@@ -138,10 +138,23 @@ window.addEventListener("load", loadAccount);function show(id){
 function loginDiscord(){
   window.location.href =
     "https://spider-v2-api.mathiangchiech.workers.dev/auth/login";
-}async function uploadScript(){
+async function uploadScript(){
+  document.getElementById("status").textContent = "Uploading...";
+
+  const name = document.getElementById("name").value.trim();
+  const source = document.getElementById("source").value;
+  const access = document.getElementById("access").value;
+  const language = document.getElementById("language").value;
+
+  if(!name || !source){
+    document.getElementById("status").textContent =
+      "Enter a script name and Lua source.";
+    return;
+  }
+
   document.getElementById("status").textContent =
-    "Backend connection and Discord login are not connected yet.";
-}
+    "Upload backend connection coming next.";
+}}
 </script>
 
 </body>
