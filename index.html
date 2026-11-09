@@ -55,7 +55,7 @@ footer{text-align:center;padding:30px;color:#777}
 <body>
 
 <header>
-  <div class="logo">🕷 SPIDER.COM</div>
+  <div class="logo">🕷 SPIDER.COM <span id="account"></span></div>
   <nav>
     <button onclick="show('upload')">Upload</button>
     <button onclick="show('scripts')">My Scripts</button>
@@ -108,7 +108,28 @@ footer{text-align:center;padding:30px;color:#777}
 <footer>SPIDER.COM • Lua Script Platform</footer>
 
 <script>
-function show(id){
+async function loadAccount(){
+  const box = document.getElementById("account");
+
+  try {
+    const r = await fetch(
+      "https://spider-v2-api.mathiangchiech.workers.dev/auth/me",
+      { credentials: "include" }
+    );
+
+    const data = await r.json();
+
+    if (data.loggedIn) {
+      box.textContent = " | " + data.user.username;
+    } else {
+      box.textContent = " | Guest";
+    }
+  } catch {
+    box.textContent = " | Guest";
+  }
+}
+
+window.addEventListener("load", loadAccount);function show(id){
   document.querySelectorAll("main section")
     .forEach(s=>s.classList.add("hidden"));
   document.getElementById(id).classList.remove("hidden");
