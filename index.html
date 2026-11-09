@@ -60,7 +60,9 @@ footer{text-align:center;padding:30px;color:#777}
     <button onclick="show('upload')">Upload</button>
     <button onclick="show('scripts')">My Scripts</button>
     <button onclick="show('plans')">Plans</button>
-  </nav>
+<button onclick="show('plans')">Plans</button>
+<button onclick="loginDiscord()">Login with Discord</button>
+</nav>  </nav>
 </header>
 
 <main>
@@ -112,7 +114,10 @@ function show(id){
   document.getElementById(id).classList.remove("hidden");
 }
 
-async function uploadScript(){
+function loginDiscord(){
+  window.location.href =
+    "https://spider-v2-api.mathiangchiech.workers.dev/auth/login";
+}async function uploadScript(){
   document.getElementById("status").textContent =
     "Backend connection and Discord login are not connected yet.";
 }
