@@ -83,7 +83,8 @@ footer{text-align:center;padding:30px;color:#777}
 <option value="paid">Paid / Key Required</option>
 </select>
 
-<label>Lua Source</label>
+<label>Upload File (.lua)</label>
+<input type="file" id="luaFile" accept=".lua,.txt"><label>Lua Source</label>
 <textarea id="source" placeholder="Paste your Lua source here"></textarea>
 
 <button onclick="uploadScript()">Upload Script</button>
@@ -116,6 +117,10 @@ async function loadAccount(){
  }catch{box.textContent=" | Guest";}
 }
 window.addEventListener("load",loadAccount);
+document.getElementById("luaFile").addEventListener("change",async e=>{
+ const file=e.target.files[0];
+ if(file) document.getElementById("source").value=await file.text();
+});
 function show(id){
  document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
  document.getElementById(id).classList.remove("hidden");
