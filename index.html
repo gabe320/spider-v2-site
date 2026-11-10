@@ -109,81 +109,36 @@ footer{text-align:center;padding:30px;color:#777}
 
 <script>
 async function loadAccount(){
-  const box = document.getElementById("account");
-
-  try {
-    const r = await fetch(
-      "https://spider-v2-api.mathiangchiech.workers.dev/auth/me",
-      { credentials: "include" }
-    );
-
-    const data = await r.json();
-
-    if (data.loggedIn) {
-      box.textContent = " | " + data.user.username;
-    } else {
-      box.textContent = " | Guest";
-    }
-  } catch {
-    box.textContent = " | Guest";
-  }
+ const box=document.getElementById("account");
+ try{
+  const r=await fetch("https://spider-v2-api.mathiangchiech.workers.dev/auth/me",{credentials:"include"});
+  const d=await r.json();
+  box.textContent=d.loggedIn?" | "+d.user.username:" | Guest";
+ }catch{box.textContent=" | Guest";}
 }
-
-window.addEventListener("load", loadAccount);function show(id){
-  document.querySelectorAll("main section")
-    .forEach(s=>s.classList.add("hidden"));
-  document.getElementById(id).classList.remove("hidden");
+window.addEventListener("load",loadAccount);
+function show(id){
+ document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
+ document.getElementById(id).classList.remove("hidden");
 }
-
 function loginDiscord(){
-  window.location.href = "https://spider-v2-api.mathiangchiech.workers.dev/auth/login";
+ window.location.href="https://spider-v2-api.mathiangchiech.workers.dev/auth/login";
 }
-
 async function uploadScript(){
-  const status = document.getElementById("status");
-  status.textContent = "Uploading...";
-
-  const name = document.getElementById("name").value.trim();
-  const source = document.getElementById("source").value;
-  const access = document.getElementById("access").value;
-  const language = document.getElementById("language").value;
-
-  if(!name || !source){
-    status.textContent = "Enter script name and source.";
-    return;
-  }
-
-  try{
-    const r = await fetch("https://spider-v2-api.mathiangchiech.workers.dev/upload",{
-      method:"POST",
-      credentials:"include",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({name,source,access,language})
-    });
-
-    const data = await r.json();
-    if(!r.ok) throw new Error(data.error || "Upload failed");
-
-    status.textContent = "Uploaded successfully!";
-  }catch(e){
-    status.textContent = "Upload failed: " + e.message;
-  }
-}  document.getElementById("status").textContent = "Uploading...";
-
-  const name = document.getElementById("name").value.trim();
-  const source = document.getElementById("source").value;
-  const access = document.getElementById("access").value;
-  const language = document.getElementById("language").value;
-
-  if(!name || !source){
-    document.getElementById("status").textContent =
-      "Enter a script name and Lua source.";
-    return;
-  }
-
-  document.getElementById("status").textContent =
-    "Upload backend connection coming next.";
-}}
+ const status=document.getElementById("status");
+ const name=document.getElementById("name").value.trim();
+ const source=document.getElementById("source").value;
+ const access=document.getElementById("access").value;
+ const language=document.getElementById("language").value;
+ if(!name||!source){status.textContent="Enter script name and source.";return;}
+ status.textContent="Uploading...";
+ try{
+  const r=await fetch("https://spider-v2-api.mathiangchiech.workers.dev/upload",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,source,access,language})});
+  const d=await r.json();
+  if(!r.ok)throw Error(d.error||"Upload failed");
+  status.textContent="Uploaded successfully!";
+ }catch(e){status.textContent="Upload failed: "+e.message;}
+}
 </script>
 
 </body>
