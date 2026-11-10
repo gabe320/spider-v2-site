@@ -139,7 +139,35 @@ function loginDiscord(){
   window.location.href =
     "https://spider-v2-api.mathiangchiech.workers.dev/auth/login";
 async function uploadScript(){
-  document.getElementById("status").textContent = "Uploading...";
+  const status = document.getElementById("status");
+  status.textContent = "Uploading...";
+
+  const name = document.getElementById("name").value.trim();
+  const source = document.getElementById("source").value;
+  const access = document.getElementById("access").value;
+  const language = document.getElementById("language").value;
+
+  if(!name || !source){
+    status.textContent = "Enter script name and source.";
+    return;
+  }
+
+  try{
+    const r = await fetch("https://spider-v2-api.mathiangchiech.workers.dev/upload",{
+      method:"POST",
+      credentials:"include",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({name,source,access,language})
+    });
+
+    const data = await r.json();
+    if(!r.ok) throw new Error(data.error || "Upload failed");
+
+    status.textContent = "Uploaded successfully!";
+  }catch(e){
+    status.textContent = "Upload failed: " + e.message;
+  }
+}  document.getElementById("status").textContent = "Uploading...";
 
   const name = document.getElementById("name").value.trim();
   const source = document.getElementById("source").value;
