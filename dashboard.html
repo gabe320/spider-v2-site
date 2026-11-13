@@ -63,7 +63,7 @@ input[type=file]{display:block;width:100%;padding:10px;color:white}.status{color
 const fileInput = document.getElementById('luaFile');
 
 fileInput.addEventListener('change', function() {
-  const file = fileInput.files[0];
+  alert('FILE EVENT WORKED');  const file = fileInput.files[0];
   if (!file) return;
 
   const reader = new FileReader();
