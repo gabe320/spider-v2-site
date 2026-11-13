@@ -52,8 +52,10 @@ input[type=file]{display:block;width:100%;padding:10px;color:white}.status{color
 <h2>📁 Upload Script</h2>
 <input id="scriptName" type="text" placeholder="Choose a script name">
 <input id="luaFile" type="file" accept=".lua,.txt">
+<input id="luaFile" type="file" accept=".lua,.txt">
 <p class="muted" id="fileName">No file selected</p>
-<p class="status" id="uploadStatus">Backend connection is not configured yet.</p>
+<button onclick="uploadScript()">Upload Source</button>
+<p class="status" id="uploadStatus">Ready to upload.</p>
 </div>
 </main>
 <script>
