@@ -1,238 +1,112 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MILO — Script Protection</title>
+<title>MILO — Lua Protection Platform</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{
-background:#07050d;
-color:#fff;
-font-family:Arial,sans-serif;
-overflow-x:hidden
-}
-body:before{
-content:"";
-position:fixed;
-inset:0;
-background:
-radial-gradient(circle at 20% 20%,#48108035,transparent 40%),
-radial-gradient(circle at 80% 70%,#7500ff25,transparent 40%);
-pointer-events:none
-}
-nav{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:25px 8%;
-border-bottom:1px solid #ffffff10
-}
-.logo{
-font-size:25px;
-font-weight:900;
-letter-spacing:3px;
-color:#b76aff
-}
-nav a{
-color:#aaa;
-text-decoration:none;
-margin-left:25px;
-font-size:14px
-}
-nav a:hover{color:#c084fc}
-.hero{
-text-align:center;
-padding:120px 20px 100px
-}
-.tag{
-color:#b76aff;
-border:1px solid #6425a5;
-padding:8px 15px;
-border-radius:30px;
-font-size:12px
-}
-h1{
-font-size:clamp(45px,8vw,90px);
-margin:30px 0;
-font-weight:900;
-letter-spacing:-4px
-}
-h1 span{
-background:linear-gradient(90deg,#a855f7,#e9d5ff);
--webkit-background-clip:text;
-color:transparent
-}
-.hero p{
-color:#999;
-max-width:550px;
-margin:auto;
-line-height:1.8
-}
-.buttons{
-margin-top:35px;
-display:flex;
-justify-content:center;
-gap:15px;
-flex-wrap:wrap
-}
-.btn{
-padding:15px 25px;
-border-radius:9px;
-text-decoration:none;
-font-weight:bold
-}
-.primary{
-background:#9333ea;
-color:white;
-box-shadow:0 0 30px #9333ea40
-}
-.secondary{
-border:1px solid #333;
-color:white
-}
-section{
-padding:80px 8%
-}
-.heading{text-align:center;margin-bottom:50px}
-.heading h2{font-size:35px;margin-bottom:15px}
-.heading p{color:#888}
-.cards{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-gap:20px
-}
-.card{
-background:linear-gradient(145deg,#15101e,#0b0910);
-border:1px solid #ffffff12;
-padding:30px;
-border-radius:16px
-}
-.card .icon{
-font-size:28px;
-color:#c084fc;
-margin-bottom:20px
-}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#09090f;color:#f5f3ff;font-family:Arial,sans-serif}
+a{text-decoration:none;color:inherit}
+nav{height:75px;display:flex;align-items:center;justify-content:space-between;padding:0 8%;border-bottom:1px solid #242230}
+.logo{font-size:27px;font-weight:900;letter-spacing:3px;color:#b18aff}
+.links{display:flex;gap:28px;color:#aaa;font-size:14px}
+.btn{background:#9865f5;color:white;padding:13px 22px;border-radius:9px;font-weight:bold;display:inline-block}
+.hero{text-align:center;padding:110px 20px 100px;background:radial-gradient(ellipse at 50% 20%,#38205b 0%,#151020 38%,#09090f 75%)}
+.tag{display:inline-block;border:1px solid #7651a8;border-radius:30px;padding:8px 15px;color:#c9aaff;font-size:12px;margin-bottom:25px}
+h1{font-size:clamp(42px,8vw,75px);line-height:1.08;max-width:850px;margin:auto}
+h1 span{color:#b18aff}
+.hero p{color:#aaa;max-width:590px;margin:25px auto 30px;line-height:1.8}
+.actions{display:flex;justify-content:center;gap:13px;flex-wrap:wrap}
+.secondary{border:1px solid #51465e;padding:13px 22px;border-radius:9px;color:white}
+section{padding:85px 8%}
+.heading{text-align:center;margin-bottom:45px}
+.heading h2{font-size:34px;margin-bottom:12px}
+.heading p{color:#999}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.card{background:#12111b;border:1px solid #292535;padding:27px;border-radius:15px}
+.card .icon{font-size:27px;margin-bottom:17px}
 .card h3{margin-bottom:12px}
-.card p{color:#888;line-height:1.7;font-size:14px}
-.pricing{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px
-}
-.price{
-background:#100b18;
-border:1px solid #ffffff15;
-padding:30px;
-border-radius:15px
-}
-.price h3{color:#c084fc;font-size:22px}
-.price h2{font-size:35px;margin:20px 0}
-.price p{color:#999;line-height:2}
-footer{
-text-align:center;
-padding:40px;
-color:#666;
-border-top:1px solid #ffffff10
-}
+.card p{color:#999;line-height:1.7;font-size:14px}
+.steps{max-width:750px;margin:auto}
+.step{display:flex;gap:20px;margin:25px 0;padding:22px;background:#12111b;border:1px solid #292535;border-radius:13px}
+.number{background:#302044;color:#c5a2ff;padding:12px 16px;border-radius:10px;height:fit-content}
+.step p{color:#999;margin-top:8px;line-height:1.6}
+.price{font-size:35px;font-weight:bold;margin:20px 0}
+.price small{font-size:13px;color:#999}
+ul{list-style:none;color:#bbb;line-height:2.3;margin-bottom:20px}
+footer{text-align:center;padding:35px;color:#777;border-top:1px solid #25212e}
+@media(max-width:650px){nav{padding:0 5%}.links{display:none}section{padding:65px 6%}.hero{padding-top:85px}}
 </style>
 </head>
-
 <body>
 
 <nav>
-<div class="logo">MILO</div><div>
+<div class="logo">MILO.</div>
+<div class="links">
 <a href="#features">Features</a>
+<a href="#how">How it works</a>
 <a href="#pricing">Pricing</a>
-<a href="dashboard.html">Dashboard</a></div>
+</div>
+<a href="dashboard.html" class="btn">Dashboard ↗</a>
 </nav>
 
-<div class="hero">
-<span class="tag">THE NEXT GENERATION SCRIPT PLATFORM</span>
-<h1>Protect Your Scripts.<br><span>Own Your Power.</span></h1>
-<p>
-A powerful script management platform built for creators.
-Upload, protect, distribute and manage your Lua scripts
-with MILO.</p>
-<div class="buttons">
-<a class="btn primary" href="#dashboard">Get Started →</a>
-<a class="btn secondary" href="#features">Explore Features</a>
+<header class="hero">
+<div class="tag">✦ THE LUA PROTECTION PLATFORM</div>
+<h1>Your scripts.<br><span>Your protection.</span></h1>
+<p>Upload, protect and manage your Lua scripts with MILO. Generate loadstrings, manage access and connect your Discord community.</p>
+<div class="actions">
+<a href="dashboard.html" class="btn">Get Started →</a>
+<a href="#features" class="secondary">Explore Features</a>
 </div>
-</div>
+</header>
 
 <section id="features">
 <div class="heading">
-<h2>Built Different.</h2>
-<p>Everything you need to manage your scripts.</p>
+<h2>Everything you need.</h2>
+<p>Powerful tools to manage and protect your scripts.</p>
 </div>
 <div class="cards">
-<div class="card">
-<div class="icon">◈</div>
-<h3>Script Protection</h3>
-<p>Manage and distribute your Lua scripts through secure loaders.</p>
+<div class="card"><div class="icon">🛡️</div><h3>Script Protection</h3><p>Manage access to your uploaded Lua scripts with server-side authorization.</p></div>
+<div class="card"><div class="icon">⚡</div><h3>Loadstring Generator</h3><p>Generate a unique loadstring for each uploaded script.</p></div>
+<div class="card"><div class="icon">📁</div><h3>Easy Uploads</h3><p>Select Lua files directly from your device and manage your scripts.</p></div>
+<div class="card"><div class="icon">🤖</div><h3>Discord Integration</h3><p>Connect your Discord bot to manage paid script access and keys.</p></div>
+<div class="card"><div class="icon">🔑</div><h3>Key Management</h3><p>Support free scripts and paid scripts with individual access validation.</p></div>
+<div class="card"><div class="icon">📊</div><h3>Dashboard</h3><p>Manage your scripts and account from one place.</p></div>
 </div>
-<div class="card">
-<div class="icon">⚡</div>
-<h3>Instant Loaders</h3>
-<p>Generate convenient loaders for your uploaded scripts.</p>
+</section>
+
+<section id="how">
+<div class="heading">
+<h2>How MILO works</h2>
+<p>Get started in three simple steps.</p>
 </div>
-<div class="card">
-<div class="icon">⌘</div>
-<h3>Discord Integration</h3>
-<p>Connect your Discord community with script access management.</p>
-</div>
-<div class="card">
-<div class="icon">♛</div>
-<h3>Access Control</h3>
-<p>Manage free and paid script access from one platform.</p>
-</div>
+<div class="steps">
+<div class="step"><div class="number">01</div><div><h3>Upload your source</h3><p>Choose a Lua file from your device or paste your source code.</p></div></div>
+<div class="step"><div class="number">02</div><div><h3>Configure your script</h3><p>Choose a script name and select free or paid access.</p></div></div>
+<div class="step"><div class="number">03</div><div><h3>Generate your loadstring</h3><p>Get your script's loadstring and manage access through MILO.</p></div></div>
 </div>
 </section>
 
 <section id="pricing">
 <div class="heading">
-<h2>Choose Your Power.</h2>
-<p>Plans designed for every creator.</p>
+<h2>Simple pricing.</h2>
+<p>Choose the plan that works for you.</p>
 </div>
-<div class="pricing">
-<div class="price">
-<h3>Standard</h3>
-<h2>FREE</h2>
-<p>10 source posts</p>
-<p>Script management</p>
-<p>Basic access</p>
-</div>
-<div class="price">
-<h3>Pro</h3>
-<h2>3 Garama</h2>
-<p>20 source posts</p>
-<p>Script management</p>
-<p>Advanced access</p>
-</div>
-<div class="price">
-<h3>Premium</h3>
-<h2>5 Garama</h2>
-<p>Unlimited source posts</p>
-<p>Full script management</p>
-<p>Premium access</p>
-</div>
+<div class="cards">
+<div class="card"><h3>Standard</h3><div class="price">Free</div><ul><li>✓ 10 source posts</li><li>✓ Script management</li><li>✓ Free scripts</li></ul><a href="dashboard.html" class="btn">Get Started</a></div>
+<div class="card"><h3>Pro</h3><div class="price">3 Garama</div><ul><li>✓ 20 source posts</li><li>✓ Script management</li><li>✓ Paid script support</li></ul><a href="dashboard.html" class="btn">Choose Pro</a></div>
+<div class="card"><h3>Premium</h3><div class="price">5 Garama</div><ul><li>✓ Unlimited source posts</li><li>✓ Script management</li><li>✓ Paid script support</li></ul><a href="dashboard.html" class="btn">Choose Premium</a></div>
 </div>
 </section>
 
-<section id="dashboard">
-<div class="heading">
-<h2>Enter the Spider Network.</h2>
-<p>Your scripts. Your rules. Your platform.</p>
-<div class="buttons">
-<a class="btn primary" href="https://gabe320.github.io/">Open Dashboard →</a>
-</div>
-</div>
+<section style="text-align:center;background:#151020">
+<h2 style="font-size:35px;margin-bottom:15px">Ready to protect your scripts?</h2>
+<p style="color:#aaa;margin-bottom:25px">Start managing your Lua scripts with MILO.</p>
+<a href="dashboard.html" class="btn">Open MILO Dashboard →</a>
 </section>
 
-<footer>
-MILO · Built for creators</footer>
-
+<footer>© 2026 MILO. All rights reserved.</footer>
 </body>
 </html>
-
