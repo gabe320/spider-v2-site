@@ -3,147 +3,235 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SPIDER.COM</title>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MILO — Script Protection</title>
 <style>
-*{box-sizing:border-box}
+*{margin:0;padding:0;box-sizing:border-box}
 body{
-  margin:0;background:#080810;color:#fff;
-  font-family:Arial,sans-serif
+background:#07050d;
+color:#fff;
+font-family:Arial,sans-serif;
+overflow-x:hidden
 }
-header{
-  padding:20px;background:#11111c;
-  border-bottom:1px solid #292938;
-  display:flex;justify-content:space-between;
-  align-items:center
+body:before{
+content:"";
+position:fixed;
+inset:0;
+background:
+radial-gradient(circle at 20% 20%,#48108035,transparent 40%),
+radial-gradient(circle at 80% 70%,#7500ff25,transparent 40%);
+pointer-events:none
 }
-.logo{font-size:25px;font-weight:bold;color:#b65cff}
-button{
-  background:#a855f7;color:white;border:0;
-  padding:12px 18px;border-radius:9px;
-  font-weight:bold;cursor:pointer
+nav{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:25px 8%;
+border-bottom:1px solid #ffffff10
 }
-button:hover{background:#9333ea}
-nav{display:flex;gap:10px;flex-wrap:wrap}
-main{max-width:1000px;margin:auto;padding:25px}
+.logo{
+font-size:25px;
+font-weight:900;
+letter-spacing:3px;
+color:#b76aff
+}
+nav a{
+color:#aaa;
+text-decoration:none;
+margin-left:25px;
+font-size:14px
+}
+nav a:hover{color:#c084fc}
+.hero{
+text-align:center;
+padding:120px 20px 100px
+}
+.tag{
+color:#b76aff;
+border:1px solid #6425a5;
+padding:8px 15px;
+border-radius:30px;
+font-size:12px
+}
+h1{
+font-size:clamp(45px,8vw,90px);
+margin:30px 0;
+font-weight:900;
+letter-spacing:-4px
+}
+h1 span{
+background:linear-gradient(90deg,#a855f7,#e9d5ff);
+-webkit-background-clip:text;
+color:transparent
+}
+.hero p{
+color:#999;
+max-width:550px;
+margin:auto;
+line-height:1.8
+}
+.buttons{
+margin-top:35px;
+display:flex;
+justify-content:center;
+gap:15px;
+flex-wrap:wrap
+}
+.btn{
+padding:15px 25px;
+border-radius:9px;
+text-decoration:none;
+font-weight:bold
+}
+.primary{
+background:#9333ea;
+color:white;
+box-shadow:0 0 30px #9333ea40
+}
+.secondary{
+border:1px solid #333;
+color:white
+}
+section{
+padding:80px 8%
+}
+.heading{text-align:center;margin-bottom:50px}
+.heading h2{font-size:35px;margin-bottom:15px}
+.heading p{color:#888}
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+gap:20px
+}
 .card{
-  background:#11111c;border:1px solid #292938;
-  border-radius:14px;padding:20px;margin-bottom:20px
+background:linear-gradient(145deg,#15101e,#0b0910);
+border:1px solid #ffffff12;
+padding:30px;
+border-radius:16px
 }
-input,select,textarea{
-  width:100%;padding:13px;margin:10px 0;
-  background:#080810;color:white;
-  border:1px solid #292938;border-radius:8px
+.card .icon{
+font-size:28px;
+color:#c084fc;
+margin-bottom:20px
 }
-textarea{min-height:180px;resize:vertical}
-h2{color:#c084fc}
-.plan{
-  border:1px solid #292938;padding:15px;
-  border-radius:10px;margin:10px 0
+.card h3{margin-bottom:12px}
+.card p{color:#888;line-height:1.7;font-size:14px}
+.pricing{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px
 }
-.plan strong{color:#c084fc}
-.hidden{display:none}
-.script{
-  background:#191927;padding:15px;
-  border-radius:10px;margin:10px 0
+.price{
+background:#100b18;
+border:1px solid #ffffff15;
+padding:30px;
+border-radius:15px
 }
-footer{text-align:center;padding:30px;color:#777}
+.price h3{color:#c084fc;font-size:22px}
+.price h2{font-size:35px;margin:20px 0}
+.price p{color:#999;line-height:2}
+footer{
+text-align:center;
+padding:40px;
+color:#666;
+border-top:1px solid #ffffff10
+}
 </style>
 </head>
 
 <body>
 
-<header>
-  <div class="logo">🕷 SPIDER.COM <span id="account"></span></div>
-  <nav>
-    <button onclick="show('upload')">Upload</button>
-    <button onclick="show('scripts')">My Scripts</button>
-    <button onclick="show('plans')">Plans</button>
-<button onclick="loginDiscord()">Login with Discord</button>
+<nav>
+<div class="logo">MILO</div><div>
+<a href="#features">Features</a>
+<a href="#pricing">Pricing</a>
+<a href="dashboard.html">Dashboard</a></div>
 </nav>
-</header>
 
-<main>
+<div class="hero">
+<span class="tag">THE NEXT GENERATION SCRIPT PLATFORM</span>
+<h1>Protect Your Scripts.<br><span>Own Your Power.</span></h1>
+<p>
+A powerful script management platform built for creators.
+Upload, protect, distribute and manage your Lua scripts
+with MILO.</p>
+<div class="buttons">
+<a class="btn primary" href="#dashboard">Get Started →</a>
+<a class="btn secondary" href="#features">Explore Features</a>
+</div>
+</div>
 
-<section id="upload" class="card">
-<h2>Upload Lua Script</h2>
-
-<label>Script Name</label>
-<input id="name" placeholder="Enter script name">
-
-<label>Language</label>
-<select id="language">
-<option value="lua">Lua</option>
-</select>
-
-<label>Access</label>
-<select id="access">
-<option value="free">Free</option>
-<option value="paid">Paid / Key Required</option>
-</select>
-
-<label>Upload File (.lua)</label>
-<input type="file" id="luaFile" accept=".lua,.txt"><label>Lua Source</label>
-<textarea id="source" placeholder="Paste your Lua source here"></textarea>
-
-<button onclick="uploadScript()">Upload Script</button>
-<p id="status"></p>
+<section id="features">
+<div class="heading">
+<h2>Built Different.</h2>
+<p>Everything you need to manage your scripts.</p>
+</div>
+<div class="cards">
+<div class="card">
+<div class="icon">◈</div>
+<h3>Script Protection</h3>
+<p>Manage and distribute your Lua scripts through secure loaders.</p>
+</div>
+<div class="card">
+<div class="icon">⚡</div>
+<h3>Instant Loaders</h3>
+<p>Generate convenient loaders for your uploaded scripts.</p>
+</div>
+<div class="card">
+<div class="icon">⌘</div>
+<h3>Discord Integration</h3>
+<p>Connect your Discord community with script access management.</p>
+</div>
+<div class="card">
+<div class="icon">♛</div>
+<h3>Access Control</h3>
+<p>Manage free and paid script access from one platform.</p>
+</div>
+</div>
 </section>
 
-<section id="scripts" class="card hidden">
-<h2>My Scripts</h2>
-<div id="scriptList">Login and connect backend to see scripts.</div>
+<section id="pricing">
+<div class="heading">
+<h2>Choose Your Power.</h2>
+<p>Plans designed for every creator.</p>
+</div>
+<div class="pricing">
+<div class="price">
+<h3>Standard</h3>
+<h2>FREE</h2>
+<p>10 source posts</p>
+<p>Script management</p>
+<p>Basic access</p>
+</div>
+<div class="price">
+<h3>Pro</h3>
+<h2>3 Garama</h2>
+<p>20 source posts</p>
+<p>Script management</p>
+<p>Advanced access</p>
+</div>
+<div class="price">
+<h3>Premium</h3>
+<h2>5 Garama</h2>
+<p>Unlimited source posts</p>
+<p>Full script management</p>
+<p>Premium access</p>
+</div>
+</div>
 </section>
 
-<section id="plans" class="card hidden">
-<h2>SPIDER Plans</h2>
-<div class="plan"><strong>STANDARD</strong><p>Free</p><p>10 source uploads</p></div>
-<div class="plan"><strong>PRO</strong><p>3 Garama</p><p>20 source uploads</p></div>
-<div class="plan"><strong>PREMIUM</strong><p>5 Garama</p><p>Unlimited uploads</p></div>
+<section id="dashboard">
+<div class="heading">
+<h2>Enter the Spider Network.</h2>
+<p>Your scripts. Your rules. Your platform.</p>
+<div class="buttons">
+<a class="btn primary" href="https://gabe320.github.io/">Open Dashboard →</a>
+</div>
+</div>
 </section>
 
-</main>
-
-<footer>SPIDER.COM • Lua Script Platform</footer>
-
-<script>
-async function loadAccount(){
- const box=document.getElementById("account");
- try{
-  const r=await fetch("https://spider-v2-api.mathiangchiech.workers.dev/auth/me",{credentials:"include"});
-  const d=await r.json();
-  box.textContent=d.loggedIn?" | "+d.user.username:" | Guest";
- }catch{box.textContent=" | Guest";}
-}
-window.addEventListener("load",loadAccount);
-document.getElementById("luaFile").addEventListener("change",async e=>{
- const file=e.target.files[0];
- if(file) document.getElementById("source").value=await file.text();
-});
-function show(id){
- document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
- document.getElementById(id).classList.remove("hidden");
-}
-function loginDiscord(){
- window.location.href="https://spider-v2-api.mathiangchiech.workers.dev/auth/login";
-}
-async function uploadScript(){
- const status=document.getElementById("status");
- const name=document.getElementById("name").value.trim();
- const source=document.getElementById("source").value;
- const access=document.getElementById("access").value;
- const language=document.getElementById("language").value;
- if(!name||!source){status.textContent="Enter script name and source.";return;}
- status.textContent="Uploading...";
- try{
-  const r=await fetch("https://spider-v2-api.mathiangchiech.workers.dev/upload",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,source,access,language})});
-  const d=await r.json();
-  if(!r.ok)throw Error(d.error||"Upload failed");
-  status.textContent="Uploaded successfully!";
- }catch(e){status.textContent="Upload failed: "+e.message;}
-}
-</script>
+<footer>
+MILO · Built for creators</footer>
 
 </body>
 </html>

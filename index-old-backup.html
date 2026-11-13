@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SPIDER.COM</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;background:#080810;color:#fff;
+  font-family:Arial,sans-serif
+}
+header{
+  padding:20px;background:#11111c;
+  border-bottom:1px solid #292938;
+  display:flex;justify-content:space-between;
+  align-items:center
+}
+.logo{font-size:25px;font-weight:bold;color:#b65cff}
+button{
+  background:#a855f7;color:white;border:0;
+  padding:12px 18px;border-radius:9px;
+  font-weight:bold;cursor:pointer
+}
+button:hover{background:#9333ea}
+nav{display:flex;gap:10px;flex-wrap:wrap}
+main{max-width:1000px;margin:auto;padding:25px}
+.card{
+  background:#11111c;border:1px solid #292938;
+  border-radius:14px;padding:20px;margin-bottom:20px
+}
+input,select,textarea{
+  width:100%;padding:13px;margin:10px 0;
+  background:#080810;color:white;
+  border:1px solid #292938;border-radius:8px
+}
+textarea{min-height:180px;resize:vertical}
+h2{color:#c084fc}
+.plan{
+  border:1px solid #292938;padding:15px;
+  border-radius:10px;margin:10px 0
+}
+.plan strong{color:#c084fc}
+.hidden{display:none}
+.script{
+  background:#191927;padding:15px;
+  border-radius:10px;margin:10px 0
+}
+footer{text-align:center;padding:30px;color:#777}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">🕷 SPIDER.COM <span id="account"></span></div>
+  <nav>
+    <button onclick="show('upload')">Upload</button>
+    <button onclick="show('scripts')">My Scripts</button>
+    <button onclick="show('plans')">Plans</button>
+<button onclick="loginDiscord()">Login with Discord</button>
+</nav>
+</header>
+
+<main>
+
+<section id="upload" class="card">
+<h2>Upload Lua Script</h2>
+
+<label>Script Name</label>
+<input id="name" placeholder="Enter script name">
+
+<label>Language</label>
+<select id="language">
+<option value="lua">Lua</option>
+</select>
+
+<label>Access</label>
+<select id="access">
+<option value="free">Free</option>
+<option value="paid">Paid / Key Required</option>
+</select>
+
+<label>Upload File (.lua)</label>
+<input type="file" id="luaFile" accept=".lua,.txt"><label>Lua Source</label>
+<textarea id="source" placeholder="Paste your Lua source here"></textarea>
+
+<button onclick="uploadScript()">Upload Script</button>
+<p id="status"></p>
+</section>
+
+<section id="scripts" class="card hidden">
+<h2>My Scripts</h2>
+<div id="scriptList">Login and connect backend to see scripts.</div>
+</section>
+
+<section id="plans" class="card hidden">
+<h2>SPIDER Plans</h2>
+<div class="plan"><strong>STANDARD</strong><p>Free</p><p>10 source uploads</p></div>
+<div class="plan"><strong>PRO</strong><p>3 Garama</p><p>20 source uploads</p></div>
+<div class="plan"><strong>PREMIUM</strong><p>5 Garama</p><p>Unlimited uploads</p></div>
+</section>
+
+</main>
+
+<footer>SPIDER.COM • Lua Script Platform</footer>
+
+<script>
+async function loadAccount(){
+ const box=document.getElementById("account");
+ try{
+  const r=await fetch("https://spider-v2-api.mathiangchiech.workers.dev/auth/me",{credentials:"include"});
+  const d=await r.json();
+  box.textContent=d.loggedIn?" | "+d.user.username:" | Guest";
+ }catch{box.textContent=" | Guest";}
+}
+window.addEventListener("load",loadAccount);
+document.getElementById("luaFile").addEventListener("change",async e=>{
+ const file=e.target.files[0];
+ if(file) document.getElementById("source").value=await file.text();
+});
+function show(id){
+ document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
+ document.getElementById(id).classList.remove("hidden");
+}
+function loginDiscord(){
+ window.location.href="https://spider-v2-api.mathiangchiech.workers.dev/auth/login";
+}
+async function uploadScript(){
+ const status=document.getElementById("status");
+ const name=document.getElementById("name").value.trim();
+ const source=document.getElementById("source").value;
+ const access=document.getElementById("access").value;
+ const language=document.getElementById("language").value;
+ if(!name||!source){status.textContent="Enter script name and source.";return;}
+ status.textContent="Uploading...";
+ try{
+  const r=await fetch("https://spider-v2-api.mathiangchiech.workers.dev/upload",{method:"POST",credentials:"include",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,source,access,language})});
+  const d=await r.json();
+  if(!r.ok)throw Error(d.error||"Upload failed");
+  status.textContent="Uploaded successfully!";
+ }catch(e){status.textContent="Upload failed: "+e.message;}
+}
+</script>
+
+</body>
+</html>
+

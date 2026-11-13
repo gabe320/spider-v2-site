@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MILO — Dashboard</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#09090f;color:white;font-family:Arial,sans-serif}
+header{padding:20px;background:#11111b;border-bottom:1px solid #29203d;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:26px;font-weight:bold;color:#a855f7}
+main{max-width:900px;margin:35px auto;padding:20px}
+h1{font-size:30px}
+p{color:#aaa}
+.card{background:#12121e;border:1px solid #29203d;border-radius:15px;padding:22px;margin-top:20px}
+button{background:#9333ea;color:white;border:0;padding:12px 18px;border-radius:8px;font-weight:bold;cursor:pointer}
+button:hover{background:#7e22ce}
+input,textarea,select{width:100%;padding:13px;margin:10px 0;background:#09090f;color:white;border:1px solid #29203d;border-radius:8px}
+textarea{height:150px;resize:vertical}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">MILO</div>
+<a href="index.html" style="color:white;text-decoration:none">Home</a>
+</header>
+<main>
+<h1>Dashboard</h1>
+<p>Manage your Lua scripts with MILO.</p>
+
+<div class="card">
+<h2>Upload Script</h2>
+<input id="name" placeholder="Script name">
+<select id="access">
+<option value="free">Free</option>
+<option value="paid">Paid / Key Required</option>
+</select>
+<textarea id="source" placeholder="Paste your Lua source here"></textarea>
+<button onclick="uploadScript()">Upload Script</button>
+<p id="status"></p>
+</div>
+
+<div class="card">
+<h2>Your Scripts</h2>
+<p>Uploaded scripts will appear here once the backend is connected.</p>
+</div>
+</main>
+
+<script>
+function uploadScript(){
+document.getElementById("status").textContent=
+"Backend connection is not configured yet.";
+}
+</script>
+</body>
+</html>
+
+
