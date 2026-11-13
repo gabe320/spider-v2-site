@@ -1,59 +1,92 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MILO — Dashboard</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MILO Dashboard</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#09090f;color:white;font-family:Arial,sans-serif}
-header{padding:20px;background:#11111b;border-bottom:1px solid #29203d;display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:26px;font-weight:bold;color:#a855f7}
-main{max-width:900px;margin:35px auto;padding:20px}
-h1{font-size:30px}
-p{color:#aaa}
-.card{background:#12121e;border:1px solid #29203d;border-radius:15px;padding:22px;margin-top:20px}
-button{background:#9333ea;color:white;border:0;padding:12px 18px;border-radius:8px;font-weight:bold;cursor:pointer}
-button:hover{background:#7e22ce}
-input,textarea,select{width:100%;padding:13px;margin:10px 0;background:#09090f;color:white;border:1px solid #29203d;border-radius:8px}
-textarea{height:150px;resize:vertical}
+body{margin:0;background:#090810;color:#f5f1ff;font-family:Arial,sans-serif}
+nav{padding:22px 7%;border-bottom:1px solid #292334;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:25px;font-weight:900;letter-spacing:3px;color:#b58aff}
+nav a{color:#c4a3ff;text-decoration:none}
+main{max-width:1000px;margin:45px auto;padding:0 20px}
+h1{font-size:34px}
+.muted{color:#999}
+.card{background:#14121e;border:1px solid #30283d;border-radius:15px;padding:24px;margin:22px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.plan{font-size:25px;font-weight:bold;margin:12px 0}
+input{width:100%;padding:15px;background:#090810;border:1px solid #453657;border-radius:9px;color:white;font-size:15px;margin:12px 0}
+button,.upload{display:inline-block;border:0;border-radius:9px;background:#9865f5;color:white;padding:14px 20px;font-weight:bold;cursor:pointer}
+button:hover,.upload:hover{background:#8050d6}
+.upload{cursor:pointer}
+input[type=file]{display:none}
+.status{color:#b9a0ff;margin-top:15px;font-size:14px}
 </style>
 </head>
 <body>
-<header>
-<div class="logo">MILO</div>
-<a href="index.html" style="color:white;text-decoration:none">Home</a>
-</header>
+<nav>
+<div class="logo">MILO.</div>
+<a href="index.html">← Home</a>
+</nav>
 <main>
 <h1>Dashboard</h1>
-<p>Manage your Lua scripts with MILO.</p>
+<p class="muted">Manage your scripts and MILO membership.</p>
 
+<div class="grid">
 <div class="card">
-<h2>Upload Script</h2>
-<input id="name" placeholder="Script name">
-<select id="access">
-<option value="free">Free</option>
-<option value="paid">Paid / Key Required</option>
-</select>
-<textarea id="source" placeholder="Paste your Lua source here"></textarea>
-<button onclick="uploadScript()">Upload Script</button>
-<p id="status"></p>
+<p class="muted">CURRENT PLAN</p>
+<div class="plan" id="plan">Standard</div>
+<p class="muted" id="expiry">No paid membership active</p>
+</div>
+<div class="card">
+<p class="muted">SCRIPT MANAGEMENT</p>
+<h3>Upload your Lua source</h3>
+<label class="upload" for="luaFile">Choose Lua File</label>
+<input id="luaFile" type="file" accept=".lua,text/plain">
+<p class="muted" id="fileName">No file selected</p>
+</div>
 </div>
 
 <div class="card">
-<h2>Your Scripts</h2>
-<p>Uploaded scripts will appear here once the backend is connected.</p>
+<h2>🔑 Redeem Key</h2>
+<p class="muted">Enter the key provided by your Discord bot to activate Pro or Premium.</p>
+<input id="redeemKey" type="text" placeholder="Enter your MILO key">
+<button id="redeemButton" onclick="redeemKey()">Redeem Key</button>
+<p class="status" id="redeemStatus">Your key will be verified by the MILO server.</p>
+</div>
+
+<div class="card">
+<h2>📁 Upload Script</h2>
+<input id="scriptName" type="text" placeholder="Choose a script name">
+<textarea id="source" placeholder="Your Lua source will appear here..." style="width:100%;height:180px;padding:15px;background:#090810;border:1px solid #453657;border-radius:9px;color:white;font-family:monospace"></textarea>
+<p class="muted">Select a .lua file above or paste your source.</p>
+<button onclick="uploadScript()">Upload Source</button>
+<p class="status" id="uploadStatus">Backend connection is not configured yet.</p>
 </div>
 </main>
-
 <script>
+const fileInput=document.getElementById('luaFile');
+fileInput.addEventListener('change',async()=>{
+ const file=fileInput.files[0];
+ if(!file)return;
+ document.getElementById('fileName').textContent=file.name;
+ document.getElementById('scriptName').value=file.name.replace(/\.lua$/i,'');
+ document.getElementById('source').value=await file.text();
+});
+async function redeemKey(){
+ const key=document.getElementById('redeemKey').value.trim();
+ const status=document.getElementById('redeemStatus');
+ if(!key){status.textContent='Please enter your key.';return;}
+ status.textContent='Key verification backend is not connected yet.';
+}
 function uploadScript(){
-document.getElementById("status").textContent=
-"Backend connection is not configured yet.";
+ const name=document.getElementById('scriptName').value.trim();
+ const source=document.getElementById('source').value;
+ const status=document.getElementById('uploadStatus');
+ if(!name||!source){status.textContent='Enter a script name and source first.';return;}
+ status.textContent='Upload backend is not connected yet.';
 }
 </script>
 </body>
 </html>
-
-
