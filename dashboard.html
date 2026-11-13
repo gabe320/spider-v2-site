@@ -80,13 +80,41 @@ async function redeemKey(){
  if(!key){status.textContent='Please enter your key.';return;}
  status.textContent='Key verification backend is not connected yet.';
 }
-function uploadScript(){
+<script>
+async function uploadScript(){
  const name=document.getElementById('scriptName').value.trim();
  const source=document.getElementById('source').value;
  const status=document.getElementById('uploadStatus');
- if(!name||!source){status.textContent='Enter a script name and source first.';return;}
- status.textContent='Upload backend is not connected yet.';
+
+ if(!name||!source){
+  status.textContent='Enter a script name and source first.';
+  return;
+ }
+
+ status.textContent='Uploading...';
+
+ try {
+  const response=await fetch('https://spider-backend.mathiangchiech.workers.dev/upload',{
+   method:'POST',
+   headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({
+    name,
+    source,
+    access:'free'
+   })
+  });
+
+  const data=await response.json();
+
+  if(!response.ok){
+   throw new Error(data.error||'Upload failed');
+  }
+
+  status.textContent='Upload successful! Script ID: '+data.id;
+ } catch(error){
+  status.textContent='Upload failed: '+error.message;
+ }
 }
-</script>
+</script> if(!name|<script>
 </body>
 </html>
