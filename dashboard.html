@@ -82,21 +82,28 @@ async function redeemKey(){
  if(!key){status.textContent='Please enter your key.';return;}
  status.textContent='Key verification backend is not connected yet.';
 }
-<scripfunction loadLuaFile(input){
- const file=input.files[0];
- if(!file)return;
- const reader=new FileReader();
- reader.onload=function(){
-  document.getElementById('source').value=reader.result;
-  document.getElementById('uploadStatus').textContent='Lua source loaded!';
- };
- reader.readAsText(file);
-}t>
-async function uploadScript(){
- const name=document.getElementById('scriptName').value.trim();
- const source=document.getElementById('source').value;
- const status=document.getElementById('uploadStatus');
+<scrip<script>
+function loadLuaFile(input) {
+  const file = input.files[0];
+  if (!file) return;
 
+  const reader = new FileReader();
+
+  reader.onload = function(e) {
+    document.getElementById("source").value = e.target.result;
+    document.getElementById("uploadStatus").textContent =
+      "Lua source loaded successfully!";
+  };
+
+  reader.onerror = function() {
+    document.getElementById("uploadStatus").textContent =
+      "Failed to read file.";
+  };
+
+  reader.readAsText(file);
+}
+
+async function uploadScript(){
  if(!name||!source){
   status.textContent='Enter a script name and source first.';
   return;
