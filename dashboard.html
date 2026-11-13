@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -39,13 +39,6 @@ input[type=file]{display:none}
 <div class="plan" id="plan">Standard</div>
 <p class="muted" id="expiry">No paid membership active</p>
 </div>
-<div class="card">
-<p class="muted">SCRIPT MANAGEMENT</p>
-<h3>Upload your Lua source</h3>
-<label class="upload" for="luaFile">Choose Lua File</label>
-<input id="luaFile" type="file" accept=".lua,text/plain">
-<p class="muted" id="fileName">No file selected</p>
-</div>
 </div>
 
 <div class="card">
@@ -59,11 +52,12 @@ input[type=file]{display:none}
 <div class="card">
 <h2>📁 Upload Script</h2>
 <input id="scriptName" type="text" placeholder="Choose a script name">
+<label class="upload" for="luaFile">Choose Lua File</label>
+<input id="luaFile" type="file" accept=".lua,.txt">
+<p class="muted" id="fileName">No file selected</p>
 <textarea id="source" placeholder="Your Lua source will appear here..." style="width:100%;height:180px;padding:15px;background:#090810;border:1px solid #453657;border-radius:9px;color:white;font-family:monospace"></textarea>
-<<textarea id="source"></textarea>
 <input type="file" id="luaFile" accept=".lua,.txt" onchange="loadLuaFile(this)">
-p class="muted">Select a .lua file above or paste your source.</p>
-<button onclick="uploadScript()">Upload Source</button>
+<p class="muted">Select a .lua file or paste your source.</p><button onclick="uploadScript()">Upload Source</button>
 <p class="status" id="uploadStatus">Backend connection is not configured yet.</p>
 </div>
 </main>
@@ -82,24 +76,6 @@ async function redeemKey(){
  if(!key){status.textContent='Please enter your key.';return;}
  status.textContent='Key verification backend is not connected yet.';
 }
-<script>function loadLuaFile(input) {
-  const file = input.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-
-  reader.onload = function(e) {
-    document.getElementById("source").value = e.target.result;
-    document.getElementById("uploadStatus").textContent =
-      "Lua source loaded successfully!";
-  };
-
-  reader.onerror = function() {
-    document.getElementById("uploadStatus").textContent =
-      "Failed to read file.";
-  };
-
-  reader.readAsText(file);
 }
 
 async function uploadScript(){
