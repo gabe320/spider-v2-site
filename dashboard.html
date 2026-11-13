@@ -61,15 +61,27 @@ input[type=file]{display:none}
 </div>
 </main>
 <script>
-const fileInput=document.getElementById('luaFile');
-fileInput.addEventListener('change',async()=>{
- const file=fileInput.files[0];
- if(!file)return;
- document.getElementById('fileName').textContent=file.name;
- document.getElementById('scriptName').value=file.name.replace(/\.lua$/i,'');
- document.getElementById('source').value=await file.text();
-});
-async function redeemKey(){
+const fileInput = document.getElementById('luaFile');
+
+fileInput.addEventListener('change', function() {
+  const file = fileInput.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function(e) {
+    document.getElementById('fileName').textContent = file.name;
+    document.getElementById('scriptName').value = file.name.replace(/\.lua$/i, '');
+    document.getElementById('source').value = e.target.result;
+    document.getElementById('uploadStatus').textContent = 'Lua source loaded!';
+  };
+
+  reader.onerror = function() {
+    document.getElementById('uploadStatus').textContent = 'Could not read Lua file.';
+  };
+
+  reader.readAsText(file);
+});async function redeemKey(){
  const key=document.getElementById('redeemKey').value.trim();
  const status=document.getElementById('redeemStatus');
  if(!key){status.textContent='Please enter your key.';return;}
