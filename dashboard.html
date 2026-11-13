@@ -81,8 +81,8 @@ fileInput.addEventListener('change', function() {
   };
 
   reader.readAsText(file);
-});async function redeemKey(){
- const key=document.getElementById('redeemKey').value.trim();
+});
+async function redeemKey(){ const key=document.getElementById('redeemKey').value.trim();
  const status=document.getElementById('redeemStatus');
  if(!key){status.textContent='Please enter your key.';return;}
  status.textContent='Key verification backend is not connected yet.';
