@@ -57,19 +57,22 @@ input[type=file]{display:block;width:100%;padding:10px;color:white}.status{color
 </div>
 </main>
 <script>
+
+let selectedSource = '';
+
 const fileInput = document.getElementById('luaFile');
 
 fileInput.addEventListener('change', function() {
-  alert('FILE EVENT WORKED');  const file = fileInput.files[0];
+  const file = fileInput.files[0];
   if (!file) return;
 
   const reader = new FileReader();
 
   reader.onload = function(e) {
+    selectedSource = e.target.result;
     document.getElementById('fileName').textContent = file.name;
     document.getElementById('scriptName').value = file.name.replace(/\.lua$/i, '');
-    document.getElementById('source').value = e.target.result;
-    document.getElementById('uploadStatus').textContent = 'Lua source loaded!';
+    document.getElementById('uploadStatus').textContent = 'Lua file ready!';
   };
 
   reader.onerror = function() {
@@ -77,41 +80,43 @@ fileInput.addEventListener('change', function() {
   };
 
   reader.readAsText(file);
-});
-async function redeemKey(){ const key=document.getElementById('redeemKey').value.trim();
+});async function redeemKey(){ const key=document.getElementById('redeemKey').value.trim();
  const status=document.getElementById('redeemStatus');
  if(!key){status.textContent='Please enter your key.';return;}
  status.textContent='Key verification backend is not connected yet.';
 }
 
 async function uploadScript(){
- if(!name||!source){
-  status.textContent='Enter a script name and source first.';
+ const name = document.getElementById('scriptName').value.trim();
+ const status = document.getElementById('uploadStatus');
+
+ if(!name || !selectedSource){
+  status.textContent = 'Choose a Lua file and enter a script name first.';
   return;
  }
 
- status.textContent='Uploading...';
+ status.textContent = 'Preparing upload...';
 
  try {
-  const response=await fetch('https://spider-backend.mathiangchiech.workers.dev/upload',{
-   method:'POST',
-   headers:{'Content-Type':'application/json'},
-   body:JSON.stringify({
-    name,
-    source,
-    access:'free'
+  const response = await fetch('https://spider-backend.mathiangchiech.workers.dev/upload', {
+   method: 'POST',
+   headers: {'Content-Type': 'application/json'},
+   body: JSON.stringify({
+    name: name,
+    source: selectedSource,
+    access: 'free'
    })
   });
 
-  const data=await response.json();
+  const data = await response.json();
 
   if(!response.ok){
-   throw new Error(data.error||'Upload failed');
+   throw new Error(data.error || 'Upload failed');
   }
 
-  status.textContent='Upload successful! Script ID: '+data.id;
+  status.textContent = 'Upload successful! Script ID: ' + data.id;
  } catch(error){
-  status.textContent='Upload failed: '+error.message;
+  status.textContent = 'Upload failed: ' + error.message;
  }
 }
 </body>
