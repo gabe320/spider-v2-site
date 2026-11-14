@@ -105,8 +105,7 @@ async function uploadScript(){
     });
 
     if(!login.ok){
-      status.textContent = 'Redirecting to Discord login...';
-      window.location.href = API + '/auth/discord';
+      status.textContent = 'Login check failed. HTTP status: ' + login.status;
       return;
     }
 
