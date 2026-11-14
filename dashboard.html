@@ -87,14 +87,52 @@ fileInput.addEventListener('change', function() {
 }
 
 async function uploadScript(){
- const name = document.getElementById('scriptName').value.trim();
- const status = document.getElementById('uploadStatus');
+  const name = document.getElementById('scriptName').value.trim();
+  const status = document.getElementById('uploadStatus');
+  const API = 'https://milo-api-2026-production.up.railway.app';
 
- if(!name || !selectedSource){
-  status.textContent = 'Choose a Lua file and enter a script name first.';
-  return;
- }
+  if(!name || !selectedSource){
+    status.textContent = 'Choose a Lua file and enter a script name first.';
+    return;
+  }
 
+  status.textContent = 'Checking Discord login...';
+
+  try {
+    const login = await fetch(API + '/auth/me', {
+      credentials: 'include'
+    });
+
+    if(!login.ok){
+      status.textContent = 'Redirecting to Discord login...';
+      window.location.href = API + '/auth/discord';
+      return;
+    }
+
+    status.textContent = 'Uploading script...';
+
+    const response = await fetch(API + '/upload', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        name: name,
+        source: selectedSource,
+        access: 'free'
+      })
+    });
+
+    const data = await response.json();
+
+    if(!response.ok){
+      throw new Error(data.error || 'Upload failed');
+    }
+
+    status.textContent = 'Upload successful! Script ID: ' + data.id;
+  } catch(error){
+    status.textContent = 'Upload failed: ' + error.message;
+  }
+}
  status.textContent = 'Preparing upload...';
 
  try {
