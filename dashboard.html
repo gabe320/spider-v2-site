@@ -1,126 +1,70 @@
-<DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>MILO Dashboard</title>
+<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>MILO Dashboard</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#090810;color:#f5f1ff;font-family:Arial,sans-serif}
-nav{padding:22px 7%;border-bottom:1px solid #292334;display:flex;justify-content:space-between;align-items:center}
-.logo{font-size:25px;font-weight:900;letter-spacing:3px;color:#b58aff}
-nav a{color:#c4a3ff;text-decoration:none}
-main{max-width:1000px;margin:45px auto;padding:0 20px}
-h1{font-size:34px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#08080a;color:#eeeef2;font-family:Arial,sans-serif}
+a{text-decoration:none;color:inherit}
+nav{padding:20px 5%;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #29292f;flex-wrap:wrap;gap:15px}
+.logo{font-size:25px;font-weight:900;letter-spacing:4px}
+.navlinks{display:flex;gap:8px;flex-wrap:wrap}
+.navlinks button{background:transparent;color:#aaa;border:1px solid transparent;padding:10px 15px;border-radius:9px;cursor:pointer}
+.navlinks button.active,.navlinks button:hover{background:#202024;color:white;border-color:#45454e}
+main{max-width:1100px;margin:35px auto;padding:0 20px}
+h1{font-size:34px;margin-bottom:10px}
+h2{margin-bottom:12px}
 .muted{color:#999}
-.card{background:#14121e;border:1px solid #30283d;border-radius:15px;padding:24px;margin:22px 0}
+.card{background:linear-gradient(145deg,#151518,#0d0d10);border:1px solid #29292f;border-radius:16px;padding:25px;margin:20px 0}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
-.plan{font-size:25px;font-weight:bold;margin:12px 0}
-input{width:100%;padding:15px;background:#090810;border:1px solid #453657;border-radius:9px;color:white;font-size:15px;margin:12px 0}
-button,.upload{display:inline-block;border:0;border-radius:9px;background:#9865f5;color:white;padding:14px 20px;font-weight:bold;cursor:pointer}
-button:hover,.upload:hover{background:#8050d6}
-.upload{cursor:pointer}
-input[type=file]{display:block;width:100%;padding:10px;color:white}.status{color:#b9a0ff;margin-top:15px;font-size:14px}
-
-/* MILO VANTARMOR-STYLE THEME */
-:root {
-  --bg:#08080a; --panel:#121216; --border:#26262e;
-  --silver:#d0d0d8; --white:#f5f5f8;
-}
-body {
-  background:#08080a !important;
-  color:#f5f5f8 !important;
-  font-family:Inter,system-ui,sans-serif !important;
-}
-nav {
-  background:rgba(8,8,10,.88) !important;
-  border-color:#26262e !important;
-  backdrop-filter:blur(18px);
-}
-.logo,h1 span {color:#f5f5f8 !important}
-.btn,button,.upload {
-  background:linear-gradient(135deg,#f5f5f8,#9999a3) !important;
-  color:#08080a !important;
-  border:1px solid #d0d0d8 !important;
-  box-shadow:0 5px 25px #ffffff12;
-  transition:.25s;
-}
-.btn:hover,button:hover,.upload:hover {
-  transform:translateY(-2px);
-  filter:brightness(1.12);
-}
-.hero {
-  background:
-    radial-gradient(ellipse at 50% 15%,#29292f 0%,#101013 40%,#08080a 78%) !important;
-}
-.tag {
-  border-color:#44444d !important;
-  color:#d0d0d8 !important;
-  background:#ffffff06;
-}
-.secondary {
-  border-color:#42424e !important;
-  background:#ffffff05;
-}
-.card,.step {
-  background:linear-gradient(145deg,#151518,#0c0c0e) !important;
-  border:1px solid #29292f !important;
-  border-radius:16px !important;
-  box-shadow:0 15px 40px #0005;
-  transition:.25s;
-}
-.card:hover,.step:hover {
-  border-color:#55555f !important;
-  transform:translateY(-3px);
-}
-.card p,.step p,.heading p,.muted {color:#a8a8b4 !important}
-.number {
-  background:#242429 !important;
-  color:#e0e0e8 !important;
-}
-input,select,textarea {
-  background:#09090b !important;
-  border-color:#33333b !important;
-  color:#f5f5f8 !important;
-}
-.status {color:#d0d0d8 !important}
-section {position:relative}
-
+.plan{font-size:30px;font-weight:bold;margin:12px 0}
+input{width:100%;padding:15px;background:#09090b;border:1px solid #33333b;border-radius:9px;color:white;font-size:15px;margin:12px 0}
+button.action{border:0;border-radius:9px;background:linear-gradient(135deg,#eeeef2,#9999a3);color:#08080a;padding:14px 20px;font-weight:bold;cursor:pointer}
+.status{color:#ccc;margin-top:15px;font-size:14px}
+.page{display:none}.page.active{display:block}
+.welcome{padding:30px 0}
+.stat{font-size:26px;font-weight:bold;margin-top:10px}
+@media(max-width:600px){nav{align-items:flex-start;flex-direction:column}.navlinks{width:100%}.navlinks button{padding:9px}}
 </style>
 </head>
 <body>
 <nav>
-<div class="logo">MILO.</div>
-<a href="index.html">← Home</a>
+ <div class="logo">MILO.</div>
+ <div class="navlinks">
+  <button class="active" onclick="showPage('overview',this)">Overview</button>
+  <button onclick="showPage('scripts',this)">Scripts</button>
+  <button onclick="showPage('keys',this)">Keys</button>
+  <button onclick="showPage('profile',this)">Profile</button>
+  <button onclick="showPage('settings',this)">Settings</button>
+  <button onclick="location.href='index.html'">Home</button>
+ </div>
 </nav>
 <main>
-<h1>Dashboard</h1>
-<p class="muted">Manage your scripts and MILO membership.</p>
-
-<div class="grid">
-<div class="card">
-<p class="muted">CURRENT PLAN</p>
-<div class="plan" id="plan">Standard</div>
-<p class="muted" id="expiry">No paid membership active</p>
-</div>
-</div>
-
-<div class="card">
-<h2>🔑 Redeem Key</h2>
-<p class="muted">Enter the key provided by your Discord bot to activate Pro or Premium.</p>
-<input id="redeemKey" type="text" placeholder="Enter your MILO key">
-<button id="redeemButton" onclick="redeemKey()">Redeem Key</button>
-<p class="status" id="redeemStatus">Your key will be verified by the MILO server.</p>
-</div>
-
-<div class="card">
-<h2>📁 Upload Script</h2>
-<input id="scriptName" type="text" placeholder="Choose a script name">
-<input id="luaFile" type="file" accept=".lua,.txt">
-<p class="muted" id="fileName">No file selected</p>
-<button onclick="uploadScript()">Upload Source</button>
-<p class="status" id="uploadStatus">Ready to upload.</p>
-</div>
+<section id="overview" class="page active">
+ <div class="welcome"><h1>Dashboard</h1><p class="muted">Welcome to your MILO control center.</p></div>
+ <div class="grid">
+  <div class="card"><p class="muted">CURRENT PLAN</p><div class="plan" id="plan">Standard</div><p class="muted" id="expiry">No paid membership active</p></div>
+  <div class="card"><p class="muted">SCRIPT MANAGER</p><div class="stat">MILO</div><p class="muted">Upload and manage your Lua scripts.</p></div>
+ </div>
+ <div class="card"><h2>Quick actions</h2><button class="action" onclick="showPage('scripts')">Upload Script</button> <button class="action" onclick="showPage('keys')">Redeem Key</button></div>
+</section>
+<section id="scripts" class="page">\n <div class="card"><h2>Your Scripts</h2><button class="action" onclick="loadScripts()">Refresh Scripts</button><div id="scriptList" class="status">Press Refresh Scripts to load your scripts.</div></div>
+ <h1>Script Management</h1><p class="muted">Upload your Lua source to MILO.</p>
+ <div class="card"><h2>Upload Script</h2>
+  <input id="scriptName" type="text" placeholder="Choose a script name">
+  <input id="luaFile" type="file" accept=".lua,.txt">
+  <p class="muted" id="fileName">No file selected</p>
+  <button class="action" onclick="uploadScript()">Upload Source</button>
+  <p class="status" id="uploadStatus">Ready to upload.</p>
+ </div>
+</section>
+<section id="keys" class="page">
+ <h1>Key Management</h1><p class="muted">Redeem a membership key from your Discord bot.</p>
+ <div class="card"><h2>Redeem Key</h2><input id="redeemKey" type="text" placeholder="Enter your MILO key"><button class="action" onclick="redeemKey()">Redeem Key</button><p class="status" id="redeemStatus">Your key will be verified by the MILO server.</p></div>
+</section>
+<section id="profile" class="page">
+ <h1>Profile</h1><div class="card"><h2>Discord Profile</h2><p class="muted">Your account is connected through Discord login.</p><p class="status">Profile details can be connected to the account API next.</p></div>
+</section>
+<section id="settings" class="page">
+ <h1>Settings</h1><div class="card"><h2>Account Settings</h2><p class="muted">MILO dashboard preferences.</p><p class="status">Additional settings will be connected next.</p></div>
+</section>
 </main>
 <script>
 
@@ -222,6 +166,74 @@ async function uploadScript(){
     status.textContent = 'Upload failed: ' + error.message;
   }
 }
-</script>
-</body>
-</html>
+
+async function loadScripts(){
+ const box=document.getElementById('scriptList');
+ const API='https://milo-api-2026-production.up.railway.app';
+ const token=getMiloToken();
+ if(!token){box.textContent='Please log in through Discord first.';return;}
+ box.textContent='Loading scripts...';
+ try{
+  const r=await fetch(API+'/my-scripts',{headers:{Authorization:'Bearer '+token}});
+  const data=await r.json();
+  if(!r.ok)throw new Error(data.error||'Could not load scripts');
+  if(!data.scripts.length){box.textContent='No scripts uploaded yet.';return;}
+  box.innerHTML='';
+  data.scripts.forEach(script=>{
+   const card=document.createElement('div');
+   card.style.cssText='margin:14px 0;padding:18px;border:1px solid #333;border-radius:12px;background:#0b0b0d';
+   const name=document.createElement('h3');name.textContent=script.name;
+   const id=document.createElement('p');id.textContent='ID: '+script.id;
+   const access=document.createElement('p');access.textContent='Access: '+script.access+' | '+(script.enabled?'Enabled':'Disabled');
+   const copy=document.createElement('button');copy.className='action';copy.textContent='Copy ID';
+   copy.onclick=()=>navigator.clipboard.writeText(script.id).then(()=>copy.textContent='Copied!');
+   const replace=document.createElement('button');
+   replace.className='action';
+   replace.textContent='Replace Source';
+   replace.style.marginLeft='8px';
+   replace.onclick=()=>replaceScriptSource(script.id);
+   card.append(name,id,access,copy,replace);box.appendChild(card);
+  });
+ }catch(e){box.textContent='Error: '+e.message;}
+}
+
+async function replaceScriptSource(id){
+ const picker=document.createElement('input');
+ picker.type='file';
+ picker.accept='.lua,.txt';
+ picker.onchange=async()=>{
+  const file=picker.files[0];
+  if(!file)return;
+  const token=getMiloToken();
+  if(!token){alert('Please log in through Discord first.');return;}
+  try{
+   const source=await file.text();
+   const response=await fetch(
+    'https://milo-api-2026-production.up.railway.app/my-scripts/'+encodeURIComponent(id),
+    {
+     method:'POST',
+     headers:{
+      'Content-Type':'application/json',
+      'Authorization':'Bearer '+token
+     },
+     body:JSON.stringify({source})
+    }
+   );
+   const data=await response.json();
+   if(!response.ok)throw new Error(data.error||'Update failed');
+   alert('Source replaced successfully!');
+   loadScripts();
+  }catch(error){
+   alert('Could not replace source: '+error.message);
+  }
+ };
+ picker.click();
+}
+
+function showPage(id,btn){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('.navlinks button').forEach(b=>b.classList.remove('active'));
+ if(btn) btn.classList.add('active');
+}
+</script></html>
