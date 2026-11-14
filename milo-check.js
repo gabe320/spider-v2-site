@@ -28,6 +28,17 @@ fileInput.addEventListener('change', function() {
  status.textContent='Key verification backend is not connected yet.';
 }
 
+
+function getMiloToken() {
+  const params = new URLSearchParams(window.location.hash.slice(1));
+  const incoming = params.get("milo_token");
+  if (incoming) {
+    sessionStorage.setItem("milo_token", incoming);
+    history.replaceState(null, "", location.pathname + location.search);
+  }
+  return sessionStorage.getItem("milo_token");
+}
+
 async function uploadScript(){
   const name = document.getElementById('scriptName').value.trim();
   const status = document.getElementById('uploadStatus');
@@ -41,12 +52,20 @@ async function uploadScript(){
   status.textContent = 'Checking Discord login...';
 
   try {
+    const token = getMiloToken();
+    if (!token) {
+      status.textContent = 'Opening Discord login...';
+      window.location.assign(API + '/auth/discord');
+      return;
+    }
+
     const login = await fetch(API + '/auth/me', {
-      credentials: 'include'
+      headers: { Authorization: 'Bearer ' + token }
     });
 
     if(!login.ok){
-      status.textContent = 'Redirecting to Discord login...';
+      sessionStorage.removeItem('milo_token');
+      status.textContent = 'Opening Discord login...';
       window.location.assign(API + '/auth/discord');
       return;
     }
@@ -56,7 +75,7 @@ async function uploadScript(){
     const response = await fetch(API + '/upload', {
       method: 'POST',
       credentials: 'include',
-      headers: {'Content-Type': 'application/json'},
+      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token},
       body: JSON.stringify({
         name: name,
         source: selectedSource,
