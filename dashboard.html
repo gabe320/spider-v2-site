@@ -21,6 +21,71 @@ button,.upload{display:inline-block;border:0;border-radius:9px;background:#9865f
 button:hover,.upload:hover{background:#8050d6}
 .upload{cursor:pointer}
 input[type=file]{display:block;width:100%;padding:10px;color:white}.status{color:#b9a0ff;margin-top:15px;font-size:14px}
+
+/* MILO VANTARMOR-STYLE THEME */
+:root {
+  --bg:#08080a; --panel:#121216; --border:#26262e;
+  --silver:#d0d0d8; --white:#f5f5f8;
+}
+body {
+  background:#08080a !important;
+  color:#f5f5f8 !important;
+  font-family:Inter,system-ui,sans-serif !important;
+}
+nav {
+  background:rgba(8,8,10,.88) !important;
+  border-color:#26262e !important;
+  backdrop-filter:blur(18px);
+}
+.logo,h1 span {color:#f5f5f8 !important}
+.btn,button,.upload {
+  background:linear-gradient(135deg,#f5f5f8,#9999a3) !important;
+  color:#08080a !important;
+  border:1px solid #d0d0d8 !important;
+  box-shadow:0 5px 25px #ffffff12;
+  transition:.25s;
+}
+.btn:hover,button:hover,.upload:hover {
+  transform:translateY(-2px);
+  filter:brightness(1.12);
+}
+.hero {
+  background:
+    radial-gradient(ellipse at 50% 15%,#29292f 0%,#101013 40%,#08080a 78%) !important;
+}
+.tag {
+  border-color:#44444d !important;
+  color:#d0d0d8 !important;
+  background:#ffffff06;
+}
+.secondary {
+  border-color:#42424e !important;
+  background:#ffffff05;
+}
+.card,.step {
+  background:linear-gradient(145deg,#151518,#0c0c0e) !important;
+  border:1px solid #29292f !important;
+  border-radius:16px !important;
+  box-shadow:0 15px 40px #0005;
+  transition:.25s;
+}
+.card:hover,.step:hover {
+  border-color:#55555f !important;
+  transform:translateY(-3px);
+}
+.card p,.step p,.heading p,.muted {color:#a8a8b4 !important}
+.number {
+  background:#242429 !important;
+  color:#e0e0e8 !important;
+}
+input,select,textarea {
+  background:#09090b !important;
+  border-color:#33333b !important;
+  color:#f5f5f8 !important;
+}
+.status {color:#d0d0d8 !important}
+section {position:relative}
+
 </style>
 </head>
 <body>
