@@ -160,6 +160,7 @@ fileInput.addEventListener('change', function() {
      if(result.status==='complete'){
        status.textContent='✅ ' + (result.message || 'Membership activated!');
        document.getElementById('redeemKey').value='';
+       await loadMembership();
        return;
      }
      if(result.status==='failed'){
@@ -249,10 +250,31 @@ async function uploadScript(){
   }
 }
 
+async function loadMembership(){
+ const token=getMiloToken();
+ if(!token)return;
+ try{
+  const r=await fetch(API+'/auth/me',{headers:{Authorization:'Bearer '+token}});
+  if(!r.ok)throw new Error('Could not load membership');
+  const data=await r.json();
+  const m=data.membership||{};
+  const plan=(m.plan||'standard').toLowerCase();
+  const planEl=document.getElementById('plan');
+  const expiryEl=document.getElementById('expiry');
+  if(planEl)planEl.textContent=plan.charAt(0).toUpperCase()+plan.slice(1);
+  if(expiryEl){
+   expiryEl.textContent=plan==='standard'
+    ? 'No paid membership active'
+    : (m.expiresAt ? 'Expires: '+new Date(m.expiresAt).toLocaleString() : 'Active membership');
+  }
+ }catch(e){console.error('Membership loading error:',e);}
+}
+
 async function loadScripts(){
  const box=document.getElementById('scriptList');
  const token=getMiloToken();
  if(!token){box.textContent='Please log in through Discord first.';return;}
+ await loadMembership();
  box.textContent='Loading scripts...';
  try{
   const r=await fetch(API+'/my-scripts',{headers:{Authorization:'Bearer '+token}});
