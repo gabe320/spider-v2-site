@@ -81,6 +81,7 @@ button.action{border:0;border-radius:9px;background:linear-gradient(135deg,#eeee
 </section>
 </main>
 <script>
+const API = 'https://milo-api-2026-production.up.railway.app';
 
 let selectedSource = '';
 
@@ -131,7 +132,6 @@ if (dashboardToken) loadScripts();
 async function uploadScript(){
   const name = document.getElementById('scriptName').value.trim();
   const status = document.getElementById('uploadStatus');
-  const API = 'https://milo-api-2026-production.up.railway.app';
 
   if(!name || !selectedSource){
     status.textContent = 'Choose a Lua file and enter a script name first.';
@@ -188,7 +188,6 @@ async function uploadScript(){
 
 async function loadScripts(){
  const box=document.getElementById('scriptList');
- const API='https://milo-api-2026-production.up.railway.app';
  const token=getMiloToken();
  if(!token){box.textContent='Please log in through Discord first.';return;}
  box.textContent='Loading scripts...';
@@ -224,7 +223,6 @@ async function loadScripts(){
 async function deleteScript(id,name){
  if(!confirm('Delete "'+name+'" permanently?'))return;
  const token=getMiloToken();
- const API='https://milo-api-2026-production.up.railway.app';
  if(!token){alert('Please log in through Discord first.');return;}
  try{
   const r=await fetch(API+'/my-scripts/'+encodeURIComponent(id),{
