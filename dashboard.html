@@ -223,6 +223,9 @@ async function loadScripts(){
 
 async function deleteScript(id,name){
  if(!confirm('Delete "'+name+'" permanently?'))return;
+ const token=getMiloToken();
+ const API='https://milo-api-2026-production.up.railway.app';
+ if(!token){alert('Please log in through Discord first.');return;}
  try{
   const r=await fetch(API+'/my-scripts/'+encodeURIComponent(id),{
    method:'DELETE',
