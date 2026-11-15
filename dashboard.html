@@ -118,11 +118,11 @@ function getMiloToken() {
   const incoming = params.get('milo_token');
 
   if (incoming) {
-    sessionStorage.setItem('milo_token', incoming);
+    localStorage.setItem('milo_token', incoming);
     history.replaceState(null, '', location.pathname + location.search);
   }
 
-  return sessionStorage.getItem('milo_token');
+  return localStorage.getItem('milo_token');
 }
 
 // Auto-recognize Discord login when dashboard opens
@@ -157,7 +157,7 @@ async function uploadScript(){
     const login = await fetch(API + '/auth/me', { headers });
 
     if(!login.ok){
-      sessionStorage.removeItem('milo_token');
+      localStorage.removeItem('milo_token');
       status.textContent = 'Login expired. Please press Upload again to log in.';
       return;
     }
