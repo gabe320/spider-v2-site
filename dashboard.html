@@ -49,6 +49,7 @@ button.action{border:0;border-radius:9px;background:linear-gradient(135deg,#eeee
  <h1>Script Management</h1><p class="muted">Upload your Lua source to MILO.</p>
  <div class="card"><h2>Upload Script</h2>
   <input id="scriptName" type="text" placeholder="Choose a script name">
+  <select id="scriptAccess"><option value="free">Free — no key required</option><option value="paid">Paid — key required</option></select>
   <input id="luaFile" type="file" accept=".lua,.txt">
   <p class="muted" id="fileName">No file selected</p>
   <button class="action" onclick="uploadScript()">Upload Source</button>
@@ -151,7 +152,7 @@ async function uploadScript(){
       body: JSON.stringify({
         name: name,
         source: selectedSource,
-        access: 'free'
+        access: document.getElementById('scriptAccess').value
       })
     });
 
