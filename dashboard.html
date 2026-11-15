@@ -117,10 +117,61 @@ fileInput.addEventListener('change', function() {
   };
 
   reader.readAsText(file);
-});async function redeemKey(){ const key=document.getElementById('redeemKey').value.trim();
- const status=document.getElementById('redeemStatus');
+});async function redeemKey(){
+ const key = document.getElementById('redeemKey').value.trim();
+ const status = document.getElementById('redeemStatus');
+ const token = getMiloToken();
+
  if(!key){status.textContent='Please enter your key.';return;}
- status.textContent='Key verification backend is not connected yet.';
+ if(!token){status.textContent='Please log in with Discord first.';return;}
+
+ const headers = {
+   'Content-Type':'application/json',
+   'Authorization':'Bearer ' + token
+ };
+
+ status.textContent='Submitting membership key...';
+
+ try {
+   const response = await fetch(API + '/membership/redeem',{
+     method:'POST',headers,body:JSON.stringify({key})
+   });
+   const data = await response.json();
+
+   if(!response.ok){
+     status.textContent=data.error || 'Could not submit key.';
+     return;
+   }
+
+   status.textContent='Checking your key...';
+
+   for(let i=0;i<30;i++){
+     await new Promise(resolve=>setTimeout(resolve,2000));
+     const check = await fetch(
+       API + '/membership/redeem-status/' + encodeURIComponent(data.requestId),
+       {headers}
+     );
+     const result = await check.json();
+
+     if(!check.ok){
+       status.textContent=result.error || 'Could not check status.';
+       return;
+     }
+     if(result.status==='complete'){
+       status.textContent='✅ ' + (result.message || 'Membership activated!');
+       document.getElementById('redeemKey').value='';
+       return;
+     }
+     if(result.status==='failed'){
+       status.textContent='❌ ' + (result.message || 'Key could not be redeemed.');
+       return;
+     }
+   }
+   status.textContent='Still processing. Please check again shortly.';
+ } catch(e) {
+   status.textContent='Connection error. Please try again.';
+   console.error(e);
+ }
 }
 
 
