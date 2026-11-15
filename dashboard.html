@@ -113,9 +113,6 @@ fileInput.addEventListener('change', function() {
 
 function getMiloToken() {
 
-// Auto-recognize Discord login when dashboard opens
-const dashboardToken = getMiloToken();
-if (dashboardToken) loadScripts();
   const params = new URLSearchParams(location.hash.slice(1));
   const incoming = params.get('milo_token');
 
@@ -126,6 +123,10 @@ if (dashboardToken) loadScripts();
 
   return sessionStorage.getItem('milo_token');
 }
+
+// Auto-recognize Discord login when dashboard opens
+const dashboardToken = getMiloToken();
+if (dashboardToken) loadScripts();
 
 async function uploadScript(){
   const name = document.getElementById('scriptName').value.trim();
