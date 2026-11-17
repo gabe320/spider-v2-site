@@ -1,363 +1,56 @@
-<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width,initial-scale=1'><title>LUNEX PROTECT Dashboard</title>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LUNEX PROTECT — Command Center</title>
 <style>
-
-*{box-sizing:border-box;margin:0;padding:0}
-:root{--bg:#080809;--panel:#111114;--panel2:#17171b;--border:#29292f;--red:#ed2638;--muted:#9999a3}
-html{scroll-behavior:smooth}
-body{background:var(--bg);color:#f4f4f6;font-family:Inter,Arial,sans-serif;line-height:1.55}
-a{text-decoration:none;color:inherit}
-nav{position:sticky;top:0;z-index:20;padding:13px 5%;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;background:rgba(9,9,11,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-.logo img{width:155px;height:65px;object-fit:contain;display:block}
-.navlinks{display:flex;gap:7px;flex-wrap:wrap}
-.navlinks button{background:transparent;color:#aaa;border:1px solid transparent;padding:10px 15px;border-radius:10px;cursor:pointer;font-size:14px;transition:.2s}
-.navlinks button.active,.navlinks button:hover{background:#241115;color:white;border-color:#64202a}
-main{max-width:1120px;margin:42px auto;padding:0 24px}
-h1{font-size:clamp(28px,5vw,42px);line-height:1.2;margin-bottom:10px;letter-spacing:-1px}
-h2{font-size:23px;margin-bottom:16px}
-p{overflow-wrap:anywhere}
-.muted{color:var(--muted)}
-.card{background:linear-gradient(145deg,#151518,#0d0d10);border:1px solid var(--border);border-radius:19px;padding:26px;margin:20px 0;box-shadow:0 12px 35px #0003}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:17px}
-.plan{font-size:30px;font-weight:800;margin:12px 0;color:#ff5362}
-.stat{font-size:25px;font-weight:800;margin-top:10px}
-.welcome{padding:25px 0 18px}
-input,select{width:100%;padding:15px;background:#09090c;border:1px solid #34343d;border-radius:11px;color:white;font-size:15px;margin:12px 0;outline:none}
-input:focus,select:focus{border-color:var(--red);box-shadow:0 0 0 3px #ed263822}
-input[type=file]{padding:12px}
-button{font-family:inherit}
-button.action{border:1px solid #a92a38;border-radius:10px;background:linear-gradient(135deg,#f13b4c,#b9162a);color:white;padding:13px 19px;font-weight:700;cursor:pointer;transition:transform .18s,filter .18s}
-button.action:hover{filter:brightness(1.12);transform:translateY(-1px)}
-.status{color:#c2c2ca;margin-top:14px;font-size:14px}
-.page{display:none}.page.active{display:block}
-#scriptList{margin-top:20px}
-#scriptList>div{background:linear-gradient(145deg,#17171b,#0b0b0e)!important;border:1px solid #303038!important;border-radius:15px!important;padding:20px!important;margin:14px 0!important}
-#scriptList h3{font-size:19px;color:#fff;margin-bottom:5px}
-#scriptList p{color:#b7b7c0}
-#scriptList button{margin:9px 8px 0 0!important}
-section>h1{margin-top:30px}
-section>.muted{margin-bottom:15px}
-@media(max-width:650px){
- nav{position:relative;padding:12px 16px;align-items:flex-start;flex-direction:column;gap:10px}
- .logo img{width:135px;height:55px}
- .navlinks{width:100%;flex-wrap:nowrap;overflow-x:auto;padding-bottom:5px}
- .navlinks button{white-space:nowrap;padding:9px 12px;font-size:13px}
- main{margin:24px auto;padding:0 15px}
- .card{padding:19px;margin:15px 0;border-radius:15px}
- .welcome{padding:15px 0}
- #scriptList button{margin:7px 5px 0 0!important}
-}
-
-</style>
-</head>
-<body>
-<nav>
- <div class="logo"><img src="lunex-logo.png" alt="LUNEX PROTECT"></div>
- <div class="navlinks">
-  <button class="active" onclick="showPage('overview',this)">Overview</button>
-  <button onclick="showPage('scripts',this)">Scripts</button>
-  <button onclick="showPage('keys',this)">Keys</button>
-  <button onclick="showPage('profile',this)">Profile</button>
-  <button onclick="showPage('settings',this)">Settings</button>
-  <button onclick="location.href='index.html'">Home</button>
- </div>
-</nav>
-<main>
-<section id="overview" class="page active">
- <div class="welcome"><h1>Dashboard</h1><p class="muted">Welcome to your LUNEX PROTECT control center.</p></div>
- <div class="grid">
-  <div class="card"><p class="muted">CURRENT PLAN</p><div class="plan" id="plan">Standard</div><p class="muted" id="expiry">No paid membership active</p></div>
-  <div class="card"><p class="muted">SCRIPT MANAGER</p><div class="stat">LUNEX PROTECT</div><p class="muted">Upload and manage your Lua scripts.</p></div>
- </div>
- <div class="card"><h2>Quick actions</h2><button class="action" onclick="showPage('scripts')">Upload Script</button> <button class="action" onclick="showPage('keys')">Redeem Key</button></div>
-</section>
-<section id="scripts" class="page"><div class="card"><h2>Your Scripts</h2><button class="action" onclick="loadScripts()">Edit</button><div id="scriptList" class="status">Press Edit to load your scripts.</div></div>
- <h1>Script Management</h1><p class="muted">Upload your Lua source to LUNEX PROTECT.</p>
- <div class="card"><h2>Upload Script</h2>
-  <input id="scriptName" type="text" placeholder="Choose a script name">
-  <select id="scriptAccess"><option value="free">Free — no key required</option><option value="paid">Paid — key required</option></select>
-  <input id="luaFile" type="file" accept=".lua,.txt">
-  <p class="muted" id="fileName">No file selected</p>
-  <button class="action" onclick="uploadScript()">Upload Source</button>
-  <p class="status" id="uploadStatus">Ready to upload.</p>
- </div>
-</section>
-<section id="keys" class="page">
- <h1>Key Management</h1><p class="muted">Redeem a membership key from your Discord bot.</p>
- <div class="card"><h2>Redeem Key</h2><input id="redeemKey" type="text" placeholder="Enter your LUNEX PROTECT key"><button class="action" onclick="redeemKey()">Redeem Key</button><p class="status" id="redeemStatus">Your key will be verified by the LUNEX PROTECT server.</p></div>
-</section>
-<section id="profile" class="page">
- <h1>Profile</h1><div class="card"><h2>Discord Profile</h2><p class="muted">Your account is connected through Discord login.</p><p class="status">Profile details can be connected to the account API next.</p></div>
-</section>
-<section id="settings" class="page">
- <h1>Settings</h1><div class="card"><h2>Account Settings</h2><p class="muted">LUNEX PROTECT dashboard preferences.</p><p class="status">Additional settings will be connected next.</p></div>
-</section>
-</main>
+:root{--bg:#07080d;--panel:#10121b;--panel2:#151827;--line:#252a3b;--red:#ff4358;--red2:#a80f2a;--muted:#9299ad;--text:#f5f6fb;--green:#45d6a0;--blue:#7c9cff;--shadow:0 18px 55px #0007}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 80% -15%,#42101e66,transparent 38%),radial-gradient(ellipse at 0% 35%,#161c3a55,transparent 35%),var(--bg);color:var(--text);font:15px/1.55 Inter,ui-sans-serif,system-ui,Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}.shell{min-height:100vh}.topbar{height:auto;min-height:76px;padding:12px clamp(16px,4vw,54px);display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid #ffffff12;background:#090a10dc;backdrop-filter:blur(18px);position:sticky;top:0;z-index:30}.brand{display:flex;align-items:center;gap:12px;font-weight:900;letter-spacing:.13em}.brand img{width:142px;height:48px;object-fit:contain}.brand small{display:block;color:var(--muted);font-size:9px;letter-spacing:.22em;margin-top:-5px}.nav{display:flex;gap:6px;overflow:auto}.nav button{white-space:nowrap;background:transparent;border:1px solid transparent;color:#aeb4c6;padding:10px 13px;border-radius:10px}.nav button.active,.nav button:hover{color:#fff;background:#32131e;border-color:#733040}.right{display:flex;align-items:center;gap:10px}.avatar{width:34px;height:34px;border-radius:50%;background:#2b3042;object-fit:cover}.layout{max-width:1240px;margin:auto;padding:34px clamp(15px,4vw,44px) 70px}.page{display:none}.page.active{display:block}.eyebrow{color:#ff7180;text-transform:uppercase;font-size:11px;font-weight:800;letter-spacing:.2em}.hero{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin:8px 0 26px}.hero h1{font-size:clamp(30px,5vw,46px);line-height:1.08;letter-spacing:-.045em;margin:8px 0}.muted{color:var(--muted)}.card{background:linear-gradient(145deg,#151927ed,#0d1019f2);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:var(--shadow)}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.statcard{position:relative;overflow:hidden;min-height:130px}.statcard:after{content:"";position:absolute;width:110px;height:110px;border-radius:50%;background:#ff43580d;right:-30px;top:-35px}.statlabel{color:var(--muted);font-size:11px;font-weight:800;letter-spacing:.13em}.statnum{font-size:34px;font-weight:850;letter-spacing:-.04em;margin:8px 0 0}.statfoot{font-size:12px;color:var(--muted)}.sectionhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:28px 0 13px}.sectionhead h2,.card h2{font-size:18px;margin:0 0 12px}.split{display:grid;grid-template-columns:1.25fr .75fr;gap:16px;margin-top:16px}.action{border:1px solid #a72d43;background:linear-gradient(135deg,#fa4058,#a70d2a);color:white;padding:11px 16px;border-radius:10px;font-weight:800;box-shadow:0 8px 22px #e3223a22}.action:hover{filter:brightness(1.12);transform:translateY(-1px)}.secondary{border:1px solid #353b50;background:#191e2d;color:#e9ebf5;padding:10px 14px;border-radius:10px;font-weight:700}.danger{border-color:#7b2938;color:#ff9aa5;background:#27131a}.field{width:100%;background:#090c14;border:1px solid #30364a;color:white;padding:13px 14px;border-radius:10px;margin:8px 0 14px;outline:none}.field:focus{border-color:var(--red);box-shadow:0 0 0 3px #ff43581a}.fieldlabel{font-size:12px;color:#c2c8d8;font-weight:700}.status{color:var(--muted);font-size:13px;margin-top:10px;overflow-wrap:anywhere}.pill{display:inline-flex;align-items:center;gap:6px;border:1px solid #34405a;background:#171e30;color:#cbd5f2;border-radius:99px;padding:4px 9px;font-size:11px;font-weight:800}.pill.ok{color:#7ce5bb;border-color:#24664f;background:#10251f}.pill.red{color:#ff9aa5;border-color:#733040;background:#2a121a}.list{display:grid;gap:10px}.item{border:1px solid #292f41;background:#0c101a;border-radius:13px;padding:15px;display:flex;justify-content:space-between;align-items:center;gap:12px}.item h3{font-size:15px;margin:0 0 3px}.item p{font-size:12px;color:var(--muted);margin:0;overflow-wrap:anywhere}.itemactions{display:flex;flex-wrap:wrap;gap:7px}.itemactions button{font-size:12px;padding:8px 10px}.empty{padding:24px;text-align:center;border:1px dashed #343b50;border-radius:13px;color:var(--muted)}.quick{display:flex;gap:10px;flex-wrap:wrap}.quick .action,.quick .secondary{margin-top:8px}.plan{font-size:28px;font-weight:900;color:#ff6577;margin:5px 0}.progress{height:7px;border-radius:99px;background:#292e40;overflow:hidden;margin-top:12px}.progress span{display:block;height:100%;background:linear-gradient(90deg,#fa4058,#ff9a65);width:0}.ticket{border:1px solid #2b3143;background:#0c1019;padding:13px;border-radius:12px}.ticket+.ticket{margin-top:9px}.tickethead{display:flex;justify-content:space-between;gap:10px}.ticket p{white-space:pre-wrap;overflow-wrap:anywhere;color:#b8bfd0;font-size:13px}.activityrow{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid #242a39}.activityrow:last-child{border:0}.dot{width:9px;height:9px;background:var(--red);border-radius:50%;margin-top:7px;box-shadow:0 0 14px #ff435877;flex:none}.activityrow strong{display:block;font-size:13px}.activityrow small{color:var(--muted)}.hidden{display:none!important}.footer{margin-top:35px;color:#697187;text-align:center;font-size:11px;letter-spacing:.1em}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.split{grid-template-columns:1fr}.topbar{align-items:flex-start;flex-wrap:wrap}.nav{order:3;width:100%}.right{margin-left:auto}}
+@media(max-width:520px){.layout{padding-top:22px}.hero{display:block}.grid{gap:9px}.card{padding:16px}.statcard{min-height:112px}.statnum{font-size:28px}.item{align-items:flex-start;flex-direction:column}.itemactions{width:100%}.itemactions button{flex:1}.brand img{width:125px}}
+</style></head>
+<body><div class="shell">
+<header class="topbar"><a class="brand" href="index.html"><img src="lunex-logo.png" alt="LUNEX PROTECT"><span><small>COMMAND CENTER</small></span></a>
+<nav class="nav" id="nav"><button class="active" data-page="overview">Overview</button><button data-page="scripts">Scripts</button><button data-page="keys">Membership</button><button data-page="activity">Activity</button><button data-page="support">Support</button><button data-page="profile">Profile</button><button data-page="settings">Settings</button></nav>
+<div class="right"><img id="avatar" class="avatar hidden" alt="Discord avatar"><span id="userLabel" class="muted" style="font-size:12px">Not connected</span></div></header>
+<main class="layout">
+<section id="overview" class="page active"><div class="hero"><div><div class="eyebrow">Secure Lua operations</div><h1>Welcome back<span style="color:var(--red)">.</span></h1><p class="muted">Your LUNEX PROTECT command center and live account overview.</p></div><button class="action" onclick="showPage('scripts')">＋ Manage scripts</button></div>
+<div class="grid"><div class="card statcard"><div class="statlabel">TOTAL SCRIPTS</div><div class="statnum" id="statScripts">—</div><div class="statfoot" id="statEnabled">Enabled scripts</div></div><div class="card statcard"><div class="statlabel">ACTIVE KEYS</div><div class="statnum" id="statKeys">—</div><div class="statfoot">Across your scripts</div></div><div class="card statcard"><div class="statlabel">WHITELISTED USERS</div><div class="statnum" id="statUsers">—</div><div class="statfoot" id="statRoles">0 role grants</div></div><div class="card statcard"><div class="statlabel">ACCOUNT STATUS</div><div class="statnum" id="statPlan" style="font-size:25px">Standard</div><div class="statfoot" id="statExpiry">Free membership</div></div></div>
+<div class="split"><div class="card"><div class="sectionhead" style="margin-top:0"><h2>Recent security activity</h2><button class="secondary" onclick="showPage('activity')">View all</button></div><div id="recentActivity" class="list"><div class="empty">Sign in to load your activity.</div></div></div><div class="card"><h2>Membership usage</h2><div class="plan" id="planName">Standard</div><p class="muted" id="planDescription">10 script uploads included</p><div class="progress"><span id="uploadProgress"></span></div><p class="status" id="uploadUsage">0 / 10 uploads used</p><div class="quick"><button class="action" onclick="showPage('keys')">Redeem membership</button><button class="secondary" onclick="showPage('support')">Get support</button></div></div></div></section>
+<section id="scripts" class="page"><div class="hero"><div><div class="eyebrow">Deployment library</div><h1>Script management</h1><p class="muted">Upload, replace, restore and manage your protected Lua scripts.</p></div><button class="secondary" onclick="loadScripts()">↻ Refresh</button></div>
+<div class="card"><div class="sectionhead" style="margin-top:0"><h2>Your scripts</h2><span class="pill" id="scriptCount">Loading</span></div><div id="scriptList" class="list"><div class="empty">Loading your scripts…</div></div></div>
+<div class="card"><h2>Upload new script</h2><div class="grid" style="grid-template-columns:1fr 1fr"><div><label class="fieldlabel" for="scriptName">SCRIPT NAME</label><input class="field" id="scriptName" maxlength="50" placeholder="My protected script"></div><div><label class="fieldlabel" for="scriptAccess">ACCESS MODE</label><select class="field" id="scriptAccess"><option value="free">Free — no key required</option><option value="paid">Paid — key required</option></select></div></div><label class="fieldlabel" for="luaFile">LUA SOURCE FILE</label><input class="field" id="luaFile" type="file" accept=".lua,.txt"><p class="status" id="fileName">No file selected</p><button class="action" onclick="uploadScript()">Upload & protect source</button><p class="status" id="uploadStatus">Ready when you are.</p></div></section>
+<section id="keys" class="page"><div class="hero"><div><div class="eyebrow">Account membership</div><h1>Membership</h1><p class="muted">Redeem a LUNEX membership key issued through the Discord bot.</p></div></div><div class="card"><h2>Redeem membership key</h2><label class="fieldlabel" for="redeemKey">KEY</label><input class="field" id="redeemKey" placeholder="LUNEX-XXXX-XXXX-XXXX"><button class="action" onclick="redeemMembership()">Redeem key</button><p class="status" id="redeemStatus">Your request will be verified by the LUNEX server.</p></div><div class="card"><h2>Your current plan</h2><div class="plan" id="membershipPlan">Standard</div><p class="muted" id="membershipExpiry">No paid membership active</p></div></section>
+<section id="activity" class="page"><div class="hero"><div><div class="eyebrow">Account audit trail</div><h1>Activity log</h1><p class="muted">Recent script and support actions recorded for your account.</p></div><button class="secondary" onclick="loadActivity()">↻ Refresh</button></div><div class="card"><div id="activityList" class="list"><div class="empty">Loading activity…</div></div></div></section>
+<section id="support" class="page"><div class="hero"><div><div class="eyebrow">We're here to help</div><h1>Support center</h1><p class="muted">Create a support ticket and track its status from your dashboard.</p></div></div><div class="card"><h2>Open a ticket</h2><label class="fieldlabel" for="ticketSubject">SUBJECT</label><input class="field" id="ticketSubject" maxlength="100" placeholder="What do you need help with?"><label class="fieldlabel" for="ticketMessage">MESSAGE</label><textarea class="field" id="ticketMessage" rows="5" maxlength="3000" placeholder="Describe the issue (at least 10 characters)…"></textarea><button class="action" onclick="createTicket()">Submit ticket</button><p class="status" id="ticketStatus"></p></div><div class="card"><div class="sectionhead" style="margin-top:0"><h2>Your tickets</h2><button class="secondary" onclick="loadTickets()">↻ Refresh</button></div><div id="ticketList" class="list"><div class="empty">Loading tickets…</div></div></div></section>
+<section id="profile" class="page"><div class="hero"><div><div class="eyebrow">Identity & account</div><h1>Profile</h1><p class="muted">Your connected Discord account and membership details.</p></div></div><div class="card"><div style="display:flex;align-items:center;gap:15px"><img id="profileAvatar" class="avatar" style="width:64px;height:64px" alt=""><div><h2 id="profileName">Discord account</h2><p class="muted" id="profileId">Sign in to view account details.</p></div></div><hr style="border:0;border-top:1px solid var(--line);margin:20px 0"><p class="muted">Membership</p><div class="plan" id="profilePlan">Standard</div><p class="status" id="profileExpiry"></p></div></section>
+<section id="settings" class="page"><div class="hero"><div><div class="eyebrow">Preferences & security</div><h1>Settings</h1><p class="muted">Manage your dashboard session and account access.</p></div></div><div class="card"><h2>Session</h2><p class="muted">Your dashboard uses a signed Discord login token stored in this browser.</p><button class="action danger" onclick="logout()">Sign out of LUNEX</button><p class="status" id="settingsStatus"></p></div><div class="card"><h2>Service connection</h2><p class="muted">API endpoint</p><p style="overflow-wrap:anywhere">milo-api-2026-production.up.railway.app</p><span class="pill" id="apiStatus">Checking API…</span></div></section>
+<div class="footer">LUNEX PROTECT · SECURE LUA PLATFORM</div>
+</main></div>
 <script>
-const API = 'https://milo-api-2026-production.up.railway.app';
-
-let selectedSource = '';
-
-const fileInput = document.getElementById('luaFile');
-
-fileInput.addEventListener('change', function() {
-  const file = fileInput.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-
-  reader.onload = function(e) {
-    selectedSource = e.target.result;
-    document.getElementById('fileName').textContent = file.name;
-    document.getElementById('scriptName').value = file.name.replace(/\.lua$/i, '');
-    document.getElementById('uploadStatus').textContent = 'Lua file ready!';
-  };
-
-  reader.onerror = function() {
-    document.getElementById('uploadStatus').textContent = 'Could not read Lua file.';
-  };
-
-  reader.readAsText(file);
-});async function redeemKey(){
- const key = document.getElementById('redeemKey').value.trim();
- const status = document.getElementById('redeemStatus');
- const token = getMiloToken();
-
- if(!key){status.textContent='Please enter your key.';return;}
- if(!token){status.textContent='Please log in with Discord first.';return;}
-
- const headers = {
-   'Content-Type':'application/json',
-   'Authorization':'Bearer ' + token
- };
-
- status.textContent='Submitting membership key...';
-
- try {
-   const response = await fetch(API + '/membership/redeem',{
-     method:'POST',headers,body:JSON.stringify({key})
-   });
-   const data = await response.json();
-
-   if(!response.ok){
-     status.textContent=data.error || 'Could not submit key.';
-     return;
-   }
-
-   status.textContent='Checking your key...';
-
-   for(let i=0;i<30;i++){
-     await new Promise(resolve=>setTimeout(resolve,2000));
-     const check = await fetch(
-       API + '/membership/redeem-status/' + encodeURIComponent(data.requestId),
-       {headers}
-     );
-     const result = await check.json();
-
-     if(!check.ok){
-       status.textContent=result.error || 'Could not check status.';
-       return;
-     }
-     if(result.status==='complete'){
-       status.textContent='✅ ' + (result.message || 'Membership activated!');
-       document.getElementById('redeemKey').value='';
-       await loadMembership();
-       return;
-     }
-     if(result.status==='failed'){
-       status.textContent='❌ ' + (result.message || 'Key could not be redeemed.');
-       return;
-     }
-   }
-   status.textContent='Still processing. Please check again shortly.';
- } catch(e) {
-   status.textContent='Connection error. Please try again.';
-   console.error(e);
- }
-}
-
-
-function getMiloToken() {
-
-  const params = new URLSearchParams(location.hash.slice(1));
-  const incoming = params.get('milo_token');
-
-  if (incoming) {
-    localStorage.setItem('milo_token', incoming);
-    history.replaceState(null, '', location.pathname + location.search);
-  }
-
-  return localStorage.getItem('milo_token');
-}
-
-// Auto-recognize Discord login when dashboard opens
-const dashboardToken = getMiloToken();
-if (dashboardToken) loadScripts();
-
-async function uploadScript(){
-  const name = document.getElementById('scriptName').value.trim();
-  const status = document.getElementById('uploadStatus');
-
-  if(!name || !selectedSource){
-    status.textContent = 'Choose a Lua file and enter a script name first.';
-    return;
-  }
-
-  let token = getMiloToken();
-
-  if(!token){
-    status.textContent = 'Opening Discord login...';
-    window.location.assign(API + '/auth/discord');
-    return;
-  }
-
-  status.textContent = 'Checking Discord login...';
-
-  try {
-    const headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer ' + token
-    };
-
-    const login = await fetch(API + '/auth/me', { headers });
-
-    if(!login.ok){
-      localStorage.removeItem('milo_token');
-      status.textContent = 'Login expired. Please press Upload again to log in.';
-      return;
-    }
-
-    status.textContent = 'Uploading script...';
-
-    const response = await fetch(API + '/upload', {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({
-        name: name,
-        source: selectedSource,
-        access: document.getElementById('scriptAccess').value
-      })
-    });
-
-    const data = await response.json();
-
-    if(!response.ok){
-      throw new Error(data.error || 'Upload failed');
-    }
-
-    status.textContent = 'Upload successful! Script ID: ' + data.id;
-  } catch(error){
-    status.textContent = 'Upload failed: ' + error.message;
-  }
-}
-
-async function loadMembership(){
- const token=getMiloToken();
- if(!token)return;
- try{
-  const r=await fetch(API+'/auth/me',{headers:{Authorization:'Bearer '+token}});
-  if(!r.ok)throw new Error('Could not load membership');
-  const data=await r.json();
-  const m=data.membership||{};
-  const plan=(m.plan||'standard').toLowerCase();
-  const planEl=document.getElementById('plan');
-  const expiryEl=document.getElementById('expiry');
-  if(planEl)planEl.textContent=plan.charAt(0).toUpperCase()+plan.slice(1);
-  if(expiryEl){
-   expiryEl.textContent=plan==='standard'
-    ? 'No paid membership active'
-    : (m.expiresAt ? 'Expires: '+new Date(m.expiresAt).toLocaleString() : 'Active membership');
-  }
- }catch(e){console.error('Membership loading error:',e);}
-}
-
-async function loadScripts(){
- const box=document.getElementById('scriptList');
- const token=getMiloToken();
- if(!token){box.textContent='Please log in through Discord first.';return;}
- await loadMembership();
- box.textContent='Loading scripts...';
- try{
-  const r=await fetch(API+'/my-scripts',{headers:{Authorization:'Bearer '+token}});
-  const data=await r.json();
-  if(!r.ok)throw new Error(data.error||'Could not load scripts');
-  if(!data.scripts.length){box.textContent='No scripts uploaded yet.';return;}
-  box.innerHTML='';
-  data.scripts.forEach(script=>{
-   const card=document.createElement('div');
-   card.style.cssText='margin:14px 0;padding:18px;border:1px solid #333;border-radius:12px;background:#0b0b0d';
-   const name=document.createElement('h3');name.textContent=script.name;
-   const id=document.createElement('p');id.textContent='ID: '+script.id;
-   const access=document.createElement('p');access.textContent='Access: '+script.access+' | '+(script.enabled?'Enabled':'Disabled');
-   const copy=document.createElement('button');copy.className='action';copy.textContent='Copy ID';
-   copy.onclick=()=>navigator.clipboard.writeText(script.id).then(()=>copy.textContent='Copied!');
-   const replace=document.createElement('button');
-   replace.className='action';
-   replace.textContent='Replace Source';
-   replace.style.marginLeft='8px';
-   replace.onclick=()=>replaceScriptSource(script.id);
-   const del=document.createElement('button');
-   del.className='action';
-   del.textContent='Delete Script';
-   del.style.marginLeft='8px';
-   del.onclick=()=>deleteScript(script.id,script.name);
-   card.append(name,id,access,copy,replace,del);box.appendChild(card);
-  });
- }catch(e){box.textContent='Error: '+e.message;}
-}
-
-async function deleteScript(id,name){
- if(!confirm('Delete "'+name+'" permanently?'))return;
- const token=getMiloToken();
- if(!token){alert('Please log in through Discord first.');return;}
- try{
-  const r=await fetch(API+'/my-scripts/'+encodeURIComponent(id),{
-   method:'DELETE',
-   headers:{Authorization:'Bearer '+token}
-  });
-  const data=await r.json();
-  if(!r.ok)throw new Error(data.error||'Delete failed');
-  alert('Script deleted.');
-  loadScripts();
- }catch(e){alert('Error: '+e.message);}
-}
-
-async function replaceScriptSource(id){
- const picker=document.createElement('input');
- picker.type='file';
- picker.accept='.lua,.txt';
- picker.onchange=async()=>{
-  const file=picker.files[0];
-  if(!file)return;
-  const token=getMiloToken();
-  if(!token){alert('Please log in through Discord first.');return;}
-  try{
-   const source=await file.text();
-   const response=await fetch(
-    'https://milo-api-2026-production.up.railway.app/my-scripts/'+encodeURIComponent(id),
-    {
-     method:'POST',
-     headers:{
-      'Content-Type':'application/json',
-      'Authorization':'Bearer '+token
-     },
-     body:JSON.stringify({source})
-    }
-   );
-   const data=await response.json();
-   if(!response.ok)throw new Error(data.error||'Update failed');
-   alert('Source replaced successfully!');
-   loadScripts();
-  }catch(error){
-   alert('Could not replace source: '+error.message);
-  }
- };
- picker.click();
-}
-
-function showPage(id,btn){
- document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
- document.getElementById(id).classList.add('active');
- document.querySelectorAll('.navlinks button').forEach(b=>b.classList.remove('active'));
- if(btn) btn.classList.add('active');
-}
-</script></html>
+const API='https://milo-api-2026-production.up.railway.app';let selectedSource='';let currentUser=null;let membership=null;
+const $=id=>document.getElementById(id);
+function token(){const params=new URLSearchParams(location.hash.slice(1));const incoming=params.get('milo_token');if(incoming){localStorage.setItem('milo_token',incoming);history.replaceState(null,'',location.pathname+location.search)}return localStorage.getItem('milo_token')}
+function headers(json=true){const h={Authorization:'Bearer '+(token()||'')};if(json)h['Content-Type']='application/json';return h}
+async function api(path,options={}){const r=await fetch(API+path,{...options,headers:{...headers(),...(options.headers||{})}});let data={};try{data=await r.json()}catch{}if(!r.ok)throw new Error(data.error||'Request failed ('+r.status+')');return data}
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));if(id==='scripts')loadScripts();if(id==='activity')loadActivity();if(id==='support')loadTickets()}
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+function node(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e}
+function fmt(ts){return ts?new Date(ts).toLocaleString():'—'}
+function activityElement(a){const wrap=node('div','activityrow');wrap.append(node('span','dot'));const body=node('div');body.append(node('strong','',a.action||'Activity'));body.append(node('small','',`${a.details||''} · ${fmt(a.created_at)}`));wrap.append(body);return wrap}
+async function loadMe(){if(!token()){location.href=API+'/auth/discord';return}try{const data=await api('/auth/me',{headers:{}});currentUser=data.user;membership=data.membership||{};const name=currentUser.username||'Discord user';$('userLabel').textContent=name;$('profileName').textContent=name;$('profileId').textContent='Discord ID: '+currentUser.id;$('profilePlan').textContent=cap(membership.plan||'standard');$('membershipPlan').textContent=cap(membership.plan||'standard');$('planName').textContent=cap(membership.plan||'standard');const expiry=membership.expiresAt?'Expires: '+fmt(membership.expiresAt):'No paid membership active';$('profileExpiry').textContent=expiry;$('membershipExpiry').textContent=expiry;$('statPlan').textContent=cap(membership.plan||'standard');$('statExpiry').textContent=expiry;const avatar=currentUser.avatar?`https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png?size=128`:'';if(avatar){$('avatar').src=avatar;$('avatar').classList.remove('hidden');$('profileAvatar').src=avatar}else $('profileAvatar').src='';const limit={standard:10,pro:20,premium:Infinity}[(membership.plan||'standard').toLowerCase()]??10;const used=membership.uploadCount||0;$('planDescription').textContent=limit===Infinity?'Unlimited script uploads':`${limit} script uploads included`;$('uploadUsage').textContent=limit===Infinity?`${used} uploads used · Unlimited plan`:`${used} / ${limit} uploads used`;$('uploadProgress').style.width=limit===Infinity?'100%':Math.min(100,used/limit*100)+'%';$('apiStatus').textContent='Connected';$('apiStatus').className='pill ok';}catch(e){$('apiStatus').textContent='Connection issue';$('apiStatus').className='pill red';console.error(e)}}
+function cap(s){s=String(s||'standard');return s.charAt(0).toUpperCase()+s.slice(1)}
+async function loadOverview(){try{const d=await api('/dashboard/summary');$('statScripts').textContent=d.scripts;$('statEnabled').textContent=`${d.enabledScripts} enabled`;$('statKeys').textContent=d.activeKeys;$('statUsers').textContent=d.whitelistedUsers;$('statRoles').textContent=`${d.whitelistedRoles} role grants`;const box=$('recentActivity');box.replaceChildren();if(!d.recentActivity?.length)box.append(node('div','empty','No recorded activity yet.'));else d.recentActivity.forEach(a=>box.append(activityElement(a)))}catch(e){$('recentActivity').textContent=e.message}}
+async function loadScripts(){const box=$('scriptList');box.replaceChildren(node('div','empty','Loading scripts…'));try{const d=await api('/my-scripts');$('scriptCount').textContent=d.scripts.length+' scripts';box.replaceChildren();if(!d.scripts.length){box.append(node('div','empty','No scripts uploaded yet. Add your first Lua script below.'));return}d.scripts.forEach(s=>{const item=node('div','item');const info=node('div');info.append(node('h3','',s.name));info.append(node('p','',`ID: ${s.id} · ${s.access} access · ${s.enabled?'Enabled':'Disabled'} · Created ${fmt(s.created_at)}`));const actions=node('div','itemactions');const copy=node('button','secondary','Copy ID');copy.onclick=()=>navigator.clipboard.writeText(s.id).then(()=>copy.textContent='Copied');const versions=node('button','secondary','Versions');versions.onclick=()=>showVersions(s.id,s.name);const replace=node('button','secondary','Replace');replace.onclick=()=>replaceScriptSource(s.id);const del=node('button','secondary danger','Delete');del.onclick=()=>deleteScript(s.id,s.name);actions.append(copy,versions,replace,del);item.append(info,actions);box.append(item)})}catch(e){box.replaceChildren(node('div','empty',e.message))}}
+async function showVersions(id,name){try{const d=await api('/my-scripts/'+encodeURIComponent(id)+'/versions');const lines=d.versions||[];if(!lines.length){alert('No saved versions yet. A backup is created automatically whenever you replace the source.');return}const choice=prompt('Saved versions for '+name+':\n'+lines.map((v,i)=>`${i+1}. ${fmt(v.created_at)} — ${v.note||'Backup'}`).join('\n')+'\n\nEnter the version number to restore, or Cancel.');if(choice===null)return;const index=Number(choice)-1;if(!Number.isInteger(index)||index<0||index>=lines.length){alert('Invalid version number.');return}if(!confirm('Restore this version? The current source will first be backed up.'))return;await api(`/my-scripts/${encodeURIComponent(id)}/versions/${encodeURIComponent(lines[index].id)}/restore`,{method:'POST',body:'{}'});alert('Version restored successfully.');loadScripts();loadOverview()}catch(e){alert('Version history: '+e.message)}}
+async function uploadScript(){const name=$('scriptName').value.trim();const status=$('uploadStatus');if(!name||!selectedSource){status.textContent='Choose a Lua file and enter a script name first.';return}if(!token()){location.href=API+'/auth/discord';return}status.textContent='Uploading and protecting source…';try{const d=await api('/upload',{method:'POST',body:JSON.stringify({name,source:selectedSource,access:$('scriptAccess').value})});status.textContent=`Upload successful · Script ID: ${d.id}`;$('scriptName').value='';$('luaFile').value='';$('fileName').textContent='No file selected';selectedSource='';await loadScripts();await loadOverview()}catch(e){status.textContent='Upload failed: '+e.message}}
+$('luaFile').addEventListener('change',async()=>{const f=$('luaFile').files[0];if(!f)return;try{selectedSource=await f.text();$('fileName').textContent=f.name;$('scriptName').value=f.name.replace(/\.lua$/i,'');$('uploadStatus').textContent='Lua source loaded and ready.'}catch(e){selectedSource='';$('uploadStatus').textContent='Could not read file.'}});
+async function replaceScriptSource(id){const picker=document.createElement('input');picker.type='file';picker.accept='.lua,.txt';picker.onchange=async()=>{const f=picker.files[0];if(!f)return;try{const source=await f.text();if(!confirm('Replace this script source? LUNEX will save a backup of the current version first.'))return;await api('/my-scripts/'+encodeURIComponent(id),{method:'POST',body:JSON.stringify({source})});alert('Source replaced. Previous version backed up.');loadScripts();loadOverview()}catch(e){alert('Could not replace source: '+e.message)}};picker.click()}
+async function deleteScript(id,name){if(!confirm(`Permanently delete "${name}"? This also deletes its saved version history.`))return;try{await api('/my-scripts/'+encodeURIComponent(id),{method:'DELETE'});await loadScripts();await loadOverview()}catch(e){alert('Delete failed: '+e.message)}}
+async function loadActivity(){const box=$('activityList');box.replaceChildren(node('div','empty','Loading activity…'));try{const d=await api('/dashboard/activity');box.replaceChildren();if(!d.events.length)box.append(node('div','empty','No activity recorded yet.'));else d.events.forEach(a=>box.append(activityElement(a)))}catch(e){box.replaceChildren(node('div','empty',e.message))}}
+async function loadTickets(){const box=$('ticketList');box.replaceChildren(node('div','empty','Loading tickets…'));try{const d=await api('/support/tickets');box.replaceChildren();if(!d.tickets.length){box.append(node('div','empty','You have not opened a support ticket yet.'));return}d.tickets.forEach(t=>{const el=node('div','ticket');const head=node('div','tickethead');head.append(node('strong','',t.subject),node('span','pill '+(t.status==='open'?'ok':'red'),cap(t.status)));el.append(head,node('small','muted',`Ticket ${t.id} · ${fmt(t.created_at)}`),node('p','',t.message));box.append(el)})}catch(e){box.replaceChildren(node('div','empty',e.message))}}
+async function createTicket(){const subject=$('ticketSubject').value.trim(),message=$('ticketMessage').value.trim();$('ticketStatus').textContent='Submitting ticket…';try{await api('/support/tickets',{method:'POST',body:JSON.stringify({subject,message})});$('ticketStatus').textContent='Ticket created. Our support team can review it.';$('ticketSubject').value='';$('ticketMessage').value='';await loadTickets();loadOverview()}catch(e){$('ticketStatus').textContent=e.message}}
+async function redeemMembership(){const key=$('redeemKey').value.trim();const status=$('redeemStatus');if(!key){status.textContent='Enter a key first.';return}status.textContent='Submitting membership key…';try{const d=await api('/membership/redeem',{method:'POST',body:JSON.stringify({key})});status.textContent='Request submitted. Waiting for verification…';for(let i=0;i<30;i++){await new Promise(r=>setTimeout(r,2000));const result=await api('/membership/redeem-status/'+encodeURIComponent(d.requestId));if(result.status==='complete'){status.textContent='Membership activated!';$('redeemKey').value='';await loadMe();await loadOverview();return}if(result.status==='failed'){status.textContent=result.message||'Key could not be redeemed.';return}}status.textContent='Still processing. Check again shortly.'}catch(e){status.textContent=e.message}}
+async function logout(){try{await api('/auth/logout',{method:'POST',body:'{}'})}catch{}localStorage.removeItem('milo_token');$('settingsStatus').textContent='Signed out. Redirecting…';location.href='index.html'}
+(async()=>{if(!token()){location.href=API+'/auth/discord';return}await loadMe();await loadOverview();await loadScripts()})();
+</script></body></html>
