@@ -99,6 +99,33 @@ footer{border-top:1px solid #20242e;padding:28px 0;color:#747c8b;font-size:11px}
 #lunex-bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.72}
 nav,.hero,.section,footer{position:relative;z-index:1}
 </style>
+<script>
+(function(){
+  document.documentElement.style.visibility='hidden';
+  const api='https://milo-api-2026-production.up.railway.app';
+  const owner='1508260400708321280';
+  async function check(){
+    try{
+      const r=await fetch(api+'/site/maintenance',{cache:'no-store'});
+      if(!r.ok)throw new Error('status');
+      const m=await r.json();
+      if(m.enabled){
+        let isOwner=false;
+        const t=localStorage.getItem('milo_token');
+        if(t){try{const a=await fetch(api+'/auth/me',{headers:{Authorization:'Bearer '+t},cache:'no-store'});if(a.ok){const d=await a.json();isOwner=d.user?.id===owner;}}catch(e){}}
+        if(!isOwner){
+          const safeMessage=String(m.message||'LUNEX PROTECT is currently undergoing maintenance. Please check back soon.').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});
+          document.open();
+          document.write('<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LUNEX PROTECT — Maintenance</title><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:radial-gradient(ellipse at top,#301018,#08090d 60%);color:#f5f5f7;font-family:Arial,sans-serif;text-align:center}.panel{max-width:560px;padding:38px 28px;border:1px solid #49212b;border-radius:22px;background:#11121a;box-shadow:0 20px 80px #0008}h1{letter-spacing:.12em;color:#ff5362;font-size:clamp(25px,6vw,42px)}p{color:#b9bdc9;line-height:1.7}.mark{font-size:12px;letter-spacing:.3em;color:#ff7a86}a{display:inline-block;margin-top:18px;color:#ff7a86;text-decoration:none;border:1px solid #74303d;padding:11px 16px;border-radius:10px}</style></head><body><main class="panel"><div class="mark">LUNEX PROTECT</div><h1>UNDER MAINTENANCE</h1><p>'+safeMessage+'</p><a href="'+api+'/auth/discord">Owner login</a></main></body></html>');
+          document.close();return;
+        }
+      }
+    }catch(e){}
+    document.documentElement.style.visibility='visible';
+  }
+  check();
+})();
+</script>
 </head>
 <body>
 <canvas id="lunex-bg" aria-hidden="true"></canvas>
