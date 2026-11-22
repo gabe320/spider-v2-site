@@ -150,63 +150,177 @@ Support</textarea>
 
 <script>
 (function(){
- const $=id=>document.getElementById(id);
- const select=$('psScript');
- if(!select)return;
+ const $ = id => document.getElementById(id);
+ const select = $('psScript');
+ if (!select) return;
 
- const status=m=>{const e=$('psStatus');if(e)e.textContent=m;};
- const updatePreview=()=>{
-  const color=$('psColor').value||'#e84158';
-  $('psPreviewTitle').textContent=$('psTitle').value||'LUNEX PROTECT';
-  $('psPreviewTitle').style.color=color;
-  $('psPreviewDesc').textContent=$('psDesc').value||'Your panel description';
-  $('psPreview').style.borderColor=color;
-  const wrap=$('psPreviewButtons');wrap.replaceChildren();
-  ($('psButtons').value||'').split(/\n/).map(x=>x.trim()).filter(Boolean).forEach(label=>{
-   const b=document.createElement('span');b.textContent=label;b.style.background=color;wrap.appendChild(b);
-  });
+ const status = message => {
+   const el = $('psStatus');
+   if (el) el.textContent = message;
  };
- async function loadScripts(){
-  try{
-   const data=await api('/my-scripts');
-   const list=Array.isArray(data)?data:(data.scripts||[]);
-   select.replaceChildren();
-   if(!list.length){select.add(new Option('No scripts found',''));return;}
-   list.forEach(s=>select.add(new Option(s.name||s.id,s.id)));
-   await loadConfig();
-  }catch(e){select.replaceChildren(new Option('Unable to load scripts',''));status('Script load error: '+e.message);}
+
+ const updatePreview = () => {
+   const color = $('psColor').value || '#ff4358';
+   $('psPreviewTitle').textContent = $('psTitle').value || 'LUNEX PROTECT';
+   $('psPreviewTitle').style.color = color;
+   $('psPreviewDesc').textContent = $('psDesc').value || 'Your panel description';
+   $('psPreview').style.borderColor = color;
+
+   const wrap = $('psPreviewButtons');
+   wrap.replaceChildren();
+
+   ($('psButtons').value || '').split(/\n/)
+     .map(x => x.trim()).filter(Boolean).forEach(label => {
+       const button = document.createElement('span');
+       button.textContent = label;
+       button.style.background = color;
+       wrap.appendChild(button);
+     });
+ };
+
+ async function loadConfig() {
+   const id = select.value;
+   if (!id) return;
+
+   status('Loading saved panel configuration…');
+
+   try {
+     const data = await api('/studio/panel-config/' + encodeURIComponent(id));
+     const config = data.config || {};
+
+     $('psTitle').value = config.title || '';
+     $('psDesc').value = config.description || '';
+     $('psColor').value = config.color || config.accent || '#ff4358';
+
+     const buttons = Array.isArray(config.buttons) ? config.buttons : [];
+     $('psButtons').value = buttons.map(button =>
+       typeof button === 'string' ? button : (button.label || '')
+     ).filter(Boolean).join('\n');
+
+     updatePreview();
+     status('Panel configuration loaded.');
+   } catch (error) {
+     updatePreview();
+     status('Could not load saved settings: ' + error.message);
+   }
  }
- async function loadConfig(){
-  const id=select.value;if(!id)return;
-  try{
-   const data=await api('/studio/panel-config/'+encodeURIComponent(id));
-   const c=data.config||data.panel||data;
-   if(c.title)$('psTitle').value=c.title;
-   if(c.description)$('psDesc').value=c.description;
-   ifc(c.accent)$('psColor').value=c.accent;
-   if(Array.isArray(c.buttons))$('psButtons').value=c.buttons.join('\n');
-  }catch(e){}
-  updatePreview();
+
+ async function loadScripts() {
+   select.replaceChildren(new Option('Loading your scripts…', ''));
+   status('Connecting to your script library…');
+
+   const controller = new AbortController();
+   const timeout = setTimeout(() => controller.abort(), 15000);
+
+   try {
+     const data = await api('/my-scripts', {signal: controller.signal});
+     const scripts = Array.isArray(data) ? data : data.scripts;
+
+     if (!Array.isArray(scripts)) {
+       throw new Error('Unexpected API response. Expected a scripts list.');
+     }
+
+     select.replaceChildren();
+
+     if (!scripts.length) {
+       select.add(new Option('No scripts found — upload one first', ''));
+       status('No scripts found in your account.');
+       return;
+     }
+
+     scripts.forEach(script => {
+       if (script && script.id) {
+         select.add(new Option(script.name || script.id, script.id));
+       }
+     });
+
+     if (!select.options.length) {
+       select.add(new Option('No valid scripts found', ''));
+       status('The API returned no usable script IDs.');
+       return;
+     }
+
+     await loadConfig();
+   } catch (error) {
+     const message = error.name === 'AbortError'
+       ? 'Request timed out. Check your connection and retry.'
+       : error.message;
+
+     select.replaceChildren(
+       new Option('Unable to load scripts — select to retry', '__retry__')
+     );
+     status('Script loading failed: ' + message);
+   } finally {
+     clearTimeout(timeout);
+   }
  }
- function ifc(v){return !!v;}
- async function save(){
-  const id=select.value;if(!id){status('Select a script first.');return;}
-  const config={title:$('psTitle').value,description:$('psDesc').value,accent:$('psColor').value,buttons:$('psButtons').value.split(/\n/).map(x=>x.trim()).filter(Boolean)};
-  try{
-   await api('/studio/panel-config/'+encodeURIComponent(id),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({config})});
-   status('Configuration saved successfully.');
-  }catch(e){status('Save error: '+e.message);}
+
+ async function save() {
+   const id = select.value;
+   if (!id || id === '__retry__') {
+     status('Select a script first.');
+     return;
+   }
+
+   const config = {
+     title: $('psTitle').value,
+     description: $('psDesc').value,
+     color: $('psColor').value || '#ff4358',
+     preset: 'premium',
+     buttons: $('psButtons').value.split(/\n/)
+       .map(label => label.trim())
+       .filter(Boolean)
+       .slice(0, 6)
+       .map(label => ({label, type: 'button'}))
+   };
+
+   try {
+     await api('/studio/panel-config/' + encodeURIComponent(id), {
+       method: 'POST',
+       body: JSON.stringify({config})
+     });
+     status('Configuration saved successfully.');
+   } catch (error) {
+     status('Save error: ' + error.message);
+   }
  }
- async function sync(){
-  const id=select.value;if(!id){status('Select a script first.');return;}
-  try{await api('/studio/panel-sync/'+encodeURIComponent(id),{method:'POST'});status('Discord sync queued.');}
-  catch(e){status('Sync error: '+e.message);}
+
+ async function sync() {
+   const id = select.value;
+   if (!id || id === '__retry__') {
+     status('Select a script first.');
+     return;
+   }
+
+   try {
+     await api('/studio/panel-sync/' + encodeURIComponent(id), {
+       method: 'POST'
+     });
+     status('Discord sync queued. The bot worker must process the queue.');
+   } catch (error) {
+     status('Sync error: ' + error.message);
+   }
  }
- ['psTitle','psDesc','psButtons','psColor'].forEach(id=>$(id).addEventListener('input',updatePreview));
- select.addEventListener('change',loadConfig);
- $('psSave').addEventListener('click',save);
- $('psSync').addEventListener('click',sync);
- document.querySelectorAll('#panelStudio .ps-swatch').forEach(b=>b.addEventListener('click',()=>{$('psColor').value=b.dataset.color;updatePreview();}));
+
+ ['psTitle', 'psDesc', 'psButtons', 'psColor'].forEach(id => {
+   $(id).addEventListener('input', updatePreview);
+ });
+
+ select.addEventListener('change', () => {
+   if (select.value === '__retry__') loadScripts();
+   else loadConfig();
+ });
+
+ $('psSave').addEventListener('click', save);
+ $('psSync').addEventListener('click', sync);
+
+ document.querySelectorAll('#panelStudio .ps-swatch').forEach(button => {
+   button.addEventListener('click', () => {
+     $('psColor').value = button.dataset.color;
+     updatePreview();
+   });
+ });
+
  updatePreview();
  loadScripts();
 })();
