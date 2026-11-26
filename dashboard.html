@@ -466,7 +466,23 @@
 <section id="activity" class="page"><div class="hero"><div><div class="eyebrow">Account audit trail</div><h1>Activity log</h1><p class="muted">Recent script and support actions recorded for your account.</p></div><button class="secondary" onclick="loadActivity()">↻ Refresh</button></div><div class="card"><div id="activityList" class="list"><div class="empty">Loading activity…</div></div></div></section>
 <section id="support" class="page"><div class="hero"><div><div class="eyebrow">We're here to help</div><h1>Support center</h1><p class="muted">Create a support ticket and track its status from your dashboard.</p></div></div><div class="card"><h2>Open a ticket</h2><label class="fieldlabel" for="ticketSubject">SUBJECT</label><input class="field" id="ticketSubject" maxlength="100" placeholder="What do you need help with?"><label class="fieldlabel" for="ticketVisibility">TICKET VISIBILITY</label><select class="field" id="ticketVisibility"><option value="private">Private — only you and support staff</option><option value="public">Public — visible to logged-in LUNEX members</option></select><p class="status">Public tickets can be viewed and replied to by any logged-in LUNEX member. Private tickets stay between you and support staff.</p><label class="fieldlabel" for="ticketMessage">MESSAGE</label><textarea class="field" id="ticketMessage" rows="5" maxlength="3000" placeholder="Describe the issue (at least 10 characters)…"></textarea><button class="action" onclick="createTicket()">Submit ticket</button><p class="status" id="ticketStatus"></p></div><div class="card"><div class="sectionhead" style="margin-top:0"><h2>Your tickets</h2><button class="secondary" onclick="loadTickets()">↻ Refresh</button></div><div id="ticketList" class="list"><div class="empty">Loading tickets…</div></div></div></section>
 <section id="profile" class="page"><div class="hero"><div><div class="eyebrow">Identity & account</div><h1>Profile</h1><p class="muted">Your connected Discord account and membership details.</p></div></div><div class="card"><div style="display:flex;align-items:center;gap:15px"><img id="profileAvatar" class="avatar" style="width:64px;height:64px" alt=""><div><h2 id="profileName">Discord account</h2><p class="muted" id="profileId">Sign in to view account details.</p></div></div><hr style="border:0;border-top:1px solid var(--line);margin:20px 0"><p class="muted">Membership</p><div class="plan" id="profilePlan">Standard</div><p class="status" id="profileExpiry"></p></div></section>
-<section id="settings" class="page"><div class="hero"><div><div class="eyebrow">Preferences & security</div><h1>Settings</h1><p class="muted">Manage your dashboard session and account access.</p></div></div><div class="card"><h2>Session</h2><p class="muted">Your dashboard uses a signed Discord login token stored in this browser.</p><button class="action danger" onclick="logout()">Sign out of LUNEX</button><p class="status" id="settingsStatus"></p></div><div class="card"><h2>Service connection</h2><p class="muted">API endpoint</p><p style="overflow-wrap:anywhere">milo-api-2026-production.up.railway.app</p><span class="pill" 
+<section id="settings" class="page"><div class="hero"><div><div class="eyebrow">Preferences & security</div><h1>Settings</h1><p class="muted">Manage your dashboard session and account access.</p></div></div><div class="card"><h2>Session</h2><p class="muted">Your dashboard uses a signed Discord login token stored in this browser.</p><button class="action danger" onclick="logout()">Sign out of LUNEX</button><p class="status" id="settingsStatus"></p></div>
+<div class="card" id="ownerMaintenanceCard" style="display:none">
+  <h2>Website maintenance</h2>
+  <p class="muted">Control the public LUNEX PROTECT website maintenance screen. This setting does not disable the dashboard API.</p>
+  <label class="fieldlabel" for="maintenanceEnabled">MAINTENANCE MODE</label>
+  <label style="display:flex;align-items:center;gap:10px;margin:10px 0 16px">
+    <input type="checkbox" id="maintenanceEnabled">
+    <span>Enable website maintenance mode</span>
+  </label>
+  <label class="fieldlabel" for="maintenanceMessage">VISITOR MESSAGE</label>
+  <textarea class="field" id="maintenanceMessage" rows="3" maxlength="240" placeholder="LUNEX PROTECT is currently undergoing maintenance. Please check back soon."></textarea>
+  <p class="status">Maximum 240 characters. Visitors will see this message while maintenance mode is enabled.</p>
+  <button class="action" type="button" onclick="saveMaintenanceSettings()">Save maintenance settings</button>
+  <p class="status" id="maintenanceStatus">Loading maintenance status…</p>
+</div>
+
+<div class="card"><h2>Service connection</h2><p class="muted">API endpoint</p><p style="overflow-wrap:anywhere">milo-api-2026-production.up.railway.app</p><span class="pill" 
 
 
 id="apiStatus">Checking API…</span></div></section>
@@ -563,13 +579,68 @@ const $=id=>document.getElementById(id);
 function token(){const params=new URLSearchParams(location.hash.slice(1));const incoming=params.get('milo_token');if(incoming){localStorage.setItem('milo_token',incoming);history.replaceState(null,'',location.pathname+location.search)}return localStorage.getItem('milo_token')}
 function headers(json=true){const h={Authorization:'Bearer '+(token()||'')};if(json)h['Content-Type']='application/json';return h}
 async function api(path,options={}){const r=await fetch(API+path,{...options,headers:{...headers(),...(options.headers||{})}});let data={};try{data=await r.json()}catch{}if(!r.ok)throw new Error(data.error||'Request failed ('+r.status+')');return data}
+
+const LUNEX_DASHBOARD_OWNER_ID = '1508260400708321280';
+
+async function loadMaintenanceSettings() {
+  const card = $('ownerMaintenanceCard');
+  if (!card || String(currentUser?.id || '') !== LUNEX_DASHBOARD_OWNER_ID) return;
+
+  card.style.display = '';
+  const status = $('maintenanceStatus');
+  status.textContent = 'Loading maintenance status…';
+
+  try {
+    const data = await api('/site/maintenance', { headers: {} });
+    $('maintenanceEnabled').checked = data.enabled === true;
+    $('maintenanceMessage').value = data.message || '';
+    status.textContent = data.enabled
+      ? 'Maintenance mode is currently ENABLED.'
+      : 'Maintenance mode is currently DISABLED.';
+  } catch (error) {
+    status.textContent = 'Could not load settings: ' + error.message;
+  }
+}
+
+async function saveMaintenanceSettings() {
+  if (String(currentUser?.id || '') !== LUNEX_DASHBOARD_OWNER_ID) {
+    $('maintenanceStatus').textContent = 'Owner access required.';
+    return;
+  }
+
+  const status = $('maintenanceStatus');
+  const button = document.querySelector('#ownerMaintenanceCard button.action');
+  const enabled = $('maintenanceEnabled').checked;
+  const message = $('maintenanceMessage').value.trim().slice(0, 240);
+
+  status.textContent = 'Saving maintenance settings…';
+  if (button) button.disabled = true;
+
+  try {
+    const data = await api('/site/maintenance', {
+      method: 'POST',
+      body: JSON.stringify({ enabled, message })
+    });
+
+    $('maintenanceEnabled').checked = data.enabled === true;
+    $('maintenanceMessage').value = data.message || '';
+    status.textContent = data.enabled
+      ? 'Saved. Website maintenance mode is ENABLED.'
+      : 'Saved. Website maintenance mode is DISABLED.';
+  } catch (error) {
+    status.textContent = 'Save failed: ' + error.message;
+  } finally {
+    if (button) button.disabled = false;
+  }
+}
+
 function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));if(id==='scripts')loadScripts();
- if(id==='obfuscator')loadObfuscatorUsage();if(id==='activity')loadActivity();if(id==='support')loadTickets()}
+ if(id==='obfuscator')loadObfuscatorUsage();if(id==='activity')loadActivity();if(id==='support')loadTickets();if(id==='settings'&&String(currentUser?.id||'')===LUNEX_DASHBOARD_OWNER_ID)loadMaintenanceSettings()}
 document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
 function node(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e}
 function fmt(ts){return ts?new Date(ts).toLocaleString():'—'}
 function activityElement(a){const wrap=node('div','activityrow');wrap.append(node('span','dot'));const body=node('div');body.append(node('strong','',a.action||'Activity'));body.append(node('small','',`${a.details||''} · ${fmt(a.created_at)}`));wrap.append(body);return wrap}
-async function loadMe(){if(!token()){location.href=API+'/auth/discord';return}try{const data=await api('/auth/me',{headers:{}});currentUser=data.user;membership=data.membership||{};const name=currentUser.username||'Discord user';$('userLabel').textContent=name;$('profileName').textContent=name;$('profileId').textContent='Discord ID: '+currentUser.id;$('profilePlan').textContent=cap(membership.plan||'standard');$('membershipPlan').textContent=cap(membership.plan||'standard');$('planName').textContent=cap(membership.plan||'standard');const expiry=membership.expiresAt?'Expires: '+fmt(membership.expiresAt):'No paid membership active';$('profileExpiry').textContent=expiry;$('membershipExpiry').textContent=expiry;$('statPlan').textContent=cap(membership.plan||'standard');$('statExpiry').textContent=expiry;const avatar=currentUser.avatar?`https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png?size=128`:'';if(avatar){$('avatar').src=avatar;$('avatar').classList.remove('hidden');$('profileAvatar').src=avatar}else $('profileAvatar').src='';const limit={standard:10,pro:20,premium:Infinity}[(membership.plan||'standard').toLowerCase()]??10;const used=membership.uploadCount||0;$('planDescription').textContent=limit===Infinity?'Unlimited script uploads':`${limit} script uploads included`;$('uploadUsage').textContent=limit===Infinity?`${used} uploads used · Unlimited plan`:`${used} / ${limit} uploads used`;$('uploadProgress').style.width=limit===Infinity?'100%':Math.min(100,used/limit*100)+'%';$('apiStatus').textContent='Connected';$('apiStatus').className='pill ok';}catch(e){$('apiStatus').textContent='Connection issue';$('apiStatus').className='pill red';console.error(e)}}
+async function loadMe(){if(!token()){location.href=API+'/auth/discord';return}try{const data=await api('/auth/me',{headers:{}});currentUser=data.user;if($('ownerMaintenanceCard'))$('ownerMaintenanceCard').style.display=String(currentUser.id)===LUNEX_DASHBOARD_OWNER_ID?'':'none';membership=data.membership||{};const name=currentUser.username||'Discord user';$('userLabel').textContent=name;$('profileName').textContent=name;$('profileId').textContent='Discord ID: '+currentUser.id;$('profilePlan').textContent=cap(membership.plan||'standard');$('membershipPlan').textContent=cap(membership.plan||'standard');$('planName').textContent=cap(membership.plan||'standard');const expiry=membership.expiresAt?'Expires: '+fmt(membership.expiresAt):'No paid membership active';$('profileExpiry').textContent=expiry;$('membershipExpiry').textContent=expiry;$('statPlan').textContent=cap(membership.plan||'standard');$('statExpiry').textContent=expiry;const avatar=currentUser.avatar?`https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png?size=128`:'';if(avatar){$('avatar').src=avatar;$('avatar').classList.remove('hidden');$('profileAvatar').src=avatar}else $('profileAvatar').src='';const limit={standard:10,pro:20,premium:Infinity}[(membership.plan||'standard').toLowerCase()]??10;const used=membership.uploadCount||0;$('planDescription').textContent=limit===Infinity?'Unlimited script uploads':`${limit} script uploads included`;$('uploadUsage').textContent=limit===Infinity?`${used} uploads used · Unlimited plan`:`${used} / ${limit} uploads used`;$('uploadProgress').style.width=limit===Infinity?'100%':Math.min(100,used/limit*100)+'%';$('apiStatus').textContent='Connected';$('apiStatus').className='pill ok';}catch(e){$('apiStatus').textContent='Connection issue';$('apiStatus').className='pill red';console.error(e)}}
 function cap(s){s=String(s||'standard');return s.charAt(0).toUpperCase()+s.slice(1)}
 async function loadOverview(){try{const d=await api('/dashboard/summary');$('statScripts').textContent=d.scripts;$('statEnabled').textContent=`${d.enabledScripts} enabled`;$('statKeys').textContent=d.activeKeys;$('statUsers').textContent=d.whitelistedUsers;$('statRoles').textContent=`${d.whitelistedRoles} role grants`;const box=$('recentActivity');box.replaceChildren();if(!d.recentActivity?.length)box.append(node('div','empty','No recorded activity yet.'));else d.recentActivity.forEach(a=>box.append(activityElement(a)))}catch(e){$('recentActivity').textContent=e.message}}
 async function loadScripts(){
