@@ -1503,28 +1503,34 @@ document.getElementById('obfDownload').addEventListener('click', function() {
 <!-- LUNEX PREMIUM STUDIO END -->
 
 
-<style id="LUNEX-DROPDOWN-FINAL-FIX">
+
+\n
+<style id="LUNEX-MENU-CLEAN-FIX">
 #scriptList,
-#scriptList .item {
+#scriptList .item,
+#scriptList .itemactions {
     overflow: visible !important;
 }
 
 #scriptList .item {
     position: relative !important;
-    isolation: auto !important;
 }
 
 #scriptList .itemactions {
-    z-index: 100000 !important;
+    z-index: 10000 !important;
+}
+
+#scriptList .script-menu {
+    position: relative !important;
+    z-index: 10001 !important;
 }
 
 #scriptList .script-menu.open {
-    position: relative !important;
-    z-index: 100001 !important;
+    z-index: 10002 !important;
 }
 
 #scriptList .script-menu-dropdown {
-    display: none !important;
+    display: none;
     position: absolute !important;
     top: calc(100% + 8px) !important;
     right: 0 !important;
@@ -1535,134 +1541,38 @@ document.getElementById('obfDownload').addEventListener('click', function() {
     max-height: none !important;
     overflow: visible !important;
     padding: 8px !important;
-    background: #171923 !important;
-    border: 1px solid #414454 !important;
-    border-radius: 12px !important;
-    box-shadow: 0 12px 35px #000b !important;
+    background: #17131f !important;
+    border: 1px solid #51405f !important;
+    border-radius: 13px !important;
+    box-shadow: 0 18px 45px #000d !important;
 }
 
 #scriptList .script-menu.open .script-menu-dropdown {
     display: grid !important;
-    gap: 4px !important;
+    gap: 5px !important;
 }
 
 #scriptList .script-menu-dropdown button {
     display: block !important;
     width: 100% !important;
     min-height: 42px !important;
-    padding: 10px 12px !important;
-    color: #fff !important;
-    background: transparent !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    text-align: left !important;
-    white-space: normal !important;
-}
-
-#scriptList .script-menu-dropdown button:hover {
-    background: #303342 !important;
-}
-</style>
-\n</body></html>
-
-/* LUNEX SCRIPT MENU VISIBILITY FIX */
-.script-menu {
-  position: relative;
-  z-index: 9999;
-}
-
-.script-menu-dropdown {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  min-width: 190px;
-  padding: 7px;
-  background: #17131f !important;
-  border: 1px solid #51405f !important;
-  border-radius: 13px;
-  box-shadow: 0 18px 45px #000d;
-  z-index: 10000;
-  overflow: visible;
-}
-
-.script-menu-dropdown button {
-  display: block;
-  width: 100%;
-  min-height: 40px;
-  padding: 10px 12px;
-  margin: 2px 0;
-  color: #f5f1fa !important;
-  background: #272032 !important;
-  border: 1px solid #3c304b !important;
-  border-radius: 8px;
-  text-align: left;
-  font-size: 13px;
-  font-weight: 600;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-.script-menu-dropdown button:hover {
-  color: #ffffff !important;
-  background: #49304f !important;
-  border-color: #ff5362 !important;
-}
-
-.script-menu-dropdown button.danger {
-  color: #ff8996 !important;
-}
-
-.script-menu-dropdown button.danger:hover {
-  background: #54232f !important;
-}
-
-<style id="LUNEX-MENU-FIX-V2">
-.script-menu-dropdown {
-    position: absolute !important;
-    z-index: 999999 !important;
-    min-width: 190px !important;
     height: auto !important;
-    max-height: none !important;
-    overflow: visible !important;
-    padding: 8px !important;
-    background: #171923 !important;
-    border: 1px solid #414454 !important;
-    border-radius: 12px !important;
-    box-shadow: 0 12px 35px rgba(0,0,0,.65) !important;
-}
-
-.script-menu-dropdown button,
-.script-menu-dropdown a,
-.script-menu-dropdown .menu-item {
-    display: flex !important;
-    align-items: center !important;
-    width: 100% !important;
-    min-height: 40px !important;
-    height: auto !important;
+    flex: none !important;
+    margin: 0 !important;
     padding: 10px 12px !important;
-    margin: 2px 0 !important;
-    color: #f5f5f7 !important;
-    background: transparent !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    font-size: 14px !important;
+    color: #f5f1fa !important;
+    background: #272032 !important;
+    border: 1px solid #3c304b !important;
+    border-radius: 8px !important;
+    font-size: 13px !important;
     font-weight: 600 !important;
-    line-height: 1.4 !important;
-    text-align: left !important;
-    white-space: normal !important;
-    border: 0 !important;
-    border-radius: 7px !important;
-}
-
-.script-menu-dropdown button:hover,
-.script-menu-dropdown a:hover,
-.script-menu-dropdown .menu-item:hover {
-    color: #ffffff !important;
-    background: #303342 !important;
-}
-
-.script-menu-dropdown * {
     opacity: 1 !important;
     visibility: visible !important;
 }
+
+#scriptList .script-menu-dropdown button.danger {
+    color: #ff8996 !important;
+}
 </style>
+
+</body></html>
