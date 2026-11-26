@@ -253,6 +253,11 @@
 #lunexVersionModal .lv-primary:disabled,#lunexVersionModal .lv-secondary:disabled{opacity:.55;cursor:not-allowed}
 #lunexVersionModal .lv-error{min-height:18px;margin-top:7px;color:#ff8494;font-size:12px}
 
+
+.nav-other{position:relative;display:inline-flex;align-items:center}
+.nav-other-menu{position:absolute;top:calc(100% + 9px);right:0;min-width:155px;padding:7px;background:#15151b;border:1px solid #34343e;border-radius:12px;box-shadow:0 12px 30px #0009;z-index:1000;gap:4px}
+.nav-other-menu button{width:100%;text-align:left;white-space:nowrap}
+@media(max-width:720px){.nav-other-menu{right:auto;left:0}}
 </style>
 <style id="lunex-premium-obfuscator">
 #obfuscator{--obf-panel:#10121b;--obf-line:#292d3d;--obf-muted:#9298aa}
@@ -352,8 +357,20 @@
 </head>
 <body><div class="shell">
 <header class="topbar"><a class="brand" href="index.html"><img src="lunex-logo.png" alt="LUNEX PROTECT"><span><small>COMMAND CENTER</small></span></a>
-<nav class="nav" id="nav"><button class="active" data-page="overview">Overview</button><button data-page="scripts">Scripts</button><button data-page="keys">Membership</button><button data-page="activity">Activity</button><button data-page="support">Support</button><button data-page="profile">Profile</button><button data-page="settings">Settings</button><button data-page="panelStudio">Panel Studio</button>
-<button data-page="obfuscator">Obfuscator</button>
+<nav class="nav" id="nav">
+<button class="active" data-page="overview" onclick="showPage('overview')">Overview</button>
+<button data-page="scripts" onclick="showPage('scripts')">Scripts</button>
+<button data-page="obfuscator" onclick="showPage('obfuscator')">Obfuscator</button>
+<button data-page="keys" onclick="showPage('keys')">Membership</button>
+<div class="nav-other">
+<button type="button" id="otherToggle" onclick="const m=document.getElementById('otherMenu');m.style.display=m.style.display==='grid'?'none':'grid'">Other ▾</button>
+<div id="otherMenu" class="nav-other-menu" style="display:none">
+<button data-page="activity" onclick="showPage('activity');document.getElementById('otherMenu').style.display='none'">Activity</button>
+<button data-page="support" onclick="showPage('support');document.getElementById('otherMenu').style.display='none'">Support</button>
+<button data-page="profile" onclick="showPage('profile');document.getElementById('otherMenu').style.display='none'">Profile</button>
+<button data-page="settings" onclick="showPage('settings');document.getElementById('otherMenu').style.display='none'">Settings</button>
+</div>
+</div>
 </nav>
 <div class="right"><img id="avatar" class="avatar hidden" alt="Discord avatar"><span id="userLabel" class="muted" style="font-size:12px">Not connected</span></div></header>
 <main class="layout">
@@ -362,7 +379,94 @@
 <div class="split"><div class="card"><div class="sectionhead" style="margin-top:0"><h2>Recent security activity</h2><button class="secondary" onclick="showPage('activity')">View all</button></div><div id="recentActivity" class="list"><div class="empty">Sign in to load your activity.</div></div></div><div class="card"><h2>Membership usage</h2><div class="plan" id="planName">Standard</div><p class="muted" id="planDescription">10 script uploads included</p><div class="progress"><span id="uploadProgress"></span></div><p class="status" id="uploadUsage">0 / 10 uploads used</p><div class="quick"><button class="action" onclick="showPage('keys')">Redeem membership</button><button class="secondary" onclick="showPage('support')">Get support</button></div></div></div></section>
 <section id="scripts" class="page"><div class="hero"><div><div class="eyebrow">Deployment library</div><h1>Script management</h1><p class="muted">Upload, replace, restore and manage your protected Lua scripts.</p></div><button class="secondary" onclick="loadScripts()">↻ Refresh</button></div>
 <div class="card"><div class="sectionhead" style="margin-top:0"><h2>Your scripts</h2><span class="pill" id="scriptCount">Loading</span></div><div id="scriptList" class="list"><div class="empty">Loading your scripts…</div></div></div>
-<div class="card"><h2>Upload new script</h2><div class="grid" style="grid-template-columns:1fr 1fr"><div><label class="fieldlabel" for="scriptName">SCRIPT NAME</label><input class="field" id="scriptName" maxlength="50" placeholder="My protected script"></div><div><label class="fieldlabel" for="scriptAccess">ACCESS MODE</label><select class="field" id="scriptAccess"><option value="free">Free — no key required</option><option value="paid">Paid — key required</option></select></div></div><label class="fieldlabel" for="luaFile">LUA SOURCE FILE</label><input class="field" id="luaFile" type="file" accept=".lua,.txt"><p class="status" id="fileName">No file selected</p><button class="action" onclick="uploadScript()">Upload & protect source</button><p class="status" id="uploadStatus">Ready when you are.</p></div></section>
+<div class="card"><h2>Upload new script</h2><div class="grid" style="grid-template-columns:1fr 1fr"><div><label class="fieldlabel" for="scriptName">SCRIPT NAME</label><input class="field" id="scriptName" maxlength="50" placeholder="My protected script"></div><div><label class="fieldlabel" for="scriptAccess">ACCESS MODE</label><select class="field" id="scriptAccess"><option value="free">Free — no key required</option><option value="paid">Paid — key required</option></select></div></div><label class="fieldlabel" for="luaFile">LUA SOURCE FILE</label><input class="field" id="luaFile" type="file" accept=".lua,.txt"><p class="status" id="fileName">No file selected</p><button class="action" onclick="uploadScript()">Upload & protect source</button><p class="status" id="uploadStatus">Ready when you are.</p></div>
+<!-- PANEL STUDIO EMBEDDED UNDER SCRIPTS -->
+<section id="panelStudio" class="ps-embedded">
+<style>
+#panelStudio{color:#f3f4f7}
+#panelStudio .ps-wrap{max-width:1120px;margin:auto;padding:24px 15px}
+#panelStudio .ps-head{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:25px}
+#panelStudio .ps-kicker{font-size:10px;letter-spacing:3px;font-weight:900;color:#fa5368}
+#panelStudio .ps-heading{font-size:30px;font-weight:900;letter-spacing:-1px;margin:8px 0}
+#panelStudio .ps-muted{color:#9295a2;font-size:13px}
+#panelStudio .ps-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:17px}
+#panelStudio .ps-card{background:linear-gradient(145deg,#18191f,#111116);border:1px solid #292a32;border-radius:18px;padding:20px;box-shadow:0 14px 40px #0003}
+#panelStudio .ps-card h3{font-size:15px;margin:0 0 5px}
+#panelStudio .ps-label{display:block;margin:15px 0 7px;color:#a3a5b0;font-size:10px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase}
+#panelStudio .ps-input{width:100%;box-sizing:border-box;background:#0d0e12;color:#f5f5f7;border:1px solid #30313a;border-radius:10px;padding:12px;outline:none}
+#panelStudio .ps-input:focus{border-color:#e84b60;box-shadow:0 0 0 3px #e84b601c}
+#panelStudio textarea.ps-input{min-height:84px;resize:vertical}
+#panelStudio .ps-btn{border:1px solid #33343d;background:#22232a;color:#f5f5f7;padding:11px 15px;border-radius:10px;font-weight:800;cursor:pointer}
+#panelStudio .ps-btn:hover{border-color:#ef5367}
+#panelStudio .ps-primary{background:linear-gradient(135deg,#fa5368,#b91f3c);border:0}
+#panelStudio .ps-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+#panelStudio .ps-preview{background:#0c0d11;border:1px solid #30313a;border-radius:15px;padding:20px;margin-top:16px;min-height:200px}
+#panelStudio .ps-pbuttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+#panelStudio .ps-pbuttons span{padding:9px 12px;border-radius:8px;color:white;font-size:12px;font-weight:800}
+#panelStudio .ps-status{font-size:12px;color:#ff7887;min-height:18px;margin-top:12px;overflow-wrap:anywhere}
+#panelStudio .ps-swatches{display:flex;gap:10px;margin-top:12px}
+#panelStudio .ps-swatch{width:28px;height:28px;border:2px solid #ffffff30;border-radius:50%;cursor:pointer}
+@media(max-width:720px){#panelStudio .ps-grid{grid-template-columns:1fr}#panelStudio .ps-wrap{padding:15px 9px}#panelStudio .ps-heading{font-size:25px}}
+</style>
+
+<div class="ps-wrap">
+ <div class="ps-head">
+  <div>
+   <div class="ps-kicker">LUNEX / PROTECT</div>
+   <div class="ps-heading">Panel Studio</div>
+   <div class="ps-muted">Design and manage your script panels.</div>
+  </div>
+  <div style="padding:9px 12px;border-radius:10px;border:1px solid #49303a;background:#211318;color:#ff6477;font-size:11px;font-weight:900">SCRIPT WORKSPACE</div>
+ </div>
+
+ <div class="ps-grid">
+  <div class="ps-card">
+   <h3>Panel Configuration</h3>
+   <div class="ps-muted">Customize your script's Discord panel.</div>
+
+   <label class="ps-label">Script</label>
+   <select id="psScript" class="ps-input"><option value="">Loading scripts...</option></select>
+
+   <label class="ps-label">Panel title</label>
+   <input id="psTitle" class="ps-input" placeholder="LUNEX PROTECT">
+
+   <label class="ps-label">Description</label>
+   <textarea id="psDesc" class="ps-input" placeholder="Describe your script panel"></textarea>
+
+   <label class="ps-label">Accent color</label>
+   <input id="psColor" type="color" class="ps-input" value="#e84158" style="height:46px;padding:4px">
+
+   <div class="ps-swatches">
+    <button class="ps-swatch" data-color="#e84158" style="background:#e84158" title="Crimson"></button>
+    <button class="ps-swatch" data-color="#7d4cff" style="background:#7d4cff" title="Violet"></button>
+    <button class="ps-swatch" data-color="#3288ff" style="background:#3288ff" title="Blue"></button>
+    <button class="ps-swatch" data-color="#17b98a" style="background:#17b98a" title="Emerald"></button>
+   </div>
+
+   <div class="ps-actions">
+    <button type="button" id="psSave" class="ps-btn ps-primary">Save configuration</button>
+    <button type="button" id="psSync" class="ps-btn">Sync Discord</button>
+   </div>
+   <div id="psStatus" class="ps-status"></div>
+  </div>
+
+  <div class="ps-card">
+   <h3>Live Preview</h3>
+   <div class="ps-muted">Preview your panel while editing.</div>
+   <div id="psPreview" class="ps-preview">
+    <div id="psPreviewTitle" style="font-weight:900;font-size:18px">LUNEX PROTECT</div>
+    <div id="psPreviewDesc" class="ps-muted" style="margin-top:8px">Your panel description</div>
+    <div id="psPreviewButtons" class="ps-pbuttons"></div>
+   </div>
+   <div style="margin-top:20px;padding-top:16px;border-top:1px solid #292a32">
+    <h3>Quick Themes</h3>
+    <div class="ps-muted">Choose an accent for the preview.</div>
+   </div>
+  </div>
+ </div>
+</div>
+</section>
+</section>
 <section id="keys" class="page"><div class="hero"><div><div class="eyebrow">Account membership</div><h1>Membership</h1><p class="muted">Redeem a LUNEX membership key issued through the Discord bot.</p></div></div><div class="card"><h2>Redeem membership key</h2><label class="fieldlabel" for="redeemKey">KEY</label><input class="field" id="redeemKey" placeholder="LUNEX-XXXX-XXXX-XXXX"><button class="action" onclick="redeemMembership()">Redeem key</button><p class="status" id="redeemStatus">Your request will be verified by the LUNEX server.</p></div><div class="card"><h2>Your current plan</h2><div class="plan" id="membershipPlan">Standard</div><p class="muted" id="membershipExpiry">No paid membership active</p></div></section>
 <section id="activity" class="page"><div class="hero"><div><div class="eyebrow">Account audit trail</div><h1>Activity log</h1><p class="muted">Recent script and support actions recorded for your account.</p></div><button class="secondary" onclick="loadActivity()">↻ Refresh</button></div><div class="card"><div id="activityList" class="list"><div class="empty">Loading activity…</div></div></div></section>
 <section id="support" class="page"><div class="hero"><div><div class="eyebrow">We're here to help</div><h1>Support center</h1><p class="muted">Create a support ticket and track its status from your dashboard.</p></div></div><div class="card"><h2>Open a ticket</h2><label class="fieldlabel" for="ticketSubject">SUBJECT</label><input class="field" id="ticketSubject" maxlength="100" placeholder="What do you need help with?"><label class="fieldlabel" for="ticketVisibility">TICKET VISIBILITY</label><select class="field" id="ticketVisibility"><option value="private">Private — only you and support staff</option><option value="public">Public — visible to logged-in LUNEX members</option></select><p class="status">Public tickets can be viewed and replied to by any logged-in LUNEX member. Private tickets stay between you and support staff.</p><label class="fieldlabel" for="ticketMessage">MESSAGE</label><textarea class="field" id="ticketMessage" rows="5" maxlength="3000" placeholder="Describe the issue (at least 10 characters)…"></textarea><button class="action" onclick="createTicket()">Submit ticket</button><p class="status" id="ticketStatus"></p></div><div class="card"><div class="sectionhead" style="margin-top:0"><h2>Your tickets</h2><button class="secondary" onclick="loadTickets()">↻ Refresh</button></div><div id="ticketList" class="list"><div class="empty">Loading tickets…</div></div></div></section>
@@ -775,93 +879,6 @@ async function redeemMembership(){const key=$('redeemKey').value.trim();const st
 async function logout(){try{await api('/auth/logout',{method:'POST',body:'{}'})}catch{}localStorage.removeItem('milo_token');$('settingsStatus').textContent='Signed out. Redirecting…';location.href='index.html'}
 (async()=>{if(!token()){location.href=API+'/auth/discord';return}await loadMe();await loadOverview();await loadScripts()})();
 </script>
-<!-- LUNEX PREMIUM STUDIO START -->
-<section id="panelStudio" class="page">
-<style>
-#panelStudio{color:#f3f4f7}
-#panelStudio .ps-wrap{max-width:1120px;margin:auto;padding:24px 15px}
-#panelStudio .ps-head{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:25px}
-#panelStudio .ps-kicker{font-size:10px;letter-spacing:3px;font-weight:900;color:#fa5368}
-#panelStudio .ps-heading{font-size:30px;font-weight:900;letter-spacing:-1px;margin:8px 0}
-#panelStudio .ps-muted{color:#9295a2;font-size:13px}
-#panelStudio .ps-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:17px}
-#panelStudio .ps-card{background:linear-gradient(145deg,#18191f,#111116);border:1px solid #292a32;border-radius:18px;padding:20px;box-shadow:0 14px 40px #0003}
-#panelStudio .ps-card h3{font-size:15px;margin:0 0 5px}
-#panelStudio .ps-label{display:block;margin:15px 0 7px;color:#a3a5b0;font-size:10px;font-weight:800;letter-spacing:1.3px;text-transform:uppercase}
-#panelStudio .ps-input{width:100%;box-sizing:border-box;background:#0d0e12;color:#f5f5f7;border:1px solid #30313a;border-radius:10px;padding:12px;outline:none}
-#panelStudio .ps-input:focus{border-color:#e84b60;box-shadow:0 0 0 3px #e84b601c}
-#panelStudio textarea.ps-input{min-height:84px;resize:vertical}
-#panelStudio .ps-btn{border:1px solid #33343d;background:#22232a;color:#f5f5f7;padding:11px 15px;border-radius:10px;font-weight:800;cursor:pointer}
-#panelStudio .ps-btn:hover{border-color:#ef5367}
-#panelStudio .ps-primary{background:linear-gradient(135deg,#fa5368,#b91f3c);border:0}
-#panelStudio .ps-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
-#panelStudio .ps-preview{background:#0c0d11;border:1px solid #30313a;border-radius:15px;padding:20px;margin-top:16px;min-height:200px}
-#panelStudio .ps-pbuttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
-#panelStudio .ps-pbuttons span{padding:9px 12px;border-radius:8px;color:white;font-size:12px;font-weight:800}
-#panelStudio .ps-status{font-size:12px;color:#ff7887;min-height:18px;margin-top:12px;overflow-wrap:anywhere}
-#panelStudio .ps-swatches{display:flex;gap:10px;margin-top:12px}
-#panelStudio .ps-swatch{width:28px;height:28px;border:2px solid #ffffff30;border-radius:50%;cursor:pointer}
-@media(max-width:720px){#panelStudio .ps-grid{grid-template-columns:1fr}#panelStudio .ps-wrap{padding:15px 9px}#panelStudio .ps-heading{font-size:25px}}
-</style>
-
-<div class="ps-wrap">
- <div class="ps-head">
-  <div>
-   <div class="ps-kicker">LUNEX / PROTECT</div>
-   <div class="ps-heading">Panel Studio</div>
-   <div class="ps-muted">Design and manage your script panels.</div>
-  </div>
-  <div style="padding:9px 12px;border-radius:10px;border:1px solid #49303a;background:#211318;color:#ff6477;font-size:11px;font-weight:900">SCRIPT WORKSPACE</div>
- </div>
-
- <div class="ps-grid">
-  <div class="ps-card">
-   <h3>Panel Configuration</h3>
-   <div class="ps-muted">Customize your script's Discord panel.</div>
-
-   <label class="ps-label">Script</label>
-   <select id="psScript" class="ps-input"><option value="">Loading scripts...</option></select>
-
-   <label class="ps-label">Panel title</label>
-   <input id="psTitle" class="ps-input" placeholder="LUNEX PROTECT">
-
-   <label class="ps-label">Description</label>
-   <textarea id="psDesc" class="ps-input" placeholder="Describe your script panel"></textarea>
-
-   <label class="ps-label">Accent color</label>
-   <input id="psColor" type="color" class="ps-input" value="#e84158" style="height:46px;padding:4px">
-
-   <div class="ps-swatches">
-    <button class="ps-swatch" data-color="#e84158" style="background:#e84158" title="Crimson"></button>
-    <button class="ps-swatch" data-color="#7d4cff" style="background:#7d4cff" title="Violet"></button>
-    <button class="ps-swatch" data-color="#3288ff" style="background:#3288ff" title="Blue"></button>
-    <button class="ps-swatch" data-color="#17b98a" style="background:#17b98a" title="Emerald"></button>
-   </div>
-
-   <div class="ps-actions">
-    <button type="button" id="psSave" class="ps-btn ps-primary">Save configuration</button>
-    <button type="button" id="psSync" class="ps-btn">Sync Discord</button>
-   </div>
-   <div id="psStatus" class="ps-status"></div>
-  </div>
-
-  <div class="ps-card">
-   <h3>Live Preview</h3>
-   <div class="ps-muted">Preview your panel while editing.</div>
-   <div id="psPreview" class="ps-preview">
-    <div id="psPreviewTitle" style="font-weight:900;font-size:18px">LUNEX PROTECT</div>
-    <div id="psPreviewDesc" class="ps-muted" style="margin-top:8px">Your panel description</div>
-    <div id="psPreviewButtons" class="ps-pbuttons"></div>
-   </div>
-   <div style="margin-top:20px;padding-top:16px;border-top:1px solid #292a32">
-    <h3>Quick Themes</h3>
-    <div class="ps-muted">Choose an accent for the preview.</div>
-   </div>
-  </div>
- </div>
-</div>
-
-
 <script>
 (function(){
  const $ = id => document.getElementById(id);
