@@ -1503,3 +1503,54 @@ document.getElementById('obfDownload').addEventListener('click', function() {
 <!-- LUNEX PREMIUM STUDIO END -->
 
 </body></html>
+
+/* LUNEX SCRIPT MENU VISIBILITY FIX */
+.script-menu {
+  position: relative;
+  z-index: 9999;
+}
+
+.script-menu-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 190px;
+  padding: 7px;
+  background: #17131f !important;
+  border: 1px solid #51405f !important;
+  border-radius: 13px;
+  box-shadow: 0 18px 45px #000d;
+  z-index: 10000;
+  overflow: visible;
+}
+
+.script-menu-dropdown button {
+  display: block;
+  width: 100%;
+  min-height: 40px;
+  padding: 10px 12px;
+  margin: 2px 0;
+  color: #f5f1fa !important;
+  background: #272032 !important;
+  border: 1px solid #3c304b !important;
+  border-radius: 8px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.script-menu-dropdown button:hover {
+  color: #ffffff !important;
+  background: #49304f !important;
+  border-color: #ff5362 !important;
+}
+
+.script-menu-dropdown button.danger {
+  color: #ff8996 !important;
+}
+
+.script-menu-dropdown button.danger:hover {
+  background: #54232f !important;
+}
