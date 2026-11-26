@@ -7,14 +7,12 @@
 <meta name="description" content="LUNEX PROTECT — Upload, protect and manage Lua scripts with access controls and Discord integration.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="LUNEX PROTECT">
-<meta property="og:description" content="Advanced Lua Protection Platform">
+<meta property="og:description" content="Protect your Lua scripts with LUNEX PROTECT. Secure access controls, script management, and Discord integration.">
 <meta property="og:url" content="https://spider-v2-site-production.up.railway.app/">
-<meta property="og:image" content="https://spider-v2-site-production.up.railway.app/lunex-logo.png">
 <meta name="theme-color" content="#09090d">
-<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="LUNEX PROTECT">
-<meta name="twitter:description" content="Advanced Lua Protection Platform">
-<meta name="twitter:image" content="https://spider-v2-site-production.up.railway.app/lunex-logo.png">
+<meta name="twitter:description" content="Protect your Lua scripts with LUNEX PROTECT. Secure access controls, script management, and Discord integration.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -98,6 +96,263 @@ footer{border-top:1px solid #20242e;padding:28px 0;color:#747c8b;font-size:11px}
 /* LUNEX animated depth grid */
 #lunex-bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.72}
 nav,.hero,.section,footer{position:relative;z-index:1}
+
+/* LUNEX NEXUS 3D LAUNCH REDESIGN V1 */
+:root {
+  --red:#ff405b;
+  --red2:#a91032;
+  --glow:rgba(255,55,83,.32);
+  --line:rgba(255,255,255,.10);
+}
+body {
+  background:
+    radial-gradient(ellipse at 78% 24%,rgba(126,16,42,.20),transparent 36%),
+    radial-gradient(ellipse at 12% 70%,rgba(75,15,35,.16),transparent 38%),
+    #07080c;
+}
+body:before {
+  background-size:48px 48px;
+  opacity:.55;
+  mask-image:linear-gradient(to bottom,black,transparent 90%);
+}
+nav {
+  width:min(1200px,94%);
+  height:72px;
+  margin:16px auto 0;
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:18px;
+  background:rgba(14,15,22,.76);
+  box-shadow:0 18px 55px #0009,inset 0 1px rgba(255,255,255,.07);
+}
+.nav-inner {padding:0 18px}
+.logo img {filter:drop-shadow(0 0 13px #ff405b35)}
+.links {gap:32px;font-size:12px}
+.links a {position:relative}
+.links a:after {
+  content:"";position:absolute;left:0;right:100%;bottom:-9px;
+  height:2px;background:var(--red);transition:right .25s;
+}
+.links a:hover:after {right:0}
+.btn {
+  border-radius:11px;
+  background:linear-gradient(145deg,#ff6375 0%,#ed2949 48%,#9e102f 100%);
+  border:1px solid #ff8b99;
+  box-shadow:0 9px 0 #650d24,0 17px 35px #ff284533,inset 0 1px 1px #ffffff70;
+  transform:translateY(-2px);
+  transition:transform .2s,box-shadow .2s,filter .2s;
+}
+.btn:hover {
+  transform:translateY(-5px);
+  box-shadow:0 12px 0 #650d24,0 25px 48px #ff284544,inset 0 1px 1px #ffffff80;
+}
+.btn:active {transform:translateY(4px);box-shadow:0 3px 0 #650d24}
+.btn.secondary {
+  background:linear-gradient(145deg,#242631,#11131b);
+  border:1px solid #454957;
+  box-shadow:0 7px 0 #08090e,0 14px 28px #0008,inset 0 1px #ffffff18;
+}
+.hero {
+  min-height:760px;
+  padding:110px 0 105px;
+  perspective:1400px;
+}
+.hero:before {
+  width:850px;height:700px;right:-180px;top:-80px;
+  background:radial-gradient(ellipse,rgba(231,32,68,.22),transparent 68%);
+}
+.hero-grid {gap:70px;grid-template-columns:1.02fr .98fr}
+.eyebrow {
+  padding:10px 15px;
+  background:linear-gradient(120deg,#ff405b1c,#ff405b05);
+  border-color:#a83b50;
+  box-shadow:0 0 28px #ff405b13,inset 0 1px #ffffff10;
+}
+h1 {
+  font-size:clamp(52px,6.6vw,88px);
+  line-height:.99;
+  letter-spacing:-5px;
+  text-shadow:0 12px 45px #0009;
+}
+h1 span {
+  background:linear-gradient(105deg,#fff 0%,#ff9aa7 35%,#ff405b 68%,#a91b39 100%);
+  -webkit-background-clip:text;background-clip:text;
+}
+.hero-copy {font-size:15px;max-width:520px;color:#b0b4c1}
+.actions {gap:16px;margin-top:36px}
+.micro {gap:17px;font-size:9px}
+.visual {
+  min-height:500px;
+  perspective:1200px;
+  transform-style:preserve-3d;
+}
+.orbit {
+  width:410px;height:410px;
+  border:1px solid #ff52652b;
+  box-shadow:0 0 100px #ff28451a,inset 0 0 90px #ff284510;
+  transform:rotateX(65deg) rotateZ(-22deg);
+  animation:lunex-orbit 24s linear infinite;
+}
+.orbit:before {
+  inset:25px;border-color:#ff52652b;
+  box-shadow:0 0 35px #ff405b12;
+}
+.orbit:after {
+  inset:65px;border-color:#ff526528;
+}
+.core {
+  width:min(340px,88%);
+  padding:32px;
+  border-radius:23px;
+  border:1px solid #ffffff26;
+  background:
+    linear-gradient(145deg,rgba(43,35,47,.96),rgba(13,15,23,.96) 52%,rgba(28,12,22,.98));
+  box-shadow:
+    0 45px 90px #000b,
+    0 0 75px #ff405b22,
+    inset 0 1px 1px #ffffff35,
+    inset 0 -25px 50px #0006;
+  transform:rotateX(9deg) rotateY(-13deg) rotateZ(-4deg);
+  transform-style:preserve-3d;
+  animation:lunex-float 6s ease-in-out infinite;
+}
+.core:before {
+  content:"";
+  position:absolute;
+  inset:8px;
+  border:1px solid #ffffff0b;
+  border-radius:17px;
+  pointer-events:none;
+  transform:translateZ(15px);
+}
+.core:after {
+  content:"";
+  position:absolute;
+  left:12%;right:12%;top:-1px;height:2px;
+  background:linear-gradient(90deg,transparent,#ff9ba8,transparent);
+  box-shadow:0 0 20px #ff405b;
+}
+.core-top {font-size:9px}
+.core-icon {
+  width:76px;height:76px;
+  border-radius:22px;
+  background:linear-gradient(145deg,#ff8290,#ed2949 48%,#751027);
+  border:1px solid #ffb0ba;
+  box-shadow:0 15px 35px #ff284555,0 7px 0 #640d25,inset 0 2px 4px #ffffff80;
+  font-size:34px;
+  transform:translateZ(28px);
+}
+.core h3 {font-size:20px;letter-spacing:1.5px;text-shadow:0 3px 20px #ff405b35}
+.core p {letter-spacing:2px;font:9px "DM Mono",monospace}
+.scan {height:6px;background:#292c38;box-shadow:inset 0 2px 4px #000}
+.scan i {box-shadow:0 0 15px #ff405b}
+.float-chip {
+  z-index:3;
+  padding:14px 17px;
+  border:1px solid #ffffff20;
+  border-radius:13px;
+  background:linear-gradient(145deg,#26232dF2,#10121af5);
+  box-shadow:0 18px 40px #000a,inset 0 1px #ffffff20;
+  backdrop-filter:blur(15px);
+}
+.chip-one {top:65px;right:-20px;animation:lunex-chip 7s ease-in-out infinite}
+.chip-two {bottom:55px;left:-22px;animation:lunex-chip 8s ease-in-out infinite reverse}
+.section {padding:115px 0}
+.section-head {margin-bottom:55px}
+.kicker {letter-spacing:2.5px}
+h2 {font-size:clamp(32px,4vw,48px)}
+.card,.step,.plan {
+  border-radius:19px;
+  border-color:#ffffff12;
+  background:linear-gradient(145deg,#1a1c27 0%,#10121a 58%,#0b0d13 100%);
+  box-shadow:0 17px 38px #0005,inset 0 1px #ffffff0c;
+}
+.card {
+  min-height:220px;
+  padding:30px;
+  transform-style:preserve-3d;
+}
+.card:hover {
+  transform:translateY(-9px) rotateX(2deg);
+  border-color:#a83b50;
+  box-shadow:0 28px 55px #0008,0 0 35px #ff405b12,inset 0 1px #ffffff18;
+}
+.icon {
+  border-radius:14px;
+  background:linear-gradient(145deg,#ff405b2b,#65132926);
+  box-shadow:0 7px 0 #270d17,inset 0 1px #ffffff20,0 10px 25px #ff405b15;
+}
+.step {padding:30px;box-shadow:0 14px 30px #0005,inset 0 1px #ffffff10}
+.step-no {letter-spacing:2px}
+.pricing {gap:20px}
+.plan {
+  padding:32px;
+  box-shadow:0 20px 42px #0006,inset 0 1px #ffffff12;
+  transition:transform .25s,border-color .25s,box-shadow .25s;
+}
+.plan:hover {transform:translateY(-7px);border-color:#733342}
+.plan.featured {
+  border-color:#d34860;
+  box-shadow:0 25px 55px #0008,0 0 55px #ff405b19,inset 0 1px #ffffff1b;
+  transform:translateY(-8px);
+}
+.plan.featured:hover {transform:translateY(-14px)}
+.cta {
+  border-radius:25px;
+  border-color:#8a3547;
+  background:
+    radial-gradient(ellipse at 50% -10%,#792034 0%,transparent 65%),
+    linear-gradient(145deg,#21131c,#101119 70%);
+  box-shadow:0 30px 70px #0008,inset 0 1px #ffffff18,0 0 70px #ff405b0d;
+}
+footer {border-color:#ffffff12}
+@keyframes lunex-float {
+  0%,100% {translate:0 0;transform:rotateX(9deg) rotateY(-13deg) rotateZ(-4deg)}
+  50% {translate:0 -13px;transform:rotateX(11deg) rotateY(-9deg) rotateZ(-2deg)}
+}
+@keyframes lunex-orbit {
+  from {rotate:0deg}
+  to {rotate:360deg}
+}
+@keyframes lunex-chip {
+  0%,100% {translate:0 0}
+  50% {translate:0 -9px}
+}
+@media(max-width:850px) {
+  nav {width:94%;margin-top:10px}
+  .hero {min-height:auto;padding:90px 0 80px}
+  .hero-grid {gap:30px}
+  .visual {min-height:420px}
+  .orbit {width:350px;height:350px}
+  .chip-one {right:2%}
+  .chip-two {left:2%}
+}
+@media(max-width:620px) {
+  nav {height:64px;border-radius:14px}
+  .nav-inner {padding:0 10px}
+  .hero {padding:75px 0 65px}
+  h1 {font-size:clamp(48px,13vw,68px);letter-spacing:-3px}
+  .hero-copy {font-size:13px;line-height:1.8}
+  .actions {gap:12px}
+  .actions .btn {padding:12px 14px;font-size:11px}
+  .visual {min-height:340px;overflow:visible}
+  .orbit {width:290px;height:290px}
+  .core {width:250px;padding:23px}
+  .core-icon {width:62px;height:62px;font-size:28px}
+  .float-chip {font-size:8px;padding:10px 11px}
+  .chip-one {top:18px;right:0}
+  .chip-two {bottom:20px;left:0}
+  .section {padding:78px 0}
+  .cards,.workflow,.pricing {gap:14px}
+  .card,.step,.plan {padding:24px}
+  .plan.featured {transform:none}
+  .plan.featured:hover {transform:translateY(-5px)}
+  .cta {padding:55px 20px}
+}
+@media(prefers-reduced-motion:reduce) {
+  .core,.orbit,.chip-one,.chip-two {animation:none!important}
+  *,*:before,*:after {scroll-behavior:auto!important;transition:none!important}
+}
+
 </style>
 <script>
 (function(){
