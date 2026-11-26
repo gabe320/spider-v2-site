@@ -1554,3 +1554,54 @@ document.getElementById('obfDownload').addEventListener('click', function() {
 .script-menu-dropdown button.danger:hover {
   background: #54232f !important;
 }
+
+<style id="LUNEX-MENU-FIX-V2">
+.script-menu-dropdown {
+    position: absolute !important;
+    z-index: 999999 !important;
+    min-width: 190px !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 8px !important;
+    background: #171923 !important;
+    border: 1px solid #414454 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 12px 35px rgba(0,0,0,.65) !important;
+}
+
+.script-menu-dropdown button,
+.script-menu-dropdown a,
+.script-menu-dropdown .menu-item {
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    min-height: 40px !important;
+    height: auto !important;
+    padding: 10px 12px !important;
+    margin: 2px 0 !important;
+    color: #f5f5f7 !important;
+    background: transparent !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+    text-align: left !important;
+    white-space: normal !important;
+    border: 0 !important;
+    border-radius: 7px !important;
+}
+
+.script-menu-dropdown button:hover,
+.script-menu-dropdown a:hover,
+.script-menu-dropdown .menu-item:hover {
+    color: #ffffff !important;
+    background: #303342 !important;
+}
+
+.script-menu-dropdown * {
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+</style>
