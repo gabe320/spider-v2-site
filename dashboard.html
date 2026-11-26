@@ -362,15 +362,10 @@
 <button data-page="scripts" onclick="showPage('scripts')">Scripts</button>
 <button data-page="obfuscator" onclick="showPage('obfuscator')">Obfuscator</button>
 <button data-page="keys" onclick="showPage('keys')">Membership</button>
-<div class="nav-other">
-<button type="button" id="otherToggle" onclick="const m=document.getElementById('otherMenu');m.style.display=m.style.display==='grid'?'none':'grid'">Other ▾</button>
-<div id="otherMenu" class="nav-other-menu" style="display:none">
-<button data-page="activity" onclick="showPage('activity');document.getElementById('otherMenu').style.display='none'">Activity</button>
-<button data-page="support" onclick="showPage('support');document.getElementById('otherMenu').style.display='none'">Support</button>
-<button data-page="profile" onclick="showPage('profile');document.getElementById('otherMenu').style.display='none'">Profile</button>
-<button data-page="settings" onclick="showPage('settings');document.getElementById('otherMenu').style.display='none'">Settings</button>
-</div>
-</div>
+<button data-page="activity" onclick="showPage('activity')">Activity</button>
+<button data-page="profile" onclick="showPage('profile')">Profile</button>
+<button data-page="support" onclick="showPage('support')">Support</button>
+<button data-page="settings" onclick="showPage('settings')">Settings</button>
 </nav>
 <div class="right"><img id="avatar" class="avatar hidden" alt="Discord avatar"><span id="userLabel" class="muted" style="font-size:12px">Not connected</span></div></header>
 <main class="layout">
