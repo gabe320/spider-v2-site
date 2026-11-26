@@ -98,6 +98,143 @@
   z-index: 1001;
 }
 
+
+/* LUNEX Version History */
+#lunexVersionModal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  background: rgba(5,3,12,.82);
+  backdrop-filter: blur(9px);
+}
+#lunexVersionModal .lv-window {
+  width: min(560px, 100%);
+  max-height: 85vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #151020;
+  color: #f5efff;
+  border: 1px solid #68449a;
+  border-radius: 20px;
+  box-shadow: 0 25px 90px rgba(0,0,0,.65);
+}
+#lunexVersionModal .lv-header {
+  padding: 21px;
+  background: linear-gradient(120deg,#29183e,#191225);
+  border-bottom: 1px solid #38264e;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+#lunexVersionModal .lv-heading {
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: .5px;
+}
+#lunexVersionModal .lv-subtitle {
+  margin-top: 5px;
+  color: #a99abf;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+#lunexVersionModal .lv-close {
+  width: 38px;
+  height: 38px;
+  border: 1px solid #594071;
+  border-radius: 10px;
+  background: #251832;
+  color: white;
+  font-size: 21px;
+  cursor: pointer;
+}
+#lunexVersionModal .lv-body {
+  padding: 18px;
+  overflow-y: auto;
+}
+#lunexVersionModal .lv-version {
+  padding: 16px;
+  margin-bottom: 11px;
+  border: 1px solid #39294e;
+  border-radius: 14px;
+  background: #1c1529;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+#lunexVersionModal .lv-version-title {
+  font-weight: 750;
+  font-size: 14px;
+}
+#lunexVersionModal .lv-version-date {
+  margin-top: 6px;
+  color: #a99abf;
+  font-size: 12px;
+}
+#lunexVersionModal .lv-tag {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 4px 8px;
+  border-radius: 20px;
+  background: #342047;
+  color: #d9b8ff;
+  font-size: 10px;
+}
+#lunexVersionModal .lv-restore {
+  flex-shrink: 0;
+  padding: 9px 13px;
+  border: 1px solid #8754c1;
+  border-radius: 9px;
+  background: linear-gradient(135deg,#7541a8,#49236f);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+#lunexVersionModal .lv-restore:disabled {
+  opacity: .5;
+  cursor: wait;
+}
+#lunexVersionModal .lv-message {
+  padding: 25px 12px;
+  text-align: center;
+  color: #b9a9ce;
+  line-height: 1.6;
+}
+#lunexVersionModal .lv-confirm {
+  padding: 20px;
+  border: 1px solid #594071;
+  border-radius: 14px;
+  background: #21172f;
+}
+#lunexVersionModal .lv-confirm-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-top: 18px;
+}
+#lunexVersionModal .lv-cancel {
+  padding: 9px 14px;
+  border: 1px solid #594071;
+  border-radius: 9px;
+  background: #291e38;
+  color: white;
+  cursor: pointer;
+}
+@media(max-width:480px) {
+  #lunexVersionModal { padding: 10px; }
+  #lunexVersionModal .lv-header { padding: 16px; }
+  #lunexVersionModal .lv-body { padding: 12px; }
+  #lunexVersionModal .lv-version { padding: 12px; }
+  #lunexVersionModal .lv-restore { padding: 8px 10px; }
+}
+
 </style></head>
 <body><div class="shell">
 <header class="topbar"><a class="brand" href="index.html"><img src="lunex-logo.png" alt="LUNEX PROTECT"><span><small>COMMAND CENTER</small></span></a>
@@ -244,7 +381,157 @@ if (!window.__lunexScriptMenuListener) {
     }
   });
 }
-async function showVersions(id,name){try{const d=await api('/my-scripts/'+encodeURIComponent(id)+'/versions');const lines=d.versions||[];if(!lines.length){alert('No saved versions yet. A backup is created automatically whenever you replace the source.');return}const choice=prompt('Saved versions for '+name+':\n'+lines.map((v,i)=>`${i+1}. ${fmt(v.created_at)} — ${v.note||'Backup'}`).join('\n')+'\n\nEnter the version number to restore, or Cancel.');if(choice===null)return;const index=Number(choice)-1;if(!Number.isInteger(index)||index<0||index>=lines.length){alert('Invalid version number.');return}if(!confirm('Restore this version? The current source will first be backed up.'))return;await api(`/my-scripts/${encodeURIComponent(id)}/versions/${encodeURIComponent(lines[index].id)}/restore`,{method:'POST',body:'{}'});alert('Version restored successfully.');loadScripts();loadOverview()}catch(e){alert('Version history: '+e.message)}}
+async function showVersions(id,name) {
+  const oldModal = document.getElementById('lunexVersionModal');
+  if (oldModal) oldModal.remove();
+
+  const overlay = node('div');
+  overlay.id = 'lunexVersionModal';
+
+  const panel = node('div','lv-window');
+  panel.setAttribute('role','dialog');
+  panel.setAttribute('aria-modal','true');
+  panel.setAttribute('aria-label','Version history');
+
+  const header = node('div','lv-header');
+  const heading = node('div');
+  heading.append(node('div','lv-heading','VERSION HISTORY'));
+  heading.append(node('div','lv-subtitle',name || 'Your script'));
+  const close = node('button','lv-close','×');
+  close.type = 'button';
+  close.setAttribute('aria-label','Close version history');
+
+  const body = node('div','lv-body');
+  body.append(node('div','lv-message','Loading saved versions…'));
+
+  function closeModal() {
+    document.removeEventListener('keydown', onKey);
+    overlay.remove();
+  }
+
+  function onKey(event) {
+    if (event.key === 'Escape') closeModal();
+  }
+
+  close.addEventListener('click',closeModal);
+  overlay.addEventListener('click',event => {
+    if (event.target === overlay) closeModal();
+  });
+
+  header.append(heading,close);
+  panel.append(header,body);
+  overlay.append(panel);
+  document.body.append(overlay);
+  document.addEventListener('keydown',onKey);
+
+  try {
+    const d = await api('/my-scripts/'+encodeURIComponent(id)+'/versions');
+    const versions = Array.isArray(d.versions) ? d.versions : [];
+
+    function renderVersions() {
+      body.replaceChildren();
+
+      if (!versions.length) {
+        body.append(node('div','lv-message',
+          'No saved versions yet. A backup is created automatically whenever you replace the source.'
+        ));
+        return;
+      }
+
+      const intro = node('div','lv-message',
+        'Your saved source backups appear below. Select a version to restore it.'
+      );
+      body.append(intro);
+
+      versions.forEach((version,index) => {
+        const card = node('div','lv-version');
+        const details = node('div');
+        details.append(node('div','lv-version-title',
+          version.note || ('Saved Version '+(versions.length-index))
+        ));
+        details.append(node('div','lv-version-date',
+          fmt(version.created_at)
+        ));
+        details.append(node('span','lv-tag',
+          index === 0 ? 'LATEST BACKUP' : 'SAVED BACKUP'
+        ));
+
+        const restore = node('button','lv-restore','Restore');
+        restore.type = 'button';
+        restore.addEventListener('click',() => renderConfirmation(version));
+
+        card.append(details,restore);
+        body.append(card);
+      });
+    }
+
+    function renderConfirmation(version) {
+      body.replaceChildren();
+
+      const confirmBox = node('div','lv-confirm');
+      confirmBox.append(node('div','lv-heading','Restore this version?'));
+      confirmBox.append(node('p','lv-subtitle',
+        'LUNEX will restore this saved source. Your current source will be backed up first.'
+      ));
+
+      const actions = node('div','lv-confirm-actions');
+      const cancel = node('button','lv-cancel','Cancel');
+      cancel.type = 'button';
+      cancel.addEventListener('click',renderVersions);
+
+      const confirm = node('button','lv-restore','Confirm Restore');
+      confirm.type = 'button';
+      confirm.addEventListener('click',async () => {
+        confirm.disabled = true;
+        confirm.textContent = 'Restoring…';
+        cancel.disabled = true;
+
+        try {
+          await api(
+            `/my-scripts/${encodeURIComponent(id)}/versions/${encodeURIComponent(version.id)}/restore`,
+            {method:'POST',body:'{}'}
+          );
+
+          body.replaceChildren(node('div','lv-message',
+            'Version restored successfully.'
+          ));
+
+          await loadScripts();
+          await loadOverview();
+
+          setTimeout(closeModal,900);
+        } catch(error) {
+          body.replaceChildren();
+          const message = node('div','lv-message',
+            'Restore failed: '+error.message
+          );
+          const back = node('button','lv-cancel','Back to versions');
+          back.type = 'button';
+          back.addEventListener('click',renderVersions);
+          body.append(message,back);
+        }
+      });
+
+      actions.append(cancel,confirm);
+      confirmBox.append(actions);
+      body.append(confirmBox);
+    }
+
+    renderVersions();
+  } catch(error) {
+    body.replaceChildren();
+    const message = node('div','lv-message',
+      'Could not load version history: '+error.message
+    );
+    const retry = node('button','lv-restore','Try Again');
+    retry.type = 'button';
+    retry.addEventListener('click',() => {
+      closeModal();
+      showVersions(id,name);
+    });
+    body.append(message,retry);
+  }
+}
 async function uploadScript(){const name=$('scriptName').value.trim();const status=$('uploadStatus');if(!name||!selectedSource){status.textContent='Choose a Lua file and enter a script name first.';return}if(!token()){location.href=API+'/auth/discord';return}status.textContent='Uploading and protecting source…';try{const d=await api('/upload',{method:'POST',body:JSON.stringify({name,source:selectedSource,access:$('scriptAccess').value})});status.textContent=`Upload successful · Script ID: ${d.id}`;$('scriptName').value='';$('luaFile').value='';$('fileName').textContent='No file selected';selectedSource='';await loadScripts();await loadOverview()}catch(e){status.textContent='Upload failed: '+e.message}}
 $('luaFile').addEventListener('change',async()=>{const f=$('luaFile').files[0];if(!f)return;try{selectedSource=await f.text();$('fileName').textContent=f.name;$('scriptName').value=f.name.replace(/\.lua$/i,'');$('uploadStatus').textContent='Lua source loaded and ready.'}catch(e){selectedSource='';$('uploadStatus').textContent='Could not read file.'}});
 async function replaceScriptSource(id){const picker=document.createElement('input');picker.type='file';picker.accept='.lua,.txt';picker.onchange=async()=>{const f=picker.files[0];if(!f)return;try{const source=await f.text();if(!confirm('Replace this script source? LUNEX will save a backup of the current version first.'))return;await api('/my-scripts/'+encodeURIComponent(id),{method:'POST',body:JSON.stringify({source})});alert('Source replaced. Previous version backed up.');loadScripts();loadOverview()}catch(e){alert('Could not replace source: '+e.message)}};picker.click()}
