@@ -1075,11 +1075,6 @@ async function loadObfuscatorUsage() {
 }
 
 document.getElementById('obfFile').addEventListener('change', async function() {
-  const nameDisplay = document.getElementById('obfFileName');
-  const statusDisplay = document.getElementById('obfFileStatus');
-  if (nameDisplay) nameDisplay.textContent = file.name;
-  if (statusDisplay) statusDisplay.textContent = 'Selected successfully · ' + (file.size / 1024).toFixed(1) + ' KB';
-
   const file = this.files && this.files[0];
   if (!file) return;
   if (file.size > 512 * 1024) {
@@ -1087,6 +1082,11 @@ document.getElementById('obfFile').addEventListener('change', async function() {
     this.value = '';
     return;
   }
+
+  const nameDisplay = document.getElementById('obfFileName');
+  const statusDisplay = document.getElementById('obfFileStatus');
+  if (nameDisplay) nameDisplay.textContent = file.name;
+  if (statusDisplay) statusDisplay.textContent = 'Selected successfully · ' + (file.size / 1024).toFixed(1) + ' KB';
   document.getElementById('obfFilename').value = file.name;
   document.getElementById('obfSource').value = await file.text();
   document.getElementById('obfChars').textContent = document.getElementById('obfSource').value.length + ' characters';
