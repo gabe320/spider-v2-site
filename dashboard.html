@@ -1511,72 +1511,98 @@ document.getElementById('obfDownload').addEventListener('click', function() {
 
 
 
-<style id="LUNEX-INLINE-MENU-FIX">
-#scripts #scriptList .item {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) auto !important;
-    align-items: start !important;
-    overflow: visible !important;
+
+\n
+<style id="LUNEX-MENU-FLOW-REPAIR">
+#scripts > .card {
+  overflow: visible !important;
+  transform: none !important;
+}
+
+#scripts > .card:hover {
+  transform: none !important;
+}
+
+#scripts #scriptList {
+  display: grid !important;
+  gap: 12px !important;
+  overflow: visible !important;
+}
+
+#scripts #scriptList > .item {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) minmax(210px, 250px) !important;
+  align-items: start !important;
+  gap: 12px !important;
+  overflow: visible !important;
+  position: relative !important;
+  transform: none !important;
+}
+
+#scripts #scriptList > .item > div:first-child {
+  min-width: 0 !important;
 }
 
 #scripts #scriptList .itemactions {
-    display: block !important;
-    width: 100% !important;
-    min-width: 0 !important;
+  display: block !important;
+  width: 100% !important;
+  min-width: 0 !important;
 }
 
 #scripts #scriptList .script-menu {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: flex-end !important;
-    width: 100% !important;
+  position: static !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  width: 100% !important;
 }
 
 #scripts #scriptList .script-menu-trigger {
-    width: 42px !important;
-    min-height: 42px !important;
-    flex: none !important;
+  align-self: flex-end !important;
+  width: 42px !important;
+  min-height: 42px !important;
+  flex: none !important;
 }
 
 #scripts #scriptList .script-menu-dropdown {
-    display: none !important;
-    position: static !important;
-    width: 100% !important;
-    min-width: 190px !important;
-    height: auto !important;
-    max-height: none !important;
-    margin-top: 8px !important;
-    padding: 8px !important;
-    overflow: visible !important;
-    background: #17131f !important;
-    border: 1px solid #51405f !important;
-    border-radius: 12px !important;
+  position: static !important;
+  inset: auto !important;
+  display: none !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-height: none !important;
+  height: auto !important;
+  margin-top: 8px !important;
+  overflow: visible !important;
+  padding: 8px !important;
+  background: #17131f !important;
+  border: 1px solid #51405f !important;
+  border-radius: 12px !important;
+  box-shadow: none !important;
+  z-index: auto !important;
 }
 
 #scripts #scriptList .script-menu.open .script-menu-dropdown {
-    display: grid !important;
-    gap: 5px !important;
+  display: grid !important;
+  gap: 6px !important;
 }
 
 #scripts #scriptList .script-menu-dropdown button {
-    display: block !important;
-    width: 100% !important;
-    min-height: 42px !important;
-    text-align: left !important;
+  display: block !important;
+  width: 100% !important;
+  min-height: 42px !important;
+  text-align: left !important;
 }
-@media(max-width:520px) {
-    #scripts #scriptList .item {
-        grid-template-columns: minmax(0, 1fr) !important;
-    }
-    #scripts #scriptList .itemactions {
-        width: 100% !important;
-    }
-    #scripts #scriptList .script-menu {
-        align-items: stretch !important;
-    }
-    #scripts #scriptList .script-menu-trigger {
-        align-self: flex-end !important;
-    }
+
+@media(max-width:600px) {
+  #scripts #scriptList > .item {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  #scripts #scriptList .script-menu {
+    width: 100% !important;
+  }
 }
 </style>
-\n</body></html>
+
+</body></html>
