@@ -1502,7 +1502,68 @@ document.getElementById('obfDownload').addEventListener('click', function() {
 
 <!-- LUNEX PREMIUM STUDIO END -->
 
-</body></html>
+
+<style id="LUNEX-DROPDOWN-FINAL-FIX">
+#scriptList,
+#scriptList .item {
+    overflow: visible !important;
+}
+
+#scriptList .item {
+    position: relative !important;
+    isolation: auto !important;
+}
+
+#scriptList .itemactions {
+    z-index: 100000 !important;
+}
+
+#scriptList .script-menu.open {
+    position: relative !important;
+    z-index: 100001 !important;
+}
+
+#scriptList .script-menu-dropdown {
+    display: none !important;
+    position: absolute !important;
+    top: calc(100% + 8px) !important;
+    right: 0 !important;
+    left: auto !important;
+    width: 210px !important;
+    min-width: 210px !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    padding: 8px !important;
+    background: #171923 !important;
+    border: 1px solid #414454 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 12px 35px #000b !important;
+}
+
+#scriptList .script-menu.open .script-menu-dropdown {
+    display: grid !important;
+    gap: 4px !important;
+}
+
+#scriptList .script-menu-dropdown button {
+    display: block !important;
+    width: 100% !important;
+    min-height: 42px !important;
+    padding: 10px 12px !important;
+    color: #fff !important;
+    background: transparent !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    text-align: left !important;
+    white-space: normal !important;
+}
+
+#scriptList .script-menu-dropdown button:hover {
+    background: #303342 !important;
+}
+</style>
+\n</body></html>
 
 /* LUNEX SCRIPT MENU VISIBILITY FIX */
 .script-menu {
