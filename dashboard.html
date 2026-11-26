@@ -339,6 +339,15 @@
  #obfuscator .obf-actions{align-items:stretch}
  #obfuscator #obfRun{width:100%}
 }
+
+#obfuscator .obf-file-picker{display:flex;align-items:center;gap:13px;text-align:left;padding:15px;border:1px dashed #75404b;border-radius:12px;background:linear-gradient(120deg,#21131b,#11121a);cursor:pointer;transition:.2s;min-width:0}
+#obfuscator .obf-file-picker:hover{border-color:#ff5368;background:#28151e}
+#obfuscator .obf-file-icon{display:grid;place-items:center;width:42px;height:42px;flex-shrink:0;border-radius:11px;background:#49202d;color:#ff8796;font-size:23px}
+#obfuscator .obf-file-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:5px}
+#obfuscator .obf-file-copy strong{color:#f4f4f7;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#obfuscator .obf-file-copy small{color:#9298aa;font-size:10px}
+#obfuscator .obf-browse{color:#ff8b99;border:1px solid #63303c;padding:8px 11px;border-radius:8px;font-size:11px;font-weight:800;flex-shrink:0}
+
 </style>
 </head>
 <body><div class="shell">
@@ -405,10 +414,15 @@ id="apiStatus">Checking API…</span></div></section>
       <div class="obf-field">
         <label class="obf-label" for="obfFile">IMPORT LUA FILE</label>
         <div class="obf-upload">
-          <div style="font-size:22px;margin-bottom:7px">↥</div>
-          <div style="font-size:12px;color:#e2e2e8;font-weight:700;margin-bottom:9px">Choose a Lua source file</div>
-          <input id="obfFile" type="file" accept=".lua,.txt,text/plain">
-          <div style="font-size:10px;color:#9298aa;margin-top:8px">Supported formats: .lua and .txt</div>
+          <label for="obfFile" class="obf-file-picker">
+            <span class="obf-file-icon">↥</span>
+            <span class="obf-file-copy">
+              <strong id="obfFileName">Choose a Lua script</strong>
+              <small id="obfFileStatus">Click to browse · .lua or .txt</small>
+            </span>
+            <span class="obf-browse">Browse</span>
+          </label>
+          <input id="obfFile" type="file" accept=".lua,.txt,text/plain" style="position:absolute;width:1px;height:1px;opacity:0">
         </div>
       </div>
 
@@ -1061,6 +1075,11 @@ async function loadObfuscatorUsage() {
 }
 
 document.getElementById('obfFile').addEventListener('change', async function() {
+  const nameDisplay = document.getElementById('obfFileName');
+  const statusDisplay = document.getElementById('obfFileStatus');
+  if (nameDisplay) nameDisplay.textContent = file.name;
+  if (statusDisplay) statusDisplay.textContent = 'Selected successfully · ' + (file.size / 1024).toFixed(1) + ' KB';
+
   const file = this.files && this.files[0];
   if (!file) return;
   if (file.size > 512 * 1024) {
