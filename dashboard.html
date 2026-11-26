@@ -235,10 +235,30 @@
   #lunexVersionModal .lv-restore { padding: 8px 10px; }
 }
 
+
+/* LUNEX premium numbered version picker */
+#lunexVersionModal .lv-list{display:grid;gap:10px;margin:16px 0 20px}
+#lunexVersionModal .lv-list-row{display:flex;align-items:center;gap:13px;padding:13px 15px;border:1px solid #49345f;border-radius:13px;background:linear-gradient(120deg,#241832,#191323)}
+#lunexVersionModal .lv-number{display:grid;place-items:center;flex:0 0 34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#a855f7,#6d28d9);color:#fff;font-weight:800}
+#lunexVersionModal .lv-list-info{min-width:0;flex:1}
+#lunexVersionModal .lv-list-note{color:#f3eaff;font-weight:700}
+#lunexVersionModal .lv-list-date{margin-top:4px;color:#a99ab9;font-size:12px}
+#lunexVersionModal .lv-picker-label{display:block;margin:14px 0 8px;color:#c9a8f4;font-size:11px;font-weight:800;letter-spacing:1.2px}
+#lunexVersionModal .lv-picker-input{box-sizing:border-box;width:100%;padding:13px 14px;border:1px solid #65428a;border-radius:11px;background:#130e1d;color:#fff;font:inherit;outline:none}
+#lunexVersionModal .lv-picker-input:focus{border-color:#b66cff;box-shadow:0 0 0 3px #a855f733}
+#lunexVersionModal .lv-footer{display:flex;justify-content:flex-end;gap:10px;margin-top:17px}
+#lunexVersionModal .lv-primary,#lunexVersionModal .lv-secondary{padding:11px 17px;border-radius:10px;font-weight:700;cursor:pointer}
+#lunexVersionModal .lv-primary{border:1px solid #a855f7;background:linear-gradient(135deg,#9333ea,#6d28d9);color:#fff}
+#lunexVersionModal .lv-secondary{border:1px solid #554366;background:#21192c;color:#e9ddf5}
+#lunexVersionModal .lv-primary:disabled,#lunexVersionModal .lv-secondary:disabled{opacity:.55;cursor:not-allowed}
+#lunexVersionModal .lv-error{min-height:18px;margin-top:7px;color:#ff8494;font-size:12px}
+
 </style></head>
 <body><div class="shell">
 <header class="topbar"><a class="brand" href="index.html"><img src="lunex-logo.png" alt="LUNEX PROTECT"><span><small>COMMAND CENTER</small></span></a>
-<nav class="nav" id="nav"><button class="active" data-page="overview">Overview</button><button data-page="scripts">Scripts</button><button data-page="keys">Membership</button><button data-page="activity">Activity</button><button data-page="support">Support</button><button data-page="profile">Profile</button><button data-page="settings">Settings</button><button data-page="panelStudio">Panel Studio</button></nav>
+<nav class="nav" id="nav"><button class="active" data-page="overview">Overview</button><button data-page="scripts">Scripts</button><button data-page="keys">Membership</button><button data-page="activity">Activity</button><button data-page="support">Support</button><button data-page="profile">Profile</button><button data-page="settings">Settings</button><button data-page="panelStudio">Panel Studio</button>
+<button data-page="obfuscator">Obfuscator</button>
+</nav>
 <div class="right"><img id="avatar" class="avatar hidden" alt="Discord avatar"><span id="userLabel" class="muted" style="font-size:12px">Not connected</span></div></header>
 <main class="layout">
 <section id="overview" class="page active"><div class="hero"><div><div class="eyebrow">Secure Lua operations</div><h1>Welcome back<span style="color:var(--red)">.</span></h1><p class="muted">Your LUNEX PROTECT command center and live account overview.</p></div><button class="action" onclick="showPage('scripts')">＋ Manage scripts</button></div>
@@ -251,7 +271,71 @@
 <section id="activity" class="page"><div class="hero"><div><div class="eyebrow">Account audit trail</div><h1>Activity log</h1><p class="muted">Recent script and support actions recorded for your account.</p></div><button class="secondary" onclick="loadActivity()">↻ Refresh</button></div><div class="card"><div id="activityList" class="list"><div class="empty">Loading activity…</div></div></div></section>
 <section id="support" class="page"><div class="hero"><div><div class="eyebrow">We're here to help</div><h1>Support center</h1><p class="muted">Create a support ticket and track its status from your dashboard.</p></div></div><div class="card"><h2>Open a ticket</h2><label class="fieldlabel" for="ticketSubject">SUBJECT</label><input class="field" id="ticketSubject" maxlength="100" placeholder="What do you need help with?"><label class="fieldlabel" for="ticketVisibility">TICKET VISIBILITY</label><select class="field" id="ticketVisibility"><option value="private">Private — only you and support staff</option><option value="public">Public — visible to logged-in LUNEX members</option></select><p class="status">Public tickets can be viewed and replied to by any logged-in LUNEX member. Private tickets stay between you and support staff.</p><label class="fieldlabel" for="ticketMessage">MESSAGE</label><textarea class="field" id="ticketMessage" rows="5" maxlength="3000" placeholder="Describe the issue (at least 10 characters)…"></textarea><button class="action" onclick="createTicket()">Submit ticket</button><p class="status" id="ticketStatus"></p></div><div class="card"><div class="sectionhead" style="margin-top:0"><h2>Your tickets</h2><button class="secondary" onclick="loadTickets()">↻ Refresh</button></div><div id="ticketList" class="list"><div class="empty">Loading tickets…</div></div></div></section>
 <section id="profile" class="page"><div class="hero"><div><div class="eyebrow">Identity & account</div><h1>Profile</h1><p class="muted">Your connected Discord account and membership details.</p></div></div><div class="card"><div style="display:flex;align-items:center;gap:15px"><img id="profileAvatar" class="avatar" style="width:64px;height:64px" alt=""><div><h2 id="profileName">Discord account</h2><p class="muted" id="profileId">Sign in to view account details.</p></div></div><hr style="border:0;border-top:1px solid var(--line);margin:20px 0"><p class="muted">Membership</p><div class="plan" id="profilePlan">Standard</div><p class="status" id="profileExpiry"></p></div></section>
-<section id="settings" class="page"><div class="hero"><div><div class="eyebrow">Preferences & security</div><h1>Settings</h1><p class="muted">Manage your dashboard session and account access.</p></div></div><div class="card"><h2>Session</h2><p class="muted">Your dashboard uses a signed Discord login token stored in this browser.</p><button class="action danger" onclick="logout()">Sign out of LUNEX</button><p class="status" id="settingsStatus"></p></div><div class="card"><h2>Service connection</h2><p class="muted">API endpoint</p><p style="overflow-wrap:anywhere">milo-api-2026-production.up.railway.app</p><span class="pill" id="apiStatus">Checking API…</span></div></section>
+<section id="settings" class="page"><div class="hero"><div><div class="eyebrow">Preferences & security</div><h1>Settings</h1><p class="muted">Manage your dashboard session and account access.</p></div></div><div class="card"><h2>Session</h2><p class="muted">Your dashboard uses a signed Discord login token stored in this browser.</p><button class="action danger" onclick="logout()">Sign out of LUNEX</button><p class="status" id="settingsStatus"></p></div><div class="card"><h2>Service connection</h2><p class="muted">API endpoint</p><p style="overflow-wrap:anywhere">milo-api-2026-production.up.railway.app</p><span class="pill" 
+<section id="obfuscator" class="page">
+  <div class="card" style="margin-bottom:18px">
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center">
+      <div>
+        <h2 style="margin:0 0 6px">LUNEX Obfuscator</h2>
+        <p style="color:var(--muted);margin:0">Lua protection workspace</p>
+      </div>
+      <span class="pill">LUNEX PROTECT</span>
+    </div>
+  </div>
+
+  <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-bottom:18px">
+    <div class="card">
+      <small style="color:var(--muted)">YOUR PLAN</small>
+      <h2 id="obfPlan" style="margin:8px 0">Loading...</h2>
+      <small style="color:var(--muted)">Current membership</small>
+    </div>
+    <div class="card">
+      <small style="color:var(--muted)">MONTHLY USAGE</small>
+      <h2 id="obfUsage" style="margin:8px 0">--</h2>
+      <div style="height:8px;background:var(--line);border-radius:20px;overflow:hidden">
+        <div id="obfProgress" style="height:100%;width:0%;background:var(--red);transition:width .2s"></div>
+      </div>
+      <small id="obfRemaining" style="color:var(--muted)">Loading usage...</small>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">Source editor</h3>
+    <div class="field">
+      <label>Lua filename</label>
+      <input id="obfFilename" value="script.lua" placeholder="script.lua">
+    </div>
+    <div class="field">
+      <label>Upload Lua file</label>
+      <input id="obfFile" type="file" accept=".lua,.txt,text/plain">
+    </div>
+    <div class="field">
+      <label>Lua source</label>
+      <textarea id="obfSource" rows="14" spellcheck="false"
+        placeholder="Paste your Lua source code here..."
+        style="width:100%;box-sizing:border-box;font-family:monospace;resize:vertical;min-height:260px"></textarea>
+    </div>
+    <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+      <small id="obfChars" style="color:var(--muted)">0 characters</small>
+      <button class="action" id="obfRun" type="button">Obfuscate Lua</button>
+    </div>
+    <p id="obfMessage" style="color:var(--muted);margin-bottom:0"></p>
+  </div>
+
+  <div class="card" style="margin-top:18px">
+    <h3 style="margin-top:0">Build output</h3>
+    <textarea id="obfOutput" rows="10" readonly
+      placeholder="Your protected Lua output will appear here..."
+      style="width:100%;box-sizing:border-box;font-family:monospace;resize:vertical;min-height:180px"></textarea>
+    <button class="secondary" id="obfDownload" type="button" disabled>Download protected file</button>
+  </div>
+  <p style="color:var(--muted);font-size:12px;margin-top:14px">
+    Obfuscation makes source harder to read; it is not unbreakable encryption.
+    Test protected scripts in your target Lua runtime before release.
+  </p>
+</section>
+
+id="apiStatus">Checking API…</span></div></section>
 <div class="footer">LUNEX PROTECT · SECURE LUA PLATFORM</div>
 </main></div>
 <script>
@@ -260,7 +344,8 @@ const $=id=>document.getElementById(id);
 function token(){const params=new URLSearchParams(location.hash.slice(1));const incoming=params.get('milo_token');if(incoming){localStorage.setItem('milo_token',incoming);history.replaceState(null,'',location.pathname+location.search)}return localStorage.getItem('milo_token')}
 function headers(json=true){const h={Authorization:'Bearer '+(token()||'')};if(json)h['Content-Type']='application/json';return h}
 async function api(path,options={}){const r=await fetch(API+path,{...options,headers:{...headers(),...(options.headers||{})}});let data={};try{data=await r.json()}catch{}if(!r.ok)throw new Error(data.error||'Request failed ('+r.status+')');return data}
-function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));if(id==='scripts')loadScripts();if(id==='activity')loadActivity();if(id==='support')loadTickets()}
+function showPage(id){document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));if(id==='scripts')loadScripts();
+ if(id==='obfuscator')loadObfuscatorUsage();if(id==='activity')loadActivity();if(id==='support')loadTickets()}
 document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
 function node(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e}
 function fmt(ts){return ts?new Date(ts).toLocaleString():'—'}
@@ -395,17 +480,17 @@ async function showVersions(id,name) {
 
   const header = node('div','lv-header');
   const heading = node('div');
-  heading.append(node('div','lv-heading','VERSION HISTORY'));
+  heading.append(node('div','lv-heading','SAVED VERSIONS'));
   heading.append(node('div','lv-subtitle',name || 'Your script'));
+
   const close = node('button','lv-close','×');
   close.type = 'button';
   close.setAttribute('aria-label','Close version history');
 
   const body = node('div','lv-body');
-  body.append(node('div','lv-message','Loading saved versions…'));
 
   function closeModal() {
-    document.removeEventListener('keydown', onKey);
+    document.removeEventListener('keydown',onKey);
     overlay.remove();
   }
 
@@ -428,8 +513,12 @@ async function showVersions(id,name) {
     const d = await api('/my-scripts/'+encodeURIComponent(id)+'/versions');
     const versions = Array.isArray(d.versions) ? d.versions : [];
 
-    function renderVersions() {
+    function renderVersions(errorText='') {
       body.replaceChildren();
+
+      body.append(node('div','lv-message',
+        'Choose a saved version by number. The newest backup is listed first.'
+      ));
 
       if (!versions.length) {
         body.append(node('div','lv-message',
@@ -438,53 +527,83 @@ async function showVersions(id,name) {
         return;
       }
 
-      const intro = node('div','lv-message',
-        'Your saved source backups appear below. Select a version to restore it.'
-      );
-      body.append(intro);
+      const list = node('div','lv-list');
 
       versions.forEach((version,index) => {
-        const card = node('div','lv-version');
-        const details = node('div');
-        details.append(node('div','lv-version-title',
-          version.note || ('Saved Version '+(versions.length-index))
-        ));
-        details.append(node('div','lv-version-date',
-          fmt(version.created_at)
-        ));
-        details.append(node('span','lv-tag',
-          index === 0 ? 'LATEST BACKUP' : 'SAVED BACKUP'
-        ));
+        const row = node('div','lv-list-row');
+        row.append(node('div','lv-number',String(index+1)));
 
-        const restore = node('button','lv-restore','Restore');
-        restore.type = 'button';
-        restore.addEventListener('click',() => renderConfirmation(version));
+        const info = node('div','lv-list-info');
+        info.append(node('div','lv-list-note',
+          version.note || (index === 0 ? 'Latest backup' : 'Saved backup')
+        ));
+        info.append(node('div','lv-list-date',fmt(version.created_at)));
 
-        card.append(details,restore);
-        body.append(card);
+        row.append(info);
+        list.append(row);
+      });
+
+      body.append(list);
+
+      const label = node('label','lv-picker-label','VERSION NUMBER TO RESTORE');
+      label.setAttribute('for','lvVersionNumber');
+
+      const input = document.createElement('input');
+      input.id = 'lvVersionNumber';
+      input.className = 'lv-picker-input';
+      input.type = 'number';
+      input.min = '1';
+      input.max = String(versions.length);
+      input.step = '1';
+      input.placeholder = 'Enter a version number';
+
+      const error = node('div','lv-error',errorText);
+      const footer = node('div','lv-footer');
+
+      const cancel = node('button','lv-secondary','Cancel');
+      cancel.type = 'button';
+      cancel.addEventListener('click',closeModal);
+
+      const restore = node('button','lv-primary','Continue');
+      restore.type = 'button';
+      restore.addEventListener('click',() => {
+        const number = Number(input.value);
+        if (!Number.isInteger(number) || number < 1 || number > versions.length) {
+          error.textContent = 'Enter a valid version number from 1 to '+versions.length+'.';
+          input.focus();
+          return;
+        }
+        renderConfirmation(versions[number-1],number);
+      });
+
+      footer.append(cancel,restore);
+      body.append(label,input,error,footer);
+      input.addEventListener('keydown',event => {
+        if (event.key === 'Enter') restore.click();
       });
     }
 
-    function renderConfirmation(version) {
+    function renderConfirmation(version,number) {
       body.replaceChildren();
 
       const confirmBox = node('div','lv-confirm');
-      confirmBox.append(node('div','lv-heading','Restore this version?'));
+      confirmBox.append(node('div','lv-heading','CONFIRM RESTORE'));
       confirmBox.append(node('p','lv-subtitle',
-        'LUNEX will restore this saved source. Your current source will be backed up first.'
+        'You selected version '+number+' ('+fmt(version.created_at)+'). Your current source will be backed up before this version is restored.'
       ));
 
       const actions = node('div','lv-confirm-actions');
-      const cancel = node('button','lv-cancel','Cancel');
-      cancel.type = 'button';
-      cancel.addEventListener('click',renderVersions);
 
-      const confirm = node('button','lv-restore','Confirm Restore');
+      const back = node('button','lv-secondary','Go Back');
+      back.type = 'button';
+      back.addEventListener('click',() => renderVersions());
+
+      const confirm = node('button','lv-primary','Restore Version');
       confirm.type = 'button';
       confirm.addEventListener('click',async () => {
         confirm.disabled = true;
         confirm.textContent = 'Restoring…';
-        cancel.disabled = true;
+        back.disabled = true;
 
         try {
           await api(
@@ -492,27 +611,21 @@ async function showVersions(id,name) {
             {method:'POST',body:'{}'}
           );
 
-          body.replaceChildren(node('div','lv-message',
-            'Version restored successfully.'
-          ));
-
+          body.replaceChildren(node('div','lv-message','Version restored successfully.'));
           await loadScripts();
           await loadOverview();
-
           setTimeout(closeModal,900);
         } catch(error) {
           body.replaceChildren();
-          const message = node('div','lv-message',
-            'Restore failed: '+error.message
-          );
-          const back = node('button','lv-cancel','Back to versions');
-          back.type = 'button';
-          back.addEventListener('click',renderVersions);
-          body.append(message,back);
+          body.append(node('div','lv-message','Restore failed: '+error.message));
+          const retry = node('button','lv-secondary','Back to versions');
+          retry.type = 'button';
+          retry.addEventListener('click',() => renderVersions());
+          body.append(retry);
         }
       });
 
-      actions.append(cancel,confirm);
+      actions.append(back,confirm);
       confirmBox.append(actions);
       body.append(confirmBox);
     }
@@ -520,16 +633,14 @@ async function showVersions(id,name) {
     renderVersions();
   } catch(error) {
     body.replaceChildren();
-    const message = node('div','lv-message',
-      'Could not load version history: '+error.message
-    );
-    const retry = node('button','lv-restore','Try Again');
+    body.append(node('div','lv-message','Could not load version history: '+error.message));
+    const retry = node('button','lv-secondary','Try Again');
     retry.type = 'button';
     retry.addEventListener('click',() => {
       closeModal();
       showVersions(id,name);
     });
-    body.append(message,retry);
+    body.append(retry);
   }
 }
 async function uploadScript(){const name=$('scriptName').value.trim();const status=$('uploadStatus');if(!name||!selectedSource){status.textContent='Choose a Lua file and enter a script name first.';return}if(!token()){location.href=API+'/auth/discord';return}status.textContent='Uploading and protecting source…';try{const d=await api('/upload',{method:'POST',body:JSON.stringify({name,source:selectedSource,access:$('scriptAccess').value})});status.textContent=`Upload successful · Script ID: ${d.id}`;$('scriptName').value='';$('luaFile').value='';$('fileName').textContent='No file selected';selectedSource='';await loadScripts();await loadOverview()}catch(e){status.textContent='Upload failed: '+e.message}}
@@ -825,6 +936,84 @@ async function logout(){try{await api('/auth/logout',{method:'POST',body:'{}'})}
  updatePreview();
  loadScripts();
 })();
+
+// LUNEX OBFUSCATOR DASHBOARD
+let lunexObfOutput = '';
+async function loadObfuscatorUsage() {
+  const plan = document.getElementById('obfPlan');
+  if (!plan) return;
+  try {
+    const data = await api('/obfuscator/usage');
+    plan.textContent = String(data.plan || 'standard').toUpperCase();
+    document.getElementById('obfUsage').textContent = data.unlimited ? String(data.used) + ' used · Unlimited' : data.used + ' / ' + data.limit;
+    document.getElementById('obfRemaining').textContent = data.unlimited ? 'Unlimited obfuscations' : data.remaining + ' remaining this month';
+    document.getElementById('obfProgress').style.width = data.unlimited ? '0%' : Math.min(100, data.used / Math.max(1, data.limit) * 100) + '%';
+  } catch (e) {
+    plan.textContent = 'Unavailable';
+    document.getElementById('obfRemaining').textContent = e.message;
+  }
+}
+
+document.getElementById('obfFile').addEventListener('change', async function() {
+  const file = this.files && this.files[0];
+  if (!file) return;
+  if (file.size > 512 * 1024) {
+    document.getElementById('obfMessage').textContent = 'File is too large. Maximum size is 512 KB.';
+    this.value = '';
+    return;
+  }
+  document.getElementById('obfFilename').value = file.name;
+  document.getElementById('obfSource').value = await file.text();
+  document.getElementById('obfChars').textContent = document.getElementById('obfSource').value.length + ' characters';
+});
+
+document.getElementById('obfSource').addEventListener('input', function() {
+  document.getElementById('obfChars').textContent = this.value.length + ' characters';
+});
+
+document.getElementById('obfRun').addEventListener('click', async function() {
+  const source = document.getElementById('obfSource').value;
+  const filename = document.getElementById('obfFilename').value || 'script.lua';
+  const message = document.getElementById('obfMessage');
+  const button = this;
+  if (!source.trim()) { message.textContent = 'Paste or upload Lua source first.'; return; }
+  button.disabled = true;
+  button.textContent = 'Building...';
+  message.textContent = 'Processing your Lua source...';
+  try {
+    const data = await api('/obfuscator/run', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ source, filename })
+    });
+    lunexObfOutput = data.output;
+    document.getElementById('obfOutput').value = data.output;
+    document.getElementById('obfDownload').disabled = false;
+    message.textContent = 'Build completed successfully.';
+    await loadObfuscatorUsage();
+  } catch (e) {
+    message.textContent = e.message;
+    await loadObfuscatorUsage();
+  } finally {
+    button.disabled = false;
+    button.textContent = 'Obfuscate Lua';
+  }
+});
+
+document.getElementById('obfDownload').addEventListener('click', function() {
+  if (!lunexObfOutput) return;
+  const filename = document.getElementById('obfFilename').value || 'script.lua';
+  const blob = new Blob([lunexObfOutput], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename.replace(/\.lua$/i, '') + '.protected.lua';
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
+});
+
 </script>
 
 <!-- LUNEX PREMIUM STUDIO END -->
