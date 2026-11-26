@@ -1575,4 +1575,32 @@ document.getElementById('obfDownload').addEventListener('click', function() {
 }
 </style>
 
+
+<style id="LUNEX-SCRIPT-CARD-LAYER-FIX">
+#scripts > .card:first-of-type {
+    position: relative !important;
+    z-index: 20 !important;
+    overflow: visible !important;
+}
+
+#scripts > .card:nth-of-type(2) {
+    position: relative !important;
+    z-index: 1 !important;
+}
+
+#scripts #scriptList,
+#scripts #scriptList .item,
+#scripts #scriptList .itemactions {
+    overflow: visible !important;
+}
+
+#scripts #scriptList .script-menu.open {
+    z-index: 100000 !important;
+}
+
+#scripts #scriptList .script-menu-dropdown {
+    z-index: 100001 !important;
+}
+</style>
+
 </body></html>
