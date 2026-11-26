@@ -66,6 +66,38 @@
   color: #ff7183;
 }
 
+
+/* LUNEX menu positioning fix */
+#scriptList .item {
+  position: relative !important;
+  padding-right: 65px !important;
+}
+
+#scriptList .itemactions {
+  position: absolute !important;
+  top: 16px !important;
+  right: 16px !important;
+  left: auto !important;
+  bottom: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: auto !important;
+  display: block !important;
+  z-index: 10;
+}
+
+#scriptList .script-menu {
+  position: relative !important;
+}
+
+#scriptList .script-menu-dropdown {
+  right: 0 !important;
+  left: auto !important;
+  top: calc(100% + 8px) !important;
+  max-width: calc(100vw - 24px);
+  z-index: 1001;
+}
+
 </style></head>
 <body><div class="shell">
 <header class="topbar"><a class="brand" href="index.html"><img src="lunex-logo.png" alt="LUNEX PROTECT"><span><small>COMMAND CENTER</small></span></a>
