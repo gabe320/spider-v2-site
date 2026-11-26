@@ -272,6 +272,9 @@
 <section id="support" class="page"><div class="hero"><div><div class="eyebrow">We're here to help</div><h1>Support center</h1><p class="muted">Create a support ticket and track its status from your dashboard.</p></div></div><div class="card"><h2>Open a ticket</h2><label class="fieldlabel" for="ticketSubject">SUBJECT</label><input class="field" id="ticketSubject" maxlength="100" placeholder="What do you need help with?"><label class="fieldlabel" for="ticketVisibility">TICKET VISIBILITY</label><select class="field" id="ticketVisibility"><option value="private">Private — only you and support staff</option><option value="public">Public — visible to logged-in LUNEX members</option></select><p class="status">Public tickets can be viewed and replied to by any logged-in LUNEX member. Private tickets stay between you and support staff.</p><label class="fieldlabel" for="ticketMessage">MESSAGE</label><textarea class="field" id="ticketMessage" rows="5" maxlength="3000" placeholder="Describe the issue (at least 10 characters)…"></textarea><button class="action" onclick="createTicket()">Submit ticket</button><p class="status" id="ticketStatus"></p></div><div class="card"><div class="sectionhead" style="margin-top:0"><h2>Your tickets</h2><button class="secondary" onclick="loadTickets()">↻ Refresh</button></div><div id="ticketList" class="list"><div class="empty">Loading tickets…</div></div></div></section>
 <section id="profile" class="page"><div class="hero"><div><div class="eyebrow">Identity & account</div><h1>Profile</h1><p class="muted">Your connected Discord account and membership details.</p></div></div><div class="card"><div style="display:flex;align-items:center;gap:15px"><img id="profileAvatar" class="avatar" style="width:64px;height:64px" alt=""><div><h2 id="profileName">Discord account</h2><p class="muted" id="profileId">Sign in to view account details.</p></div></div><hr style="border:0;border-top:1px solid var(--line);margin:20px 0"><p class="muted">Membership</p><div class="plan" id="profilePlan">Standard</div><p class="status" id="profileExpiry"></p></div></section>
 <section id="settings" class="page"><div class="hero"><div><div class="eyebrow">Preferences & security</div><h1>Settings</h1><p class="muted">Manage your dashboard session and account access.</p></div></div><div class="card"><h2>Session</h2><p class="muted">Your dashboard uses a signed Discord login token stored in this browser.</p><button class="action danger" onclick="logout()">Sign out of LUNEX</button><p class="status" id="settingsStatus"></p></div><div class="card"><h2>Service connection</h2><p class="muted">API endpoint</p><p style="overflow-wrap:anywhere">milo-api-2026-production.up.railway.app</p><span class="pill" 
+
+
+id="apiStatus">Checking API…</span></div></section>
 <section id="obfuscator" class="page">
   <div class="card" style="margin-bottom:18px">
     <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center">
@@ -334,8 +337,6 @@
     Test protected scripts in your target Lua runtime before release.
   </p>
 </section>
-
-id="apiStatus">Checking API…</span></div></section>
 <div class="footer">LUNEX PROTECT · SECURE LUA PLATFORM</div>
 </main></div>
 <script>
