@@ -591,6 +591,52 @@ body.pro-tier .pro-membership-banner {
   font-weight: 700;
 }
 
+
+/* LUNEX TOP-LEFT BRANDING */
+.lunex-brand {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  flex-shrink:0;
+  text-decoration:none;
+  letter-spacing:normal;
+}
+.lunex-brand-mark {
+  width:48px;
+  height:48px;
+  display:grid;
+  place-items:center;
+  flex-shrink:0;
+  border:1px solid #a72d43;
+  border-radius:13px;
+  background:linear-gradient(145deg,#35101d,#130b12);
+  color:#ff5368;
+  font-size:30px;
+  font-weight:950;
+  font-style:italic;
+  line-height:1;
+  text-shadow:0 0 14px #ff4358aa;
+  box-shadow:0 0 20px #ff435822,inset 0 0 14px #ff435815;
+}
+.lunex-brand-name {
+  color:#f7f7fc;
+  font-size:16px;
+  font-weight:900;
+  letter-spacing:.09em;
+  white-space:nowrap;
+}
+@media(max-width:520px) {
+  .lunex-brand-mark {
+    width:42px;
+    height:42px;
+    font-size:27px;
+  }
+  .lunex-brand-name {
+    font-size:13px;
+    letter-spacing:.06em;
+  }
+}
+
 </style>
 <style id="lunex-premium-obfuscator">
 #obfuscator{--obf-panel:#10121b;--obf-line:#292d3d;--obf-muted:#9298aa}
@@ -689,7 +735,10 @@ body.pro-tier .pro-membership-banner {
 </style>
 </head>
 <body><div class="shell">
-<header class="topbar"><a class="brand" href="index.html"><img src="lunex-logo.png" alt="LUNEX PROTECT"><span><small>COMMAND CENTER</small></span></a>
+<header class="topbar"><a class="brand lunex-brand" href="index.html" aria-label="LUNEX PROTECT home">
+  <span class="lunex-brand-mark">L</span>
+  <span class="lunex-brand-name">LUNEX PROTECT</span>
+</a>
 <nav class="nav" id="nav">
 <button class="active" data-page="overview" onclick="showPage('overview')">Overview</button>
 <button data-page="scripts" onclick="showPage('scripts')">Scripts</button>
