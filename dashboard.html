@@ -534,6 +534,63 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,te
   }
 }
 
+
+/* LUNEX_PRO_TIER_UI */
+body.pro-tier {
+  --accent: #a78bfa;
+  --accent-strong: #8b5cf6;
+}
+body.pro-tier .card {
+  border-color: rgba(139,92,246,.28);
+  background: linear-gradient(145deg,rgba(35,25,65,.96),rgba(17,20,38,.98));
+  box-shadow: 0 8px 30px rgba(88,55,180,.10);
+}
+body.pro-tier .hero {
+  border-color: rgba(167,139,250,.25);
+}
+body.pro-tier .action {
+  background: linear-gradient(110deg,#7c3aed,#4f46e5);
+  border-color: transparent;
+}
+body.pro-tier .pro-membership-banner {
+  position: relative;
+  overflow: hidden;
+  padding: 24px;
+  margin-bottom: 22px;
+  border: 1px solid rgba(167,139,250,.4);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 85% 20%,rgba(139,92,246,.32),transparent 35%),
+    linear-gradient(120deg,#21143f,#171b37 65%,#252052);
+  box-shadow: 0 12px 35px rgba(91,52,180,.18);
+}
+.pro-membership-banner .pro-kicker {
+  color: #c4b5fd;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+.pro-membership-banner h2 {
+  margin: 9px 0 5px;
+  font-size: 27px;
+  color: #fff;
+}
+.pro-membership-banner p {
+  margin: 0;
+  color: #d5cafa;
+}
+.pro-membership-banner .pro-tag {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 7px 12px;
+  border: 1px solid rgba(196,181,253,.35);
+  border-radius: 30px;
+  color: #e9ddff;
+  background: rgba(139,92,246,.18);
+  font-size: 12px;
+  font-weight: 700;
+}
+
 </style>
 <style id="lunex-premium-obfuscator">
 #obfuscator{--obf-panel:#10121b;--obf-line:#292d3d;--obf-muted:#9298aa}
@@ -922,7 +979,33 @@ document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',(
 function node(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e}
 function fmt(ts){return ts?new Date(ts).toLocaleString():'—'}
 function activityElement(a){const wrap=node('div','activityrow');wrap.append(node('span','dot'));const body=node('div');body.append(node('strong','',a.action||'Activity'));body.append(node('small','',`${a.details||''} · ${fmt(a.created_at)}`));wrap.append(body);return wrap}
-async function loadMe(){if(!token()){location.href=API+'/auth/discord';return}try{const data=await api('/auth/me',{headers:{}});currentUser=data.user;if($('ownerMaintenanceCard'))$('ownerMaintenanceCard').style.display=String(currentUser.id)===LUNEX_DASHBOARD_OWNER_ID?'':'none';membership=data.membership||{};const name=currentUser.username||'Discord user';$('userLabel').textContent=name;$('profileName').textContent=name;$('profileId').textContent='Discord ID: '+currentUser.id;$('profilePlan').textContent=cap(membership.plan||'standard');$('membershipPlan').textContent=cap(membership.plan||'standard');$('planName').textContent=cap(membership.plan||'standard');const expiry=membership.expiresAt?'Expires: '+fmt(membership.expiresAt):'No paid membership active';$('profileExpiry').textContent=expiry;$('membershipExpiry').textContent=expiry;$('statPlan').textContent=cap(membership.plan||'standard');$('statExpiry').textContent=expiry;const avatar=currentUser.avatar?`https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png?size=128`:'';if(avatar){$('avatar').src=avatar;$('avatar').classList.remove('hidden');$('profileAvatar').src=avatar}else $('profileAvatar').src='';const limit={standard:10,pro:20,premium:Infinity}[(membership.plan||'standard').toLowerCase()]??10;const used=membership.uploadCount||0;$('planDescription').textContent=limit===Infinity?'Unlimited script uploads':`${limit} script uploads included`;$('uploadUsage').textContent=limit===Infinity?`${used} uploads used · Unlimited plan`:`${used} / ${limit} uploads used`;$('uploadProgress').style.width=limit===Infinity?'100%':Math.min(100,used/limit*100)+'%';$('apiStatus').textContent='Connected';$('apiStatus').className='pill ok';}catch(e){$('apiStatus').textContent='Connection issue';$('apiStatus').className='pill red';console.error(e)}}
+async function loadMe(){if(!token()){location.href=API+'/auth/discord';return}try{const data=await api('/auth/me',{headers:{}});currentUser=data.user;if($('ownerMaintenanceCard'))$('ownerMaintenanceCard').style.display=String(currentUser.id)===LUNEX_DASHBOARD_OWNER_ID?'':'none';membership=data.membership||{};applyTierTheme(membership.plan||'standard');const name=currentUser.username||'Discord user';$('userLabel').textContent=name;$('profileName').textContent=name;$('profileId').textContent='Discord ID: '+currentUser.id;$('profilePlan').textContent=cap(membership.plan||'standard');$('membershipPlan').textContent=cap(membership.plan||'standard');$('planName').textContent=cap(membership.plan||'standard');const expiry=membership.expiresAt?'Expires: '+fmt(membership.expiresAt):'No paid membership active';$('profileExpiry').textContent=expiry;$('membershipExpiry').textContent=expiry;$('statPlan').textContent=cap(membership.plan||'standard');$('statExpiry').textContent=expiry;const avatar=currentUser.avatar?`https://cdn.discordapp.com/avatars/${currentUser.id}/${currentUser.avatar}.png?size=128`:'';if(avatar){$('avatar').src=avatar;$('avatar').classList.remove('hidden');$('profileAvatar').src=avatar}else $('profileAvatar').src='';const limit={standard:10,pro:20,premium:Infinity}[(membership.plan||'standard').toLowerCase()]??10;const used=membership.uploadCount||0;$('planDescription').textContent=limit===Infinity?'Unlimited script uploads':`${limit} script uploads included`;$('uploadUsage').textContent=limit===Infinity?`${used} uploads used · Unlimited plan`:`${used} / ${limit} uploads used`;$('uploadProgress').style.width=limit===Infinity?'100%':Math.min(100,used/limit*100)+'%';$('apiStatus').textContent='Connected';$('apiStatus').className='pill ok';}catch(e){$('apiStatus').textContent='Connection issue';$('apiStatus').className='pill red';console.error(e)}}
+
+function applyTierTheme(plan) {
+  const tier = String(plan || "standard").toLowerCase();
+  document.body.classList.toggle("pro-tier", tier === "pro");
+
+  let banner = document.getElementById("proMembershipBanner");
+
+  if (tier === "pro") {
+    if (!banner) {
+      banner = document.createElement("div");
+      banner.id = "proMembershipBanner";
+      banner.className = "pro-membership-banner";
+      banner.innerHTML = `
+        <div class="pro-kicker">LUNEX PRO MEMBERSHIP</div>
+        <h2>Welcome to Pro.</h2>
+        <p>Your upgraded LUNEX workspace is ready. Enjoy your Pro membership benefits.</p>
+        <span class="pro-tag">✦ PRO MEMBER · 20 SCRIPT UPLOADS</span>
+      `;
+      const overview = document.getElementById("overview");
+      if (overview) overview.insertBefore(banner, overview.firstChild);
+    }
+  } else if (banner) {
+    banner.remove();
+  }
+}
+
 function cap(s){s=String(s||'standard');return s.charAt(0).toUpperCase()+s.slice(1)}
 async function loadOverview(){try{const d=await api('/dashboard/summary');$('statScripts').textContent=d.scripts;$('statEnabled').textContent=`${d.enabledScripts} enabled`;$('statKeys').textContent=d.activeKeys;$('statUsers').textContent=d.whitelistedUsers;$('statRoles').textContent=`${d.whitelistedRoles} role grants`;const box=$('recentActivity');box.replaceChildren();if(!d.recentActivity?.length)box.append(node('div','empty','No recorded activity yet.'));else d.recentActivity.forEach(a=>box.append(activityElement(a)))}catch(e){$('recentActivity').textContent=e.message}}
 async function loadScripts(){
