@@ -403,7 +403,7 @@ footer {border-color:#ffffff12}
       <p class="hero-copy">A central place to upload, protect and manage your Lua scripts. Control access with keys, whitelists and Discord-connected tools — all through LUNEX PROTECT.</p>
       <div class="actions">
         <a class="btn" href="dashboard.html">Launch Dashboard <span>→</span></a>
-        <a class="btn secondary" href="https://discord.gg/MTyaqbhbp" target="_blank" rel="noopener noreferrer">Join Discord ↗</a>
+        <a class="btn secondary" href="https://discord.gg/J6wvaUCvP" target="_blank" rel="noopener noreferrer">Join Discord ↗</a>
         <a class="btn secondary" href="https://discord.com/oauth2/authorize?client_id=1569195580654354452&permissions=52224&integration_type=0&scope=bot+applications.commands" target="_blank" rel="noopener noreferrer">Invite Bot ↗</a>
       </div>
       <div class="micro"><span><b></b> ACCESS CONTROL</span><span><b></b> SCRIPT MANAGEMENT</span><span><b></b> DISCORD INTEGRATION</span></div>
@@ -465,7 +465,7 @@ footer {border-color:#ffffff12}
   <div class="wrap"><div class="cta"><div class="kicker">LUNEX PROTECT</div><h2>Build. Protect. Control.</h2><p>Bring your Lua scripts and Discord access workflow together.<br>Get started in your LUNEX dashboard.</p><a class="btn" href="dashboard.html">Open Dashboard →</a></div></div>
 </section>
 </main>
-<footer><div class="wrap footer-inner"><div class="footer-brand">LUNEX PROTECT</div><div>© 2026 LUNEX PROTECT. All rights reserved.</div><a href="https://discord.gg/MTyaqbhbp" target="_blank" rel="noopener noreferrer">Discord Community ↗</a></div></footer>
+<footer><div class="wrap footer-inner"><div class="footer-brand">LUNEX PROTECT</div><div>© 2026 LUNEX PROTECT. All rights reserved.</div><a href="https://discord.gg/J6wvaUCvP" target="_blank" rel="noopener noreferrer">Discord Community ↗</a></div></footer>
 
 <script>
 (()=>{const c=document.getElementById('lunex-bg');if(!c)return;const x=c.getContext('2d');const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;let w,h,dpr,pts=[],raf;let mx=0,my=0;function resize(){dpr=Math.min(devicePixelRatio||1,1.5);w=innerWidth;h=innerHeight;c.width=w*dpr;c.height=h*dpr;c.style.width=w+'px';c.style.height=h+'px';x.setTransform(dpr,0,0,dpr,0,0);const n=Math.min(64,Math.max(24,Math.floor(w*h/19000)));pts=Array.from({length:n},()=>({x:Math.random()*w,y:Math.random()*h,z:.35+Math.random()*.65,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,r:.7+Math.random()*1.5}));}function draw(){x.clearRect(0,0,w,h);const drift=reduce?0:1;for(const p of pts){p.x+=p.vx*drift;p.y+=p.vy*drift;if(p.x<0||p.x>w)p.vx*=-1;if(p.y<0||p.y>h)p.vy*=-1;const px=p.x+mx*p.z*.012,py=p.y+my*p.z*.012;x.beginPath();x.arc(px,py,p.r,0,Math.PI*2);x.fillStyle='rgba(255,75,98,'+(.22+p.z*.42)+')';x.fill()}for(let i=0;i<pts.length;i++)for(let j=i+1;j<pts.length;j++){const a=pts[i],b=pts[j],dx=a.x-b.x,dy=a.y-b.y,dist=Math.hypot(dx,dy);if(dist<125){x.beginPath();x.moveTo(a.x+mx*a.z*.012,a.y+my*a.z*.012);x.lineTo(b.x+mx*b.z*.012,b.y+my*b.z*.012);x.strokeStyle='rgba(255,65,88,'+(1-dist/125)*.16+')';x.lineWidth=.7;x.stroke()}}if(!reduce)raf=requestAnimationFrame(draw)}addEventListener('resize',resize,{passive:true});addEventListener('pointermove',e=>{mx=e.clientX-w/2;my=e.clientY-h/2},{passive:true});resize();draw();document.addEventListener('visibilitychange',()=>{if(document.hidden)cancelAnimationFrame(raf);else if(!reduce)draw()});})();
